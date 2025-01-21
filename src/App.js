@@ -41,19 +41,24 @@ function App() {
   return (
       <Router>
           <NavigateHandler />
-          <h1 className={'heading'}>Order food</h1>
-          <Cart cartItems={cartItems} onCheckout={onCheckout} />
-          <div className="cards__container">
-              {foods.map(food => {
-                  return <Card food={food} key={food.id}  onAdd={onAdd} onRemove={onRemove}/>;
-              })}
-          </div>
           <Routes>
-              <Route path="/order" element={<OrderPage cartItems={cartItems} />} />
+              <Route path='/' element={
+                  <>
+                      <h1 className={'heading'}>Order food</h1>
+                      <Cart cartItems={cartItems} onCheckout={onCheckout}/>
+                      <div className="cards__container">
+                          {foods.map(food => {
+                              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove}/>;
+                          })}
+                      </div>
+                  </>
+              }
+              />
+              <Route path="/order" element={<OrderPage cartItems={cartItems}/>}/>
           </Routes>
       </Router>
 
-  );
+);
 }
 
 export default App;
