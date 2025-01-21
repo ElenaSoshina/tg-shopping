@@ -1,10 +1,11 @@
-// eslint-disable-next-line no-unused-vars
+
 
 import React, {useState} from 'react';
 import './Card.css'
 import Button from "../Button/Button";
 const Card = ({food, onAdd, onRemove}) => {
     const [count, setCount] = useState(0);
+    // eslint-disable-next-line no-unused-vars
     const {title, price, image, id} = food;
 
     const handleIncrement = () => {
