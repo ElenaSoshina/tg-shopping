@@ -1,10 +1,9 @@
 import React from 'react';
 import './Cart.css'
 import Button from "../Button/Button";
-import { useNavigate } from 'react-router-dom'
+
 
 const Cart = ({cartItems, onCheckout}) => {
-    const navigate = useNavigate()
 
     const totalPrice = cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
 
