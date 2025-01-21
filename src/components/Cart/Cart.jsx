@@ -8,10 +8,6 @@ const Cart = ({cartItems, onCheckout}) => {
 
     const totalPrice = cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
 
-    const handleCheckout = () => {
-        onCheckout()
-        navigate('/order')
-    }
     return (
         <div className={'cart__container'}>
             {cartItems.length === 0 ? (<p>No items in cart</p>) : (
@@ -23,7 +19,7 @@ const Cart = ({cartItems, onCheckout}) => {
             <Button title={cartItems.length === 0 ? "Order" : "Checkout"}
             type={"checkout"}
             disable={cartItems.length === 0}
-            onClick={handleCheckout}
+            onClick={onCheckout}
             />
         </div>
     );

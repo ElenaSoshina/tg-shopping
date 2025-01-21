@@ -3,7 +3,7 @@ import './App.css';
 import Card from "./components/Card/Card";
 import Cart from "./components/Cart/Cart";
 import {useEffect, useState} from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 
 const { getData } = require('./db/db')
@@ -14,10 +14,23 @@ const tg = window.Telegram.WebApp
 
 function App() {
     const [cartItems, setCartItems] = useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         tg.ready()
-    })
+
+        // Add event listener for MainButton
+        tg.MainButton.onClick(() => {
+            navigate('/order')
+        })
+
+        return () => {
+            // Clean up event listener on unmount
+            tg.MainButton.offClick(() => {
+                navigate('/order')
+            })
+        }
+    }, [navigate])
 
     const onAdd = (food) => {
         const exist = cartItems.find(x => x.id === food.id);
