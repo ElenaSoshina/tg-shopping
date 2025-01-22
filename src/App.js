@@ -18,7 +18,7 @@ function App() {
 
     // Загружаем корзину из localStorage при монтировании
     useEffect(() => {
-        const savedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+        const savedCartItems = JSON.parse(sessionStorage.getItem("cartItems"));
         if (savedCartItems) {
             setCartItems(savedCartItems)
         }
@@ -27,7 +27,7 @@ function App() {
     // Сохраняем корзину в localstorage при изменении состояния
     useEffect(() => {
         if (cartItems.length > 0) {
-            localStorage.setItem('cartItems', JSON.stringify(cartItems))
+            sessionStorage.setItem('cartItems', JSON.stringify(cartItems))
         }
     }, [cartItems]);
 
