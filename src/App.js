@@ -1,21 +1,19 @@
 import './App.css';
 import Card from "./components/Card/Card";
 import Cart from "./components/Cart/Cart";
-import {useEffect, useState} from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
-import LocationHandler from "./services/navigate/locationHandler"; // Этот компонент не изменился, он будет использоваться
+import LocationHandler from "./services/navigate/locationHandler"; // Этот компонент использует useLocation
 
 const { getData } = require('./db/db');
-
 const foods = getData();
-
 const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
-    // Загружаем корзину из sessionStorage при монтировании
+
     useEffect(() => {
         const savedCartItems = JSON.parse(sessionStorage.getItem("cartItems"));
         if (savedCartItems) {
@@ -23,14 +21,12 @@ function App() {
         }
     }, []);
 
-    // Сохраняем корзину в sessionStorage при изменении состояния
     useEffect(() => {
         if (cartItems.length > 0) {
             sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
         }
     }, [cartItems]);
 
-    // Логика показа кнопки VIEW ORDER
     useEffect(() => {
         if (cartItems.length > 0) {
             tg.MainButton.text = "VIEW ORDER";
@@ -43,9 +39,9 @@ function App() {
     const onAdd = (food) => {
         const exist = cartItems.find(x => x.id === food.id);
         if (exist) {
-            setCartItems(cartItems.map((x) => x.id === food.id ? {...exist, quantity: exist.quantity + 1 } : x));
+            setCartItems(cartItems.map((x) => x.id === food.id ? { ...exist, quantity: exist.quantity + 1 } : x));
         } else {
-            setCartItems([...cartItems, {...food, quantity: 1 }]);
+            setCartItems([...cartItems, { ...food, quantity: 1 }]);
         }
     };
 
@@ -54,22 +50,14 @@ function App() {
         if (exist.quantity === 1) {
             setCartItems(cartItems.filter(x => x.id !== food.id));
         } else {
-            setCartItems(cartItems.map((x) => x.id === food.id ? {...exist, quantity: exist.quantity - 1} : x));
+            setCartItems(cartItems.map((x) => x.id === food.id ? { ...exist, quantity: exist.quantity - 1 } : x));
         }
     };
-
-    // В этом useEffect, при возврате на главную страницу с OrderPage, обновляем состояние для кнопки
-    useEffect(() => {
-        if (cartItems.length > 0 && location.pathname === "/") {
-            tg.MainButton.text = "VIEW ORDER";
-            tg.MainButton.show();
-        }
-    }, [location, cartItems]); // Следим за изменением маршрута
 
     return (
         <Router>
             <NavigateHandler />
-            {/* Используем LocationHandler для обработки показа кнопки */}
+            {/* Переместите LocationHandler внутрь Router, чтобы он был корректно обернут */}
             <LocationHandler setCartButtonVisibility={cartItems.length > 0} />
             <Routes>
                 <Route path='/' element={
@@ -89,7 +77,7 @@ function App() {
                         </div>
                     </>
                 } />
-                <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd}/>}/>
+                <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} />} />
             </Routes>
         </Router>
     );
