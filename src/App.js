@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {BrowserRouter as Router, Route, Routes, useLocation} from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
+import LocationHandler from "./services/navigate/locationHandler";
 
 const { getData } = require('./db/db');
 
@@ -70,6 +71,7 @@ function App() {
     return (
         <Router>
             <NavigateHandler />
+            <LocationHandler setCartButtonVisibility={cartItems.length > 0} />
             <Routes>
                 <Route path='/' element={
                     <>
