@@ -26,7 +26,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
                 // всплывающее окно
                 tg.showPopup("Order information",
-                    `You have ordered:\n\n${orderDetails.items.map(item => `${item.name} - ${item.quantity} x $${item.price} = $${item.total}`).join("\n")}\n\nTotal: $${orderDetails.totalPrice}`, false)
+                    "Your order has been successfully placed!", true)
 
             };
 
