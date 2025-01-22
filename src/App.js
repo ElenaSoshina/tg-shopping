@@ -54,11 +54,20 @@ function App() {
         }
     };
 
+    // Функция для управления видимостью кнопки
+    const handleCartButtonVisibility = (visible) => {
+        if (visible) {
+            tg.MainButton.show();
+        } else {
+            tg.MainButton.hide();
+        }
+    };
+
     return (
         <Router>
             <NavigateHandler />
             {/* Переместите LocationHandler внутрь Router, чтобы он был корректно обернут */}
-            <LocationHandler setCartButtonVisibility={cartItems.length > 0} />
+            <LocationHandler setCartButtonVisibility={handleCartButtonVisibility} />
             <Routes>
                 <Route path='/' element={
                     <>

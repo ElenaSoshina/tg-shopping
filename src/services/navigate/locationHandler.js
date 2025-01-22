@@ -8,9 +8,7 @@ const LocationHandler = ({ setCartButtonVisibility}) => {
 
     useEffect(() => {
         if (location.pathname === '/') {
-            if (setCartButtonVisibility) {
-                setCartButtonVisibility(true)
-            }
+            setCartButtonVisibility(true)
         }
     }, [location, setCartButtonVisibility])
     return null
