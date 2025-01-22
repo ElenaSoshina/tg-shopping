@@ -1,20 +1,17 @@
 
 
-import React, {useState} from 'react';
+import React from 'react';
 import './Card.css'
 import Button from "../Button/Button";
-const Card = ({food, onAdd, onRemove}) => {
-    const [count, setCount] = useState(0);
-    // eslint-disable-next-line no-unused-vars
-    const {title, price, image, id} = food;
+const Card = ({food, onAdd, onRemove, cartItems}) => {
+    const cartItem = cartItems.find(item => item.id === food.id);
+    const count = cartItem ? cartItem.quantity : 0
 
     const handleIncrement = () => {
-        setCount(count + 1);
         onAdd(food)
     }
 
     const handleDecrement = () => {
-        setCount(count - 1);
         onRemove(food)
     }
 
@@ -24,10 +21,10 @@ const Card = ({food, onAdd, onRemove}) => {
                 {count}
             </span>
             <div className="image__container">
-                <img src={image} alt={title}/>
+                <img src={food.image} alt={food.title}/>
             </div>
             <h4 className="card__title">
-                {title} . <span className="card__price">$ {price}</span>
+                {food.title} . <span className="card__price">$ {food.price}</span>
             </h4>
             <div className="btn__container">
                 <Button title={'+'} type={'add'} onClick={handleIncrement}/>

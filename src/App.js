@@ -68,7 +68,7 @@ function App() {
                       <Cart cartItems={cartItems}/>
                       <div className="cards__container">
                           {foods.map(food => {
-                              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove}/>;
+                              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove} cartItems={cartItems}/>;
                           })}
                       </div>
                   </>
