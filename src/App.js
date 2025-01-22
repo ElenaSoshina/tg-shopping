@@ -16,6 +16,21 @@ const tg = window.Telegram.WebApp
 function App() {
     const [cartItems, setCartItems] = useState([])
 
+    // Загружаем корзину из localStorage при монтировании
+    useEffect(() => {
+        const savedCartItems = JSON.parse(localStorage.getItem("cartItems"));
+        if (savedCartItems) {
+            setCartItems(savedCartItems)
+        }
+    }, [])
+
+    // Сохраняем корзину в localstorage при изменении состояния
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems))
+        }
+    }, [cartItems]);
+
     useEffect(() => {
         if (cartItems.length > 0) {
             tg.MainButton.text = "VIEW ORDER";
