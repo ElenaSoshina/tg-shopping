@@ -1,6 +1,5 @@
 import React from 'react';
 import './Cart.css'
-import Button from "../Button/Button";
 
 
 const Cart = ({cartItems, onCheckout}) => {
@@ -9,17 +8,13 @@ const Cart = ({cartItems, onCheckout}) => {
 
     return (
         <div className={'cart__container'}>
-            {cartItems.length === 0 ? (<p>No items in cart</p>) : (
+            {cartItems.length === 0 ? (
+                <p>No items in cart</p>
+            ) : (
                 <>
-                 <br/>
                  <span>Total price: ${totalPrice.toFixed(2)}</span>
                 </>
             )}
-            <Button title={cartItems.length === 0 ? "Order" : "Checkout"}
-            type={"checkout"}
-            disable={cartItems.length === 0}
-            onClick={onCheckout}
-            />
         </div>
     );
 };

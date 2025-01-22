@@ -2,7 +2,7 @@
 import './App.css';
 import Card from "./components/Card/Card";
 import Cart from "./components/Cart/Cart";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
@@ -15,6 +15,15 @@ const tg = window.Telegram.WebApp
 
 function App() {
     const [cartItems, setCartItems] = useState([])
+
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            tg.MainButton.text = "VIEW ORDER";
+            tg.MainButton.show();
+        } else {
+            tg.MainButton.hide();
+        }
+    }, [cartItems]);
 
     const onAdd = (food) => {
         const exist = cartItems.find(x => x.id === food.id);
@@ -34,10 +43,6 @@ function App() {
         }
     }
 
-    const onCheckout = () => {
-        tg.MainButton.text = "VIEW ORDER"
-        tg.MainButton.show()
-    }
   return (
       <Router>
           <NavigateHandler />
@@ -45,7 +50,7 @@ function App() {
               <Route path='/' element={
                   <>
                       <h1 className={'heading'}>Order food</h1>
-                      <Cart cartItems={cartItems} onCheckout={onCheckout}/>
+                      <Cart cartItems={cartItems}/>
                       <div className="cards__container">
                           {foods.map(food => {
                               return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove}/>;
