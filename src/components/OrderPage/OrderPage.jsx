@@ -24,9 +24,14 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     totalPrice: totalPrice.toFixed(2),
                 };
 
-                if (window.confirm("Order placed successfully!")) {
-                    tg.sendData(JSON.stringify(orderDetails));
-                }
+                // всплывающее окно
+                tg.showPopup("Order information", `You have ordered:\n\n${orderDetails.items.map(item => `${item.name} - ${item.quantity} x $${item.price} = $${item.total}`).join("\n")}\n\nTotal: $${orderDetails.totalPrice}`, false)
+
+                // отправка данных
+                tg.sendData(JSON.stringify(orderDetails))
+
+                // закрытие webapp после отправки
+                tg.close();
             };
 
             tg.MainButton.onClick(handleOrder);
