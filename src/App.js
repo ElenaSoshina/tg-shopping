@@ -2,7 +2,7 @@ import './App.css';
 import Card from "./components/Card/Card";
 import Cart from "./components/Cart/Cart";
 import {useEffect, useState} from "react";
-import {BrowserRouter as Router, Route, Routes, useLocation} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
 import LocationHandler from "./services/navigate/locationHandler"; // Этот компонент не изменился, он будет использоваться
@@ -15,8 +15,6 @@ const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
-    const location = useLocation(); // Получаем текущий путь
-
     // Загружаем корзину из sessionStorage при монтировании
     useEffect(() => {
         const savedCartItems = JSON.parse(sessionStorage.getItem("cartItems"));
