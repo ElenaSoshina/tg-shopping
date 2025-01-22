@@ -2,7 +2,7 @@ import './App.css';
 import Card from "./components/Card/Card";
 import Cart from "./components/Cart/Cart";
 import {useEffect, useState} from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes, useLocation} from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
 
@@ -14,6 +14,7 @@ const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
+    const location = useLocation(); // Получаем текущий путь
 
     // Загружаем корзину из sessionStorage при монтировании
     useEffect(() => {
@@ -57,6 +58,14 @@ function App() {
             setCartItems(cartItems.map((x) => x.id === food.id ? {...exist, quantity: exist.quantity - 1} : x));
         }
     };
+
+    // В этом useEffect, при возврате на главную страницу с OrderPage, обновляем состояние для кнопки
+    useEffect(() => {
+        if (cartItems.length > 0 && location.pathname === "/") {
+            tg.MainButton.text = "VIEW ORDER";
+            tg.MainButton.show();
+        }
+    }, [location, cartItems]); // Следим за изменением маршрута
 
     return (
         <Router>
