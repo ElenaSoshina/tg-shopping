@@ -54,7 +54,7 @@ function App() {
                   </>
               }
               />
-              <Route path="/order" element={<OrderPage cartItems={cartItems}/>}/>
+              <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd}/>}/>
           </Routes>
       </Router>
 

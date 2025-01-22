@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import './OrderPage.css'
 
 const tg = window.Telegram.WebApp;
 
