@@ -25,7 +25,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 // };
 
                 // всплывающее окно
-                tg.showPopup("Order information",
+                tg.alert("Order information",
                     "Your order has been successfully placed!", true)
 
             };
