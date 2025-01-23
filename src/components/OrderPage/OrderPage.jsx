@@ -9,32 +9,34 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigate = useNavigate();
 
+    const handleOrder = () => {
+
+        //данные для отправки в бот
+        const orderDetails = {
+            items: cartItems.map(item => ({
+                id: item.id,
+                name: item.title,
+                quantity: item.quantity,
+                price: item.price,
+                total: (item.price * item.quantity).toFixed(2),
+            })),
+            totalPrice: totalPrice.toFixed(2),
+        }
+
+
+        //отправка данных в бот
+        tg.sendData(JSON.stringify(orderDetails))
+
+        setShowPopup(true);
+
+        console.log('Sending data to bot:', orderDetails); // Логируем данные
+    }
+
     useEffect(() => {
         if (cartItems.length > 0) {
             tg.MainButton.text = `ORDER $${totalPrice.toFixed(2)}`;
             tg.MainButton.show();
 
-            const handleOrder = () => {
-
-                //данные для отправки в бот
-                const orderDetails = {
-                    items: cartItems.map(item => ({
-                        id: item.id,
-                        name: item.title,
-                        quantity: item.quantity,
-                        price: item.price,
-                        total: (item.price * item.quantity).toFixed(2),
-                    })),
-                    totalPrice: totalPrice.toFixed(2),
-                }
-
-                console.log('Sending data to bot:', orderDetails); // Логируем данные
-
-                //отправка данных в бот
-                tg.sendData(JSON.stringify(orderDetails))
-
-                setShowPopup(true);
-            }
 
             tg.MainButton.onClick(handleOrder);
 
@@ -101,6 +103,13 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     </div>
                 </div>
             )}
+
+            {/* Временные кнопки для отладки */}
+            <div>
+                <button onClick={handleOrder}>Simulate Order</button>
+                <button onClick={() => console.log('Cart Items:', cartItems)}>Log Cart Items</button>
+            </div>
+
         </div>
     );
 }
