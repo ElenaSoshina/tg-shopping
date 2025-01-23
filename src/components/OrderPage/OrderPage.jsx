@@ -14,15 +14,15 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             tg.MainButton.show();
 
             const handleOrder = () => {
-                const orderDetails = {
-                    items: cartItems.map(item => ({
-                        id: item.id,
-                        name: item.title,
-                        quantity: item.quantity,
-                        total: (item.price * item.quantity).toFixed(2),
-                    })),
-                    totalPrice: totalPrice.toFixed(2),
-                };
+                // const orderDetails = {
+                //     items: cartItems.map(item => ({
+                //         id: item.id,
+                //         name: item.title,
+                //         quantity: item.quantity,
+                //         total: (item.price * item.quantity).toFixed(2),
+                //     })),
+                //     totalPrice: totalPrice.toFixed(2),
+                // };
 
                 // всплывающее окно
                 tg.showPopup("Order information",
