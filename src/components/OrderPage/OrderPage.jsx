@@ -22,9 +22,16 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        console.log('Order Details:', orderDetails);
+        // Симулируем отправку данных
+        const simulatedData = JSON.stringify(orderDetails);
+        console.log('[Simulated Data] JSON String:', simulatedData);
 
-        tg.sendData(JSON.stringify(orderDetails));
+        // Парсим строку JSON для проверки структуры
+        const parsedData = JSON.parse(simulatedData);
+        console.log('[Parsed Data] Object:', parsedData);
+
+        // Отправка данных в Telegram WebApp
+        tg.sendData(simulatedData);
         setShowPopup(true);
 
     }, [cartItems, totalPrice]);
