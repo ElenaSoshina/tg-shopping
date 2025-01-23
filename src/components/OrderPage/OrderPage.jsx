@@ -30,9 +30,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         const parsedData = JSON.parse(simulatedData);
         console.log('[Parsed Data] Object:', parsedData);
 
+        setShowPopup(true);
+
         // Отправка данных в Telegram WebApp
         tg.sendData(simulatedData);
-        setShowPopup(true);
+
 
     }, [cartItems, totalPrice]);
 
