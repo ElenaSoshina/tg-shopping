@@ -21,18 +21,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
+        // Сохраняем данные для отправки
         const simulatedData = JSON.stringify(orderDetails);
         console.log('[Simulated Data] JSON String:', simulatedData);
 
-        // Отправляем данные, но не закрываем приложение
-        try {
-            tg.sendData(simulatedData); // Telegram WebApp получает данные
-            console.log('Data sent to Telegram WebApp');
-        } catch (error) {
-            console.error('Error sending data to Telegram WebApp:', error);
-        }
-
-        // Показываем popup
+        // Показываем модальное окно
         setShowPopup(true);
     }, [cartItems, totalPrice]);
 
@@ -53,7 +46,24 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     }, [cartItems, totalPrice, handleOrder]);
 
     const closeWebApp = () => {
-        tg.close(); // Приложение закрывается только при нажатии на кнопку
+        const orderDetails = {
+            items: cartItems.map(item => ({
+                id: item.id,
+                name: item.title,
+                quantity: item.quantity,
+                price: item.price,
+                total: (item.price * item.quantity).toFixed(2),
+            })),
+            totalPrice: totalPrice.toFixed(2),
+        };
+
+        // Отправка данных перед закрытием
+        const simulatedData = JSON.stringify(orderDetails);
+        console.log('Sending data to Telegram WebApp before closing:', simulatedData);
+        tg.sendData(simulatedData);
+
+        // Закрываем приложение
+        tg.close();
     };
 
     return (
