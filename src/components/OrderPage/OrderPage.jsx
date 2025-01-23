@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
-import './OrderPage.css'
+import './OrderPage.css';
 
 const tg = window.Telegram.WebApp;
 
@@ -9,9 +9,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigate = useNavigate();
 
-    const handleOrder = () => {
-
-        //данные для отправки в бот
+    // Мемоизируем функцию handleOrder, чтобы не создавать её заново при каждом рендере
+    const handleOrder = useCallback(() => {
         const orderDetails = {
             items: cartItems.map(item => ({
                 id: item.id,
@@ -21,22 +20,18 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 total: (item.price * item.quantity).toFixed(2),
             })),
             totalPrice: totalPrice.toFixed(2),
-        }
+        };
 
-
-        //отправка данных в бот
-        tg.sendData(JSON.stringify(orderDetails))
-
+        tg.sendData(JSON.stringify(orderDetails));
         setShowPopup(true);
 
-        console.log('Sending data to bot:', orderDetails); // Логируем данные
-    }
+        console.log('Sending data to bot:', orderDetails);
+    }, [cartItems, totalPrice]);
 
     useEffect(() => {
         if (cartItems.length > 0) {
             tg.MainButton.text = `ORDER $${totalPrice.toFixed(2)}`;
             tg.MainButton.show();
-
 
             tg.MainButton.onClick(handleOrder);
 
@@ -47,11 +42,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         } else {
             tg.MainButton.hide();
         }
-    }, [cartItems, totalPrice]);
+    }, [cartItems, totalPrice, handleOrder]);
 
     const closeWebApp = () => {
-        tg.close()
-    }
+        tg.close();
+    };
 
     return (
         <div className="order-container">
@@ -96,7 +91,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             {showPopup && (
                 <div className={'popup'}>
                     <div className={'popup-content'}>
-                        <p>Your order haas benn successfully placed!</p>
+                        <p>Your order has been successfully placed!</p>
                         <button className="popup-close-button" onClick={closeWebApp}>
                             Close and return to chat
                         </button>
@@ -109,7 +104,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 <button onClick={handleOrder}>Simulate Order</button>
                 <button onClick={() => console.log('Cart Items:', cartItems)}>Log Cart Items</button>
             </div>
-
         </div>
     );
 }
