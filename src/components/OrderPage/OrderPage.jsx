@@ -22,10 +22,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
+        console.log('Order Details:', orderDetails);
+
         tg.sendData(JSON.stringify(orderDetails));
         setShowPopup(true);
 
-        console.log('Sending data to bot:', JSON.stringify(orderDetails));
     }, [cartItems, totalPrice]);
 
     useEffect(() => {
