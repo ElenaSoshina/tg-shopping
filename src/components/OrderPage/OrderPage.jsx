@@ -89,6 +89,15 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 </div>
             )}
 
+            {cartItems.length > 0 && (
+                <button
+                    className="simulate-button"
+                    onClick={handleOrder}
+                >
+                    Simulate Order
+                </button>
+            )}
+
             {showPopup && (
                 <div className={'popup'}>
                     <div className={'popup-content'}>
