@@ -9,7 +9,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigate = useNavigate();
 
-    // Мемоизируем функцию handleOrder, чтобы не создавать её заново при каждом рендере
     const handleOrder = useCallback(() => {
         const orderDetails = {
             items: cartItems.map(item => ({
@@ -22,19 +21,19 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        // Симулируем отправку данных
         const simulatedData = JSON.stringify(orderDetails);
         console.log('[Simulated Data] JSON String:', simulatedData);
 
-        // Парсим строку JSON для проверки структуры
-        const parsedData = JSON.parse(simulatedData);
-        console.log('[Parsed Data] Object:', parsedData);
+        // Отправляем данные, но не закрываем приложение
+        try {
+            tg.sendData(simulatedData); // Telegram WebApp получает данные
+            console.log('Data sent to Telegram WebApp');
+        } catch (error) {
+            console.error('Error sending data to Telegram WebApp:', error);
+        }
 
+        // Показываем popup
         setShowPopup(true);
-
-        // Отправка данных в Telegram WebApp
-        tg.sendData(simulatedData);
-
     }, [cartItems, totalPrice]);
 
     useEffect(() => {
@@ -54,7 +53,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     }, [cartItems, totalPrice, handleOrder]);
 
     const closeWebApp = () => {
-        tg.close();
+        tg.close(); // Приложение закрывается только при нажатии на кнопку
     };
 
     return (
