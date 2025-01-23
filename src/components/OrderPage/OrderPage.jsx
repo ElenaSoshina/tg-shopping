@@ -15,6 +15,22 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             tg.MainButton.show();
 
             const handleOrder = () => {
+
+                //данные для отправки в бот
+                const orderDetails = {
+                    items: cartItems.map(item => ({
+                        id: item.id,
+                        name: item.title,
+                        quantity: item.quantity,
+                        price: item.price,
+                        total: (item.price * item.quantity).toFixed(2),
+                    })),
+                    totalPrice: totalPrice.toFixed(2),
+                }
+
+                //отправка данных в бот
+                tg.sendData(JSON.stringify(orderDetails))
+
                 setShowPopup(true);
             }
 
