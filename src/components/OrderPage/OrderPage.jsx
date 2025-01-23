@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import './OrderPage.css'
 
 const tg = window.Telegram.WebApp;
 
 function OrderPage({ cartItems, onRemove, onAdd }) {
+    const [showPopup, setShowPopup] = useState(false);
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigate = useNavigate();
 
@@ -14,21 +15,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             tg.MainButton.show();
 
             const handleOrder = () => {
-                // const orderDetails = {
-                //     items: cartItems.map(item => ({
-                //         id: item.id,
-                //         name: item.title,
-                //         quantity: item.quantity,
-                //         total: (item.price * item.quantity).toFixed(2),
-                //     })),
-                //     totalPrice: totalPrice.toFixed(2),
-                // };
-
-                // всплывающее окно
-                tg.alert("Order information",
-                    "Your order has been successfully placed!", true)
-
-            };
+                setShowPopup(true);
+            }
 
             tg.MainButton.onClick(handleOrder);
 
@@ -40,6 +28,10 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             tg.MainButton.hide();
         }
     }, [cartItems, totalPrice]);
+
+    const closeWebApp = () => {
+        tg.close()
+    }
 
     return (
         <div className="order-container">
@@ -78,6 +70,17 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             {cartItems.length > 0 && (
                 <div className="order-summary">
                     <span>Total price: ${totalPrice.toFixed(2)}</span>
+                </div>
+            )}
+
+            {showPopup && (
+                <div className={'popup'}>
+                    <div className={'popup-content'}>
+                        <p>Your order haas benn successfully placed!</p>
+                        <button className="popup-close-button" onClick={closeWebApp}>
+                            Close and return to chat
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
