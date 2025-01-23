@@ -25,7 +25,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         tg.sendData(JSON.stringify(orderDetails));
         setShowPopup(true);
 
-        console.log('Sending data to bot:', orderDetails);
+        console.log('Sending data to bot:', JSON.stringify(orderDetails));
     }, [cartItems, totalPrice]);
 
     useEffect(() => {
