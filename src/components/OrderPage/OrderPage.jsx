@@ -98,12 +98,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     </div>
                 </div>
             )}
-
-            {/* Временные кнопки для отладки */}
-            <div>
-                <button onClick={handleOrder}>Simulate Order</button>
-                <button onClick={() => console.log('Cart Items:', cartItems)}>Log Cart Items</button>
-            </div>
         </div>
     );
 }
