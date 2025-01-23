@@ -35,7 +35,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         // Отправка данных в Telegram WebApp
         tg.sendData(simulatedData);
 
-
     }, [cartItems, totalPrice]);
 
     useEffect(() => {
@@ -97,7 +96,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     <span>Total price: ${totalPrice.toFixed(2)}</span>
                 </div>
             )}
-
 
             {showPopup && (
                 <div className={'popup'}>
