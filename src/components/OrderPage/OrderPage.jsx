@@ -28,6 +28,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     totalPrice: totalPrice.toFixed(2),
                 }
 
+                console.log('Sending data to bot:', orderDetails); // Логируем данные
+
                 //отправка данных в бот
                 tg.sendData(JSON.stringify(orderDetails))
 
