@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
-import LocationHandler from "./services/navigate/locationHandler"; // Этот компонент использует useLocation
+import LocationHandler from "./services/navigate/locationHandler";
+import HomePage from "./components/HomePage/HomePage"; // Этот компонент использует useLocation
 
 const { getData } = require('./db/db');
 const foods = getData();
@@ -69,7 +70,8 @@ function App() {
             {/* Переместите LocationHandler внутрь Router, чтобы он был корректно обернут */}
             <LocationHandler setCartButtonVisibility={handleCartButtonVisibility} />
             <Routes>
-                <Route path='/' element={
+                <Route path={'/'} element={<HomePage/>} />
+                <Route path='/items' element={
                     <>
                         <h1 className={'heading'}>Order food</h1>
                         <Cart cartItems={cartItems} />

@@ -1,0 +1,64 @@
+/* Общий стиль для страницы */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f2f4f8; /* Светло-пастельный фон */
+    padding: 20px;
+    text-align: center;
+}
+
+
+/* Контейнер для карточек */
+.home-page__cards-container {
+    display: flex; /* Горизонтальное расположение карточек */
+    gap: 20px; /* Расстояние между карточками */
+    justify-content: center; /* Центрирование карточек по горизонтали */
+    flex-wrap: wrap; /* Перенос карточек на новую строку для мобильных устройств */
+}
+
+/* Контейнер карточки с текстом */
+.home-page__card-container {
+    display: flex;
+    flex-direction: column; /* Заголовок сверху, карточка снизу */
+    align-items: center;
+    gap: 10px; /* Расстояние между заголовком и карточкой */
+}
+
+/* Заголовок карточки */
+.home-page__card-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+/* Карточка */
+.home-page__card {
+    background-color: #fff; /* Фон на случай отсутствия изображения */
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    height: 300px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-size: cover; /* Изображение растягивается, сохраняя пропорции */
+    background-position: center; /* Центрирование изображения */
+    background-repeat: no-repeat; /* Изображение не повторяется */
+}
+
+.home-page__card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Карточка: фон для "Сырников" */
+.home-page__card--syrniki {
+    background-image: url('../../images/syrniki.jpg');
+}
+
+/* Карточка: фон для "Лосося" */
+.home-page__card--fish {
+    background-image: url('../../images/fish.jpg');
+}

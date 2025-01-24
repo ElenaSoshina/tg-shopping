@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './Card.css'
-import Button from "../Button/Button";
+import Button from "../ui/Button/Button";
 const Card = ({food, onAdd, onRemove, cartItems}) => {
     const cartItem = cartItems.find(item => item.id === food.id);
     const count = cartItem ? cartItem.quantity : 0
