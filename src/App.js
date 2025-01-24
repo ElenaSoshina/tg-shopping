@@ -6,7 +6,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
 import LocationHandler from "./services/navigate/locationHandler";
-import HomePage from "./components/HomePage/HomePage"; // Этот компонент использует useLocation
+import HomePage from "./components/HomePage/HomePage";
+import CheesePage from "./components/CheesePage/CheesePage"; // Этот компонент использует useLocation
 
 const { getData } = require('./db/db');
 const foods = getData();
@@ -88,6 +89,8 @@ function App() {
                         </div>
                     </>
                 } />
+                {/* Страница выбора сырников */}
+                <Route path="/cheese" element={<CheesePage />} />
                 <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} />} />
             </Routes>
         </Router>
