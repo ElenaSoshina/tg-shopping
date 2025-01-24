@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CheesePage.css';
+
+const tg = window.Telegram.WebApp;
 
 function CheesePage() {
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -27,6 +29,35 @@ function CheesePage() {
                 : [...prevToppings, topping] // Добавляем, если не выбран
         );
     };
+
+    useEffect(() => {
+        // Показываем кнопку только если выбраны все категории
+        if (selectedCategory && quantity > 0 && selectedToppings.length > 0) {
+            tg.MainButton.setText('Оформить заказ');
+            tg.MainButton.show();
+            tg.MainButton.onClick(() => {
+                const orderDetails = {
+                    category: selectedCategory === 'prepared' ? 'Сырники приготовленные' : 'Сырники замороженные',
+                    quantity,
+                    toppings: selectedToppings.map((topping) => {
+                        if (topping === 'sourCream') return 'Сметана';
+                        if (topping === 'condensedMilk') return 'Сгущенка';
+                        if (topping === 'passionFruitJam') return 'Джем из маракуйи';
+                        return '';
+                    }),
+                };
+                console.log('Order Details:', orderDetails);
+                tg.sendData(JSON.stringify(orderDetails)); // Отправка данных в Telegram WebApp
+            });
+        } else {
+            tg.MainButton.hide();
+        }
+
+        // Очищаем обработчик клика, чтобы избежать дублирования
+        return () => {
+            tg.MainButton.offClick(() => {});
+        };
+    }, [selectedCategory, quantity, selectedToppings]);
 
     return (
         <div className="cheese-container">
@@ -101,9 +132,6 @@ function CheesePage() {
                     </div>
                 </div>
             )}
-            {/* Разделитель */}
-            {selectedCategory && selectedToppings.length > 0 && <div className="section-divider"></div>}
-
         </div>
     );
 }
