@@ -4,7 +4,7 @@ import './OrderPage.css';
 import frozenCheese from '../../images/frozenCheese.jpeg';
 import preparedCheese from '../../images/preparedCheese.jpeg';
 import salmonSlice from '../../images/fishPage.jpeg';
-import salmonPiece from '../../images/fishPage.jpeg';
+import salmonPiece from '../../images/fish_slices.jpg';
 
 const tg = window.Telegram.WebApp;
 
@@ -13,7 +13,16 @@ function OrderPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const orderData = useMemo(() => location.state?.orderData || {}, [location.state]);
+    // Фallback для получения данных из sessionStorage
+    const orderData = useMemo(() => {
+        return (
+            location.state?.orderData ||
+            JSON.parse(sessionStorage.getItem('fishOrderData')) ||
+            JSON.parse(sessionStorage.getItem('cheeseOrderData')) ||
+            {}
+        );
+    }, [location.state]);
+
     const [orderItems, setOrderItems] = useState([]);
 
     useEffect(() => {
@@ -29,7 +38,6 @@ function OrderPage() {
             ]);
         }
     }, [orderData]);
-
 
     const totalPrice = useMemo(
         () => orderItems.reduce((total, item) => total + item.price * item.quantity, 0),
@@ -116,7 +124,6 @@ function OrderPage() {
         );
     };
 
-    // Dynamic background image based on category
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
@@ -154,16 +161,21 @@ function OrderPage() {
 
                     <div className="quantity-controls">
                         <strong>Количество:</strong>
-                        <button className="quantity-button" onClick={() => decreaseQuantity(orderItems[0]?.id)}>
+                        <button
+                            className="quantity-button"
+                            onClick={() => decreaseQuantity(orderItems[0]?.id)}
+                        >
                             -
                         </button>
                         <span className="quantity-value">{orderItems[0]?.quantity}</span>
-                        <button className="quantity-button" onClick={() => increaseQuantity(orderItems[0]?.id)}>
+                        <button
+                            className="quantity-button"
+                            onClick={() => increaseQuantity(orderItems[0]?.id)}
+                        >
                             +
                         </button>
                     </div>
 
-                    {/* Отображаем топпинги только для сырников */}
                     {orderData.type !== 'fish' && (
                         <p>
                             <strong>Топпинги:</strong>{' '}
