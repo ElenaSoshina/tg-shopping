@@ -126,10 +126,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         borderRadius: '12px',
-        height: '400px',
+        height: '200px',
         width: '100%',
-        maxWidth: '300px',
+        maxWidth: '100px',
         marginBottom: '20px',
+        textAlign: 'center',
     };
 
     return (
