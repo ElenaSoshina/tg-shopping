@@ -5,7 +5,7 @@ import frozenCheese from '../../images/frozenCheese.jpeg';
 import preparedCheese from '../../images/preparedCheese.jpeg';
 import salmonSlice from '../../images/fishPage.jpeg';
 import salmonPiece from '../../images/fish_slices.jpg';
-import lemonImage from '../../images/lemonPage.jpeg'; // Добавлено изображение лимона
+import lemonImage from '../../images/lemonPage.jpeg';
 import {
     calculateTotalPrice,
     getBackgroundImage,
@@ -23,18 +23,16 @@ function OrderPage() {
     const [orderItems, setOrderItems] = useState([]);
     const location = useLocation();
 
-    // Получение данных заказа
     const orderData = useMemo(() => {
         return (
             location.state?.orderData ||
             JSON.parse(sessionStorage.getItem('fishOrderData')) ||
             JSON.parse(sessionStorage.getItem('cheeseOrderData')) ||
-            JSON.parse(sessionStorage.getItem('lemonOrderData')) || // Для лимона
+            JSON.parse(sessionStorage.getItem('lemonOrderData')) ||
             {}
         );
     }, [location.state]);
 
-    // Инициализация данных заказа
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
             setOrderItems([
@@ -44,20 +42,18 @@ function OrderPage() {
                     quantity: orderData.quantity,
                     price:
                         orderData.type === 'fish'
-                            ? 160000 // Цена за 100 г рыбы
+                            ? 160000
                             : orderData.type === 'lemon'
-                                ? 80000 // Цена за упаковку лимонов
-                                : 40000, // Цена за сырники
+                                ? 80000
+                                : 40000,
                     toppings: orderData.toppings || [],
                 },
             ]);
         }
     }, [orderData]);
 
-    // Подсчет общей стоимости
     const totalPrice = useMemo(() => calculateTotalPrice(orderItems), [orderItems]);
 
-    // Обработка заказа
     const handleOrder = useCallback(() => {
         if (orderItems.length === 0) return;
 
@@ -73,14 +69,12 @@ function OrderPage() {
         setShowPopup(true);
     }, [orderItems, totalPrice]);
 
-    // Увеличение количества
     const increaseQuantity = () => {
         setOrderItems((prevItems) =>
             prevItems.map((item) => ({ ...item, quantity: item.quantity + 1 }))
         );
     };
 
-    // Уменьшение количества
     const decreaseQuantity = () => {
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
@@ -89,7 +83,6 @@ function OrderPage() {
         );
     };
 
-    // Управление кнопкой Telegram
     useEffect(() => {
         if (orderItems.length > 0) {
             tg.MainButton.setText('Оформить заказ');
@@ -105,25 +98,22 @@ function OrderPage() {
         }
     }, [orderItems, handleOrder]);
 
-    // Закрытие WebApp
     const closeWebApp = () => {
         tg.close();
     };
 
-    // Установка фона для категории
     const containerStyle = {
         backgroundImage: `url(${getBackgroundImage(orderData.category, {
             frozenCheese,
             preparedCheese,
             salmonSlice,
             salmonPiece,
-            lemonImage, // Добавлен лимон
+            lemonImage,
         })})`,
     };
 
     return (
         <div className="order-container">
-            {/* Заголовок */}
             <OrderHeader
                 redirectPath={
                     orderData.type === 'fish'
@@ -134,7 +124,6 @@ function OrderPage() {
                 }
             />
 
-            {/* Контент заказа */}
             <div className="order-content">
                 <OrderImage style={containerStyle} />
                 <div className="order-details">
@@ -148,6 +137,29 @@ function OrderPage() {
                         decrease={decreaseQuantity}
                     />
 
+                    {/* Отображаем топпинги только для сырников */}
+                    {orderData.type === 'cheese' && (
+                        <p>
+                            <strong>Топпинги:</strong>{' '}
+                            {orderItems[0]?.toppings?.length
+                                ? orderItems[0].toppings
+                                    .map((topping) => {
+                                        switch (topping) {
+                                            case 'sourCream':
+                                                return 'Сметана';
+                                            case 'condensedMilk':
+                                                return 'Сгущенка';
+                                            case 'passionFruitJam':
+                                                return 'Джем из маракуйи';
+                                            default:
+                                                return 'Неизвестный топпинг';
+                                        }
+                                    })
+                                    .join(', ')
+                                : 'Нет'}
+                        </p>
+                    )}
+
                     <OrderSummary
                         orderItems={orderItems}
                         totalPrice={totalPrice}
@@ -156,7 +168,6 @@ function OrderPage() {
                 </div>
             </div>
 
-            {/* Всплывающее окно */}
             {showPopup && <OrderPopup onClose={closeWebApp} />}
         </div>
     );
