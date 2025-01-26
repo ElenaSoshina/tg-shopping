@@ -16,6 +16,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
+            console.log("Initializing order items with:", orderData);
             setOrderItems([
                 {
                     id: 'cheese-order',
@@ -25,6 +26,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     toppings: orderData.toppings,
                 },
             ]);
+        } else {
+            console.log("No order data found in location.state");
         }
     }, [orderData]);
 
@@ -34,6 +37,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     );
 
     const handleOrder = useCallback(() => {
+        if (orderItems.length === 0) {
+            console.error('OrderItems is empty');
+            return;
+        }
+
         const orderDetails = {
             items: orderItems.map((item) => ({
                 id: item.id,
@@ -46,22 +54,37 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        console.log('[Simulated Data] JSON String:', JSON.stringify(orderDetails));
-        setShowPopup(true);
+        try {
+            console.log('[Simulated Data] JSON String:', JSON.stringify(orderDetails));
+            console.log("Sending data to Telegram WebApp and opening modal.");
+
+            tg.sendData(JSON.stringify(orderDetails));
+            setShowPopup(true);
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     }, [orderItems, totalPrice]);
 
     useEffect(() => {
         if (orderItems.length > 0) {
+            console.log("Setting up MainButton with text 'Оформить заказ'");
             tg.MainButton.text = 'Оформить заказ';
             tg.MainButton.show();
 
-            tg.MainButton.onClick(handleOrder);
+            const handleMainButtonClick = () => {
+                console.log("MainButton clicked");
+                handleOrder();
+            };
+
+            tg.MainButton.onClick(handleMainButtonClick);
 
             return () => {
+                console.log("Cleaning up MainButton click listener");
+                tg.MainButton.offClick(handleMainButtonClick);
                 tg.MainButton.hide();
-                tg.MainButton.offClick(handleOrder);
             };
         } else {
+            console.log("Hiding MainButton as orderItems is empty");
             tg.MainButton.hide();
         }
     }, [orderItems, totalPrice, handleOrder]);
@@ -79,12 +102,17 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        console.log('Sending data to Telegram WebApp before closing:', JSON.stringify(orderDetails));
-        tg.sendData(JSON.stringify(orderDetails));
-        tg.close();
+        try {
+            console.log("Closing WebApp and sending data:", JSON.stringify(orderDetails));
+            tg.sendData(JSON.stringify(orderDetails));
+            tg.close();
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     };
 
     const increaseQuantity = (id) => {
+        console.log("Increasing quantity for item ID:", id);
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
                 item.id === id ? { ...item, quantity: item.quantity + 1 } : item
@@ -93,6 +121,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     };
 
     const decreaseQuantity = (id) => {
+        console.log("Decreasing quantity for item ID:", id);
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
                 item.id === id && item.quantity > 1
@@ -113,7 +142,14 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     return (
         <div className="order-container">
             <div className="order-header">
-                <button className="order-back-button" onClick={() => navigate('/cheese')}>
+                <button
+                    className="order-back-button"
+                    onClick={() => {
+                        console.log("Navigating back to CheesePage with orderData:", orderData);
+                        sessionStorage.setItem('orderData', JSON.stringify(orderData));
+                        navigate('/cheese');
+                    }}
+                >
                     ←
                 </button>
                 <h2 className="order-title">Ваш заказ</h2>
