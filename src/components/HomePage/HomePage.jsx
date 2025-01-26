@@ -33,7 +33,7 @@ const HomePage = () => {
                         <h2 className="home-page__card-title">Лимоны</h2>
                         <div
                             className="home-page__card home-page__card--lemons"
-                            onClick={() => navigate('/lemons')}
+                            onClick={() => navigate('/lemon')}
                         ></div>
                     </div>
                 </div>

@@ -1,11 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.8a457525.css",
-    "main.js": "/static/js/main.ad11ee28.js",
+    "main.css": "/static/css/main.3d265213.css",
+    "main.js": "/static/js/main.f5f508a0.js",
     "static/media/cheesse_tonning.jpeg": "/static/media/cheesse_tonning.08e6efb367e33f645600.jpeg",
     "static/media/preparedCheese.jpeg": "/static/media/preparedCheese.bdb140d7ba7da688ed63.jpeg",
     "static/media/frozenCheese.jpeg": "/static/media/frozenCheese.bd90f6c6323a38b3b2a9.jpeg",
     "static/media/fishPage.jpeg": "/static/media/fishPage.fb1f300375e47e3b20d0.jpeg",
+    "static/media/lemonPage.jpeg": "/static/media/lemonPage.d3edfcde124cf5318593.jpeg",
     "static/media/pizza.png": "/static/media/pizza.c644001e8aa3f3446e15.png",
     "static/media/kebab.png": "/static/media/kebab.3c4858e89de56131e20d.png",
     "static/media/burger.png": "/static/media/burger.cb91a41266710be009e6.png",
@@ -18,11 +19,11 @@
     "static/media/fish_slices.jpg": "/static/media/fish_slices.fcc7ac1d35c99533e02e.jpg",
     "static/media/lemons.jpg": "/static/media/lemons.d4bde727d653be0b58d2.jpg",
     "index.html": "/index.html",
-    "main.8a457525.css.map": "/static/css/main.8a457525.css.map",
-    "main.ad11ee28.js.map": "/static/js/main.ad11ee28.js.map"
+    "main.3d265213.css.map": "/static/css/main.3d265213.css.map",
+    "main.f5f508a0.js.map": "/static/js/main.f5f508a0.js.map"
   },
   "entrypoints": [
-    "static/css/main.8a457525.css",
-    "static/js/main.ad11ee28.js"
+    "static/css/main.3d265213.css",
+    "static/js/main.f5f508a0.js"
   ]
 }

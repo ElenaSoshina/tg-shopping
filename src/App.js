@@ -8,7 +8,8 @@ import NavigateHandler from "./services/navigate/navigateHandler";
 import LocationHandler from "./services/navigate/locationHandler";
 import HomePage from "./components/HomePage/HomePage";
 import CheesePage from "./components/CheesePage/CheesePage";
-import FishPage from "./components/FishPage/FishPage"; // Этот компонент использует useLocation
+import FishPage from "./components/FishPage/FishPage";
+import LemonPage from "./components/LemonPage/LemonPage"; // Этот компонент использует useLocation
 
 const { getData } = require('./db/db');
 const foods = getData();
@@ -93,6 +94,7 @@ function App() {
                 {/* Страница выбора сырников */}
                 <Route path="/cheese" element={<CheesePage />} />
                 <Route path="/fish" element={<FishPage />} />
+                <Route path="/lemon" element={<LemonPage />} />
                 <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} />} />
             </Routes>
         </Router>
