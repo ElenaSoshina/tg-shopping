@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useCallback, useMemo} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
+import frozenCheese from '../../images/frozenCheese.jpeg'
+import preparedCheese from '../../images/preparedCheese.jpeg'
 
 const tg = window.Telegram.WebApp;
 
@@ -97,8 +99,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
-                ? '../../../images/frozenCheese.jpeg'
-                : '../../../images/preparedCheese.jpeg'
+                ? frozenCheese
+                : preparedCheese
         })`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
