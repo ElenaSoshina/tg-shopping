@@ -97,8 +97,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
-                ? '../../images/frozenCheese.jpeg'
-                : '../../images/preparedCheese.jpeg'
+                ? '../../../images/frozenCheese.jpeg'
+                : '../../../images/preparedCheese.jpeg'
         })`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
