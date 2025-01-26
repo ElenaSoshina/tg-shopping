@@ -1,22 +1,48 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 
 const tg = window.Telegram.WebApp;
 
 function OrderPage({ cartItems, onRemove, onAdd }) {
     const [showPopup, setShowPopup] = useState(false);
-    const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Получаем данные заказа из CheesePage
+    const orderData = useMemo(() => location.state?.orderData || {}, [location.state]);
+    const [orderItems, setOrderItems] = useState([]);
+
+    // Если данные переданы из CheesePage, добавляем их в список заказа
+    useEffect(() => {
+        if (orderData?.quantity && orderData?.category) {
+            setOrderItems([
+                {
+                    id: 'cheese-order', // Уникальный идентификатор
+                    title: orderData.category,
+                    quantity: orderData.quantity,
+                    price: 40000,
+                    toppings: orderData.toppings,
+                },
+            ]);
+        }
+    }, [orderData]);
+
+    // Подсчет общей стоимости
+    const totalPrice = orderItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+    );
 
     const handleOrder = useCallback(() => {
         const orderDetails = {
-            items: cartItems.map(item => ({
+            items: orderItems.map(item => ({
                 id: item.id,
                 name: item.title,
                 quantity: item.quantity,
                 price: item.price,
                 total: (item.price * item.quantity).toFixed(2),
+                toppings: item.toppings || [],
             })),
             totalPrice: totalPrice.toFixed(2),
         };
@@ -27,10 +53,10 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
         // Показываем модальное окно
         setShowPopup(true);
-    }, [cartItems, totalPrice]);
+    }, [orderItems, totalPrice]);
 
     useEffect(() => {
-        if (cartItems.length > 0) {
+        if (orderItems.length > 0) {
             tg.MainButton.text = `ORDER $${totalPrice.toFixed(2)}`;
             tg.MainButton.show();
 
@@ -43,16 +69,17 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         } else {
             tg.MainButton.hide();
         }
-    }, [cartItems, totalPrice, handleOrder]);
+    }, [orderItems, totalPrice, handleOrder]);
 
     const closeWebApp = () => {
         const orderDetails = {
-            items: cartItems.map(item => ({
+            items: orderItems.map(item => ({
                 id: item.id,
                 name: item.title,
                 quantity: item.quantity,
                 price: item.price,
                 total: (item.price * item.quantity).toFixed(2),
+                toppings: item.toppings || [],
             })),
             totalPrice: totalPrice.toFixed(2),
         };
@@ -66,52 +93,72 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         tg.close();
     };
 
+    // Определяем изображение в зависимости от категории
+    const imageSrc =
+        orderData.category === 'Сырники замороженные'
+            ? '../../images/frozenCheese.jpeg'
+            : '../../images/preparedCheese.jpeg';
+
     return (
         <div className="order-container">
             <div className="order-header">
                 <button className="order-back-button" onClick={() => navigate(-1)}>
                     ←
                 </button>
-                <h2 className="order-title">YOUR ORDER</h2>
+                <h2 className="order-title">Ваш заказ</h2>
             </div>
-            {cartItems.length === 0 ? (
-                <p>Your cart is empty</p>
+
+            {/* Проверяем наличие данных заказа */}
+            {Object.keys(orderData).length === 0 ? (
+                <p className="order-empty">Нет данных для отображения заказа</p>
             ) : (
-                <ul>
-                    {cartItems.map(item => (
-                        <li key={item.id} className="order-item">
-                            <img src={item.image} alt={item.title} className="order-item-image" />
-                            <div className="order-item-info">
-                                <span className="order-item-name">{item.title}</span>
-                                <div className="order-item-controls">
-                                    <button className="order-item-button" onClick={() => onRemove(item)}>
-                                        -
-                                    </button>
-                                    <span className="order-item-quantity">{item.quantity}</span>
-                                    <button className="order-item-button" onClick={() => onAdd(item)}>
-                                        +
-                                    </button>
-                                </div>
-                                <span className="order-item-price">
-                                    ${(item.price * item.quantity).toFixed(2)}
-                                </span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <div className="order-details">
+                    {/* Изображение категории */}
+                    <div className="order-image-container">
+                        <img src={imageSrc} alt={orderData.category} className="order-image" />
+                    </div>
+
+                    {/* Категория */}
+                    <p><strong>Категория:</strong> {orderData.category}</p>
+
+                    {/* Количество */}
+                    <p><strong>Количество:</strong> {orderData.quantity} шт.</p>
+
+                    {/* Топпинги */}
+                    <p>
+                        <strong>Топпинги:</strong>{' '}
+                        {orderData.toppings.length > 0
+                            ? orderData.toppings
+                                .map((topping) => {
+                                    if (topping === 'sourCream') return 'Сметана';
+                                    if (topping === 'condensedMilk') return 'Сгущенка';
+                                    if (topping === 'passionFruitJam') return 'Джем из маракуйи';
+                                    return '';
+                                })
+                                .join(', ')
+                            : 'Нет'}
+                    </p>
+
+                    {/* Общая цена */}
+                    <p>
+                        <strong>Общая стоимость:</strong>{' '}
+                        {(orderData.quantity * 40000).toLocaleString('ru-RU')} VND
+                    </p>
+                </div>
             )}
-            {cartItems.length > 0 && (
+
+            {orderItems.length > 0 && (
                 <div className="order-summary">
-                    <span>Total price: ${totalPrice.toFixed(2)}</span>
+                    <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
                 </div>
             )}
 
             {showPopup && (
                 <div className={'popup'}>
                     <div className={'popup-content'}>
-                        <p>Your order has been successfully placed!</p>
+                        <p>Ваш заказ успешно оформлен!</p>
                         <button className="popup-close-button" onClick={closeWebApp}>
-                            Close and return to chat
+                            Закрыть и вернуться в чат
                         </button>
                     </div>
                 </div>
