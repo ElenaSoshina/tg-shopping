@@ -122,25 +122,26 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             <div className="order-content">
                 <div className="order-image" style={containerStyle}></div>
                 <div className="order-details">
-                    <p><strong>Категория:</strong> {orderData.category}</p>
+                    <div className="order-category">
+                        <strong>Категория:</strong>
+                        <span>{orderData.category}</span>
+                    </div>
 
-                    <div className="quantity-selector">
-                        <h3>Количество:</h3>
-                        <div className="quantity-controls">
-                            <button
-                                className="quantity-button"
-                                onClick={() => decreaseQuantity(orderItems[0]?.id)}
-                            >
-                                -
-                            </button>
-                            <span className="quantity-value">{orderItems[0]?.quantity} шт.</span>
-                            <button
-                                className="quantity-button"
-                                onClick={() => increaseQuantity(orderItems[0]?.id)}
-                            >
-                                +
-                            </button>
-                        </div>
+                    <div className="quantity-controls">
+                        <strong>Количество:</strong>
+                        <button
+                            className="quantity-button"
+                            onClick={() => decreaseQuantity(orderItems[0]?.id)}
+                        >
+                            -
+                        </button>
+                        <span className="quantity-value">{orderItems[0]?.quantity}</span>
+                        <button
+                            className="quantity-button"
+                            onClick={() => increaseQuantity(orderItems[0]?.id)}
+                        >
+                            +
+                        </button>
                     </div>
 
                     <p>
