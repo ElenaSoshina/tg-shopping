@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.5b0bb926.css",
-    "main.js": "/static/js/main.bbc85a79.js",
+    "main.css": "/static/css/main.8a457525.css",
+    "main.js": "/static/js/main.1e981327.js",
     "static/media/cheesse_tonning.jpeg": "/static/media/cheesse_tonning.08e6efb367e33f645600.jpeg",
     "static/media/preparedCheese.jpeg": "/static/media/preparedCheese.bdb140d7ba7da688ed63.jpeg",
     "static/media/frozenCheese.jpeg": "/static/media/frozenCheese.bd90f6c6323a38b3b2a9.jpeg",
+    "static/media/fishPage.jpeg": "/static/media/fishPage.fb1f300375e47e3b20d0.jpeg",
     "static/media/pizza.png": "/static/media/pizza.c644001e8aa3f3446e15.png",
     "static/media/kebab.png": "/static/media/kebab.3c4858e89de56131e20d.png",
     "static/media/burger.png": "/static/media/burger.cb91a41266710be009e6.png",
@@ -14,12 +15,14 @@
     "static/media/syrniki.jpg": "/static/media/syrniki.66b68a86a5963948c7bf.jpg",
     "static/media/icecream.png": "/static/media/icecream.596499d573e6d7c47d6a.png",
     "static/media/water.png": "/static/media/water.52ba975d6e1bc5be32d3.png",
+    "static/media/fish_slices.jpg": "/static/media/fish_slices.fcc7ac1d35c99533e02e.jpg",
+    "static/media/lemons.jpg": "/static/media/lemons.d4bde727d653be0b58d2.jpg",
     "index.html": "/index.html",
-    "main.5b0bb926.css.map": "/static/css/main.5b0bb926.css.map",
-    "main.bbc85a79.js.map": "/static/js/main.bbc85a79.js.map"
+    "main.8a457525.css.map": "/static/css/main.8a457525.css.map",
+    "main.1e981327.js.map": "/static/js/main.1e981327.js.map"
   },
   "entrypoints": [
-    "static/css/main.5b0bb926.css",
-    "static/js/main.bbc85a79.js"
+    "static/css/main.8a457525.css",
+    "static/js/main.1e981327.js"
   ]
 }
