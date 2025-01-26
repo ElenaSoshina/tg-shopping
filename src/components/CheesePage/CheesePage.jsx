@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
 
 const tg = window.Telegram.WebApp;
@@ -7,6 +8,8 @@ function CheesePage() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [selectedToppings, setSelectedToppings] = useState([]);
+    const pricePerCheese = 40000
+    const navigate = useNavigate();
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
@@ -31,33 +34,30 @@ function CheesePage() {
     };
 
     useEffect(() => {
-        // Показываем кнопку только если выбраны все категории
+        // Показываем MainButton, если выбраны все данные
         if (selectedCategory && quantity > 0 && selectedToppings.length > 0) {
-            tg.MainButton.setText('Оформить заказ');
+            tg.MainButton.setText('Перейти к заказу');
             tg.MainButton.show();
+
             tg.MainButton.onClick(() => {
-                const orderDetails = {
+                const orderData = {
                     category: selectedCategory === 'prepared' ? 'Сырники приготовленные' : 'Сырники замороженные',
                     quantity,
-                    toppings: selectedToppings.map((topping) => {
-                        if (topping === 'sourCream') return 'Сметана';
-                        if (topping === 'condensedMilk') return 'Сгущенка';
-                        if (topping === 'passionFruitJam') return 'Джем из маракуйи';
-                        return '';
-                    }),
+                    toppings: selectedToppings,
                 };
-                console.log('Order Details:', orderDetails);
-                tg.sendData(JSON.stringify(orderDetails)); // Отправка данных в Telegram WebApp
+
+                // Переход на OrderPage с передачей данных через state
+                navigate('/order', { state: { orderData } });
             });
         } else {
             tg.MainButton.hide();
         }
 
-        // Очищаем обработчик клика, чтобы избежать дублирования
+        // Удаляем обработчик клика при размонтировании
         return () => {
             tg.MainButton.offClick(() => {});
         };
-    }, [selectedCategory, quantity, selectedToppings]);
+    }, [selectedCategory, quantity, selectedToppings, navigate]);
 
     return (
         <div className="cheese-container">
@@ -85,10 +85,10 @@ function CheesePage() {
                     Сырники замороженные
                 </div>
             </div>
-            {/* Разделитель */}
+
             {selectedCategory && <div className="section-divider"></div>}
 
-            {/* Выбор количества */}
+            {/* Секция "Количество" */}
             {selectedCategory && (
                 <div className="quantity-selector">
                     <h3>Количество:</h3>
@@ -101,9 +101,12 @@ function CheesePage() {
                             +
                         </button>
                     </div>
+                    <p className="quantity-price">
+                        Цена: {(quantity * pricePerCheese).toLocaleString('en-US')} VND
+                    </p>
                 </div>
             )}
-            {/* Разделитель */}
+
             {selectedCategory && quantity > 0 && <div className="section-divider"></div>}
 
             {/* Подкатегории (Топпинги) */}
