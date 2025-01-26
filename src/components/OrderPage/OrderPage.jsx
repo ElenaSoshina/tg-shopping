@@ -3,10 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 import frozenCheese from '../../images/frozenCheese.jpeg';
 import preparedCheese from '../../images/preparedCheese.jpeg';
+import salmonSlice from '../../images/fishPage.jpeg';
+import salmonPiece from '../../images/fishPage.jpeg';
 
 const tg = window.Telegram.WebApp;
 
-function OrderPage({ cartItems, onRemove, onAdd }) {
+function OrderPage() {
     const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -16,18 +18,15 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
-            console.log("Initializing order items with:", orderData);
             setOrderItems([
                 {
-                    id: 'cheese-order',
+                    id: 'order-item',
                     title: orderData.category,
                     quantity: orderData.quantity,
-                    price: 40000,
-                    toppings: orderData.toppings,
+                    price: orderData.price,
+                    toppings: orderData.toppings || [],
                 },
             ]);
-        } else {
-            console.log("No order data found in location.state");
         }
     }, [orderData]);
 
@@ -37,10 +36,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     );
 
     const handleOrder = useCallback(() => {
-        if (orderItems.length === 0) {
-            console.error('OrderItems is empty');
-            return;
-        }
+        if (orderItems.length === 0) return;
 
         const orderDetails = {
             items: orderItems.map((item) => ({
@@ -49,70 +45,35 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 quantity: item.quantity,
                 price: item.price,
                 total: (item.price * item.quantity).toFixed(2),
-                toppings: item.toppings || [],
+                toppings: item.toppings,
             })),
             totalPrice: totalPrice.toFixed(2),
         };
 
-        try {
-            console.log('[Simulated Data] JSON String:', JSON.stringify(orderDetails));
-            console.log("Sending data to Telegram WebApp and opening modal.");
-
-            tg.sendData(JSON.stringify(orderDetails));
-            setShowPopup(true);
-        } catch (error) {
-            console.error('Error sending data:', error);
-        }
+        tg.sendData(JSON.stringify(orderDetails));
+        setShowPopup(true);
     }, [orderItems, totalPrice]);
 
     useEffect(() => {
         if (orderItems.length > 0) {
-            console.log("Setting up MainButton with text 'Оформить заказ'");
             tg.MainButton.text = 'Оформить заказ';
             tg.MainButton.show();
 
-            const handleMainButtonClick = () => {
-                console.log("MainButton clicked");
-                handleOrder();
-            };
-
-            tg.MainButton.onClick(handleMainButtonClick);
+            tg.MainButton.onClick(handleOrder);
 
             return () => {
-                console.log("Cleaning up MainButton click listener");
-                tg.MainButton.offClick(handleMainButtonClick);
+                tg.MainButton.offClick(handleOrder);
                 tg.MainButton.hide();
             };
-        } else {
-            console.log("Hiding MainButton as orderItems is empty");
-            tg.MainButton.hide();
         }
-    }, [orderItems, totalPrice, handleOrder]);
+    }, [orderItems, handleOrder]);
 
     const closeWebApp = () => {
-        const orderDetails = {
-            items: orderItems.map((item) => ({
-                id: item.id,
-                name: item.title,
-                quantity: item.quantity,
-                price: item.price,
-                total: (item.price * item.quantity).toFixed(2),
-                toppings: item.toppings || [],
-            })),
-            totalPrice: totalPrice.toFixed(2),
-        };
-
-        try {
-            console.log("Closing WebApp and sending data:", JSON.stringify(orderDetails));
-            tg.sendData(JSON.stringify(orderDetails));
-            tg.close();
-        } catch (error) {
-            console.error('Error sending data:', error);
-        }
+        tg.sendData(JSON.stringify(orderItems));
+        tg.close();
     };
 
     const increaseQuantity = (id) => {
-        console.log("Increasing quantity for item ID:", id);
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
                 item.id === id ? { ...item, quantity: item.quantity + 1 } : item
@@ -121,7 +82,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     };
 
     const decreaseQuantity = (id) => {
-        console.log("Decreasing quantity for item ID:", id);
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
                 item.id === id && item.quantity > 1
@@ -131,11 +91,16 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         );
     };
 
+    // Dynamic background image based on category
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
                 ? frozenCheese
-                : preparedCheese
+                : orderData.category === 'Сырники приготовленные'
+                    ? preparedCheese
+                    : orderData.category === 'Нарезка'
+                        ? salmonSlice
+                        : salmonPiece
         })`,
     };
 
@@ -145,12 +110,13 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 <button
                     className="order-back-button"
                     onClick={() => {
-                        console.log("Navigating back to CheesePage with orderData:", orderData);
-                        sessionStorage.setItem('orderData', JSON.stringify(orderData));
-                        navigate('/cheese');
+                        const targetPage = orderData.category.includes('Сырники')
+                            ? '/cheese'
+                            : '/fish';
+                        navigate(targetPage);
                     }}
                 >
-                    ←
+                    ← Назад
                 </button>
                 <h2 className="order-title">Ваш заказ</h2>
             </div>
@@ -182,21 +148,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
                     <p>
                         <strong>Топпинги:</strong>{' '}
-                        {orderData.toppings.length > 0
-                            ? orderData.toppings
-                                .map((topping) => {
-                                    switch (topping) {
-                                        case 'sourCream':
-                                            return 'Сметана';
-                                        case 'condensedMilk':
-                                            return 'Сгущенка';
-                                        case 'passionFruitJam':
-                                            return 'Джем из маракуйи';
-                                        default:
-                                            return 'Неизвестный топпинг';
-                                    }
-                                })
-                                .join(', ')
+                        {orderItems[0]?.toppings.length > 0
+                            ? orderItems[0]?.toppings.join(', ')
                             : 'Нет'}
                     </p>
 
