@@ -10,13 +10,23 @@
     text-align: center;
 }
 
-
 /* Контейнер для карточек */
 .home-page__cards-container {
-    display: flex; /* Горизонтальное расположение карточек */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Расстояние между строками */
+}
+
+/* Общий стиль для строки карточек */
+.home-page__row {
+    display: flex;
     gap: 20px; /* Расстояние между карточками */
     justify-content: center; /* Центрирование карточек по горизонтали */
-    flex-wrap: wrap; /* Перенос карточек на новую строку для мобильных устройств */
+}
+
+/* Центрирование строки с одной карточкой */
+.home-page__row--center {
+    justify-content: center;
 }
 
 /* Контейнер карточки с текстом */
@@ -39,8 +49,8 @@
     background-color: #fff; /* Фон на случай отсутствия изображения */
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 220px;
-    height: 300px;
+    width: 190px; /* Уменьшенный размер карточки */
+    height: 250px;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     background-size: cover; /* Изображение растягивается, сохраняя пропорции */
@@ -63,20 +73,7 @@
     background-image: url('../../images/fish.jpg');
 }
 
+/* Карточка: фон для "Лимонов" */
 .home-page__card--lemons {
-    background-color: #fdfd96; /* Светло-желтый цвет */
-    background-image: url('../../images/lemons.jpg'); /* Укажите путь к изображению */
-    background-size: cover;
-    background-position: center;
-    height: 150px;
-    width: 100%;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.home-page__card--lemons:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    background-image: url('../../images/lemons.jpg');
 }

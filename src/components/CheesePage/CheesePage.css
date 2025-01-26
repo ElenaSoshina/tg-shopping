@@ -180,3 +180,25 @@
     color: #4caf50;
     text-align: center;
 }
+
+.cheese-back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cheese-back-button:hover {
+    color: #0056b3;
+    transform: translateX(-5px);
+}
+
+

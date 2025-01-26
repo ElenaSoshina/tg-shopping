@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
+import {IoArrowBack} from "react-icons/io5";
 
 const tg = window.Telegram.WebApp;
 
@@ -97,6 +98,9 @@ function CheesePage() {
         <div className="cheese-container">
             {/* Контейнер с фоновым изображением и описанием */}
             <div className="cheese-header">
+                <button className="cheese-back-button" onClick={() => navigate('/')}>
+                    <IoArrowBack size={24}/> Назад
+                </button>
                 <div className="cheese-image-container"></div>
                 <p className="cheese-description">
                     Вкусные и свежие сырники с разными начинками и топпингами.
