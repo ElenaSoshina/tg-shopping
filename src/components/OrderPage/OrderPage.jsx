@@ -113,7 +113,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     return (
         <div className="order-container">
             <div className="order-header">
-                <button className="order-back-button" onClick={() => navigate(-1)}>
+                <button className="order-back-button" onClick={() => navigate('/cheese')}>
                     ←
                 </button>
                 <h2 className="order-title">Ваш заказ</h2>
@@ -147,7 +147,20 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     <p>
                         <strong>Топпинги:</strong>{' '}
                         {orderData.toppings.length > 0
-                            ? orderData.toppings.join(', ')
+                            ? orderData.toppings
+                                .map((topping) => {
+                                    switch (topping) {
+                                        case 'sourCream':
+                                            return 'Сметана';
+                                        case 'condensedMilk':
+                                            return 'Сгущенка';
+                                        case 'passionFruitJam':
+                                            return 'Джем из маракуйи';
+                                        default:
+                                            return 'Неизвестный топпинг';
+                                    }
+                                })
+                                .join(', ')
                             : 'Нет'}
                     </p>
 

@@ -45,6 +45,16 @@ function CheesePage() {
         );
     };
 
+    // Загружаем данные из sessionStorage при монтировании
+    useEffect(() => {
+        const savedData = JSON.parse(sessionStorage.getItem('cheeseOrderData'));
+        if (savedData) {
+            setSelectedCategory(savedData.category === 'Сырники приготовленные' ? 'prepared' : 'frozen');
+            setQuantity(savedData.quantity);
+            setSelectedToppings(savedData.toppings);
+        }
+    }, []);
+
     useEffect(() => {
         // Показываем MainButton, если выбраны все данные
         if (selectedCategory && quantity > 0 && selectedToppings.length > 0) {
@@ -58,6 +68,8 @@ function CheesePage() {
                     toppings: selectedToppings,
                 };
 
+                sessionStorage.setItem('cheeseOrderData', JSON.stringify(orderData));
+
                 // Переход на OrderPage с передачей данных через state
                 navigate('/order', { state: { orderData } });
             });
@@ -70,6 +82,16 @@ function CheesePage() {
             tg.MainButton.offClick(() => {});
         };
     }, [selectedCategory, quantity, selectedToppings, navigate]);
+
+    useEffect(() => {
+        const savedData = JSON.parse(sessionStorage.getItem('cheeseOrderData'));
+        if (savedData) {
+            setSelectedCategory(savedData.category === 'Сырники приготовленные' ? 'prepared' : 'frozen');
+            setQuantity(savedData.quantity);
+            setSelectedToppings(savedData.toppings);
+        }
+    }, []);
+
 
     return (
         <div className="cheese-container">
