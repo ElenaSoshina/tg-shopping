@@ -57,7 +57,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
     useEffect(() => {
         if (orderItems.length > 0) {
-            tg.MainButton.text = `ORDER $${totalPrice.toFixed(2)}`;
+            tg.MainButton.text = `Оформить заказ`;
             tg.MainButton.show();
 
             tg.MainButton.onClick(handleOrder);
@@ -93,11 +93,21 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         tg.close();
     };
 
-    // Определяем изображение в зависимости от категории
-    const imageSrc =
-        orderData.category === 'Сырники замороженные'
-            ? '../../images/frozenCheese.jpeg'
-            : '../../images/preparedCheese.jpeg';
+    // Определяем стиль фона в зависимости от категории
+    const containerStyle = {
+        backgroundImage: `url(${
+            orderData.category === 'Сырники замороженные'
+                ? '../../images/frozenCheese.jpeg'
+                : '../../images/preparedCheese.jpeg'
+        })`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        borderRadius: '12px',
+        height: '200px',
+        width: '100%',
+        maxWidth: '400px',
+        marginBottom: '20px',
+    };
 
     return (
         <div className="order-container">
@@ -113,10 +123,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 <p className="order-empty">Нет данных для отображения заказа</p>
             ) : (
                 <div className="order-details">
-                    {/* Изображение категории */}
-                    <div className="order-image-container">
-                        <img src={imageSrc} alt={orderData.category} className="order-image" />
-                    </div>
+                    <div style={containerStyle}></div>
 
                     {/* Категория */}
                     <p><strong>Категория:</strong> {orderData.category}</p>
@@ -139,11 +146,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                             : 'Нет'}
                     </p>
 
-                    {/* Общая цена */}
-                    <p>
-                        <strong>Общая стоимость:</strong>{' '}
-                        {(orderData.quantity * 40000).toLocaleString('ru-RU')} VND
-                    </p>
                 </div>
             )}
 
