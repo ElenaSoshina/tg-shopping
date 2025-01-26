@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
-import {IoArrowBack} from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 
 const tg = window.Telegram.WebApp;
 
@@ -9,55 +9,59 @@ function CheesePage() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [selectedToppings, setSelectedToppings] = useState([]);
-    const pricePerCheese = 40000;
+    const pricePerCheese = 40000; // Цена за один сырник
     const navigate = useNavigate();
 
     // Рефы для секций
     const quantityRef = useRef(null);
     const toppingsRef = useRef(null);
 
+    // Обработчик выбора категории
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        setQuantity(0); // Сбрасываем количество при выборе новой категории
-        setSelectedToppings([]); // Сбрасываем выбранные топпинги
+        setQuantity(0); // Сброс количества
+        setSelectedToppings([]); // Сброс топпингов
 
-        // Скроллим к секции количества
+        // Прокрутка к секции количества
         setTimeout(() => quantityRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
     };
 
+    // Увеличение количества
     const increaseQuantity = () => {
-        setQuantity((prevQuantity) => prevQuantity + 1);
+        setQuantity((prev) => prev + 1);
 
-        // Скроллим к секции топпингов
+        // Прокрутка к секции топпингов
         if (quantity === 0) {
             setTimeout(() => toppingsRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
         }
     };
 
+    // Уменьшение количества
     const decreaseQuantity = () => {
-        setQuantity((prevQuantity) => (prevQuantity > 0 ? prevQuantity - 1 : 0));
+        setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
     };
 
+    // Обработчик выбора топпинга
     const handleToppingSelect = (topping) => {
-        setSelectedToppings((prevToppings) =>
-            prevToppings.includes(topping)
-                ? prevToppings.filter((item) => item !== topping) // Удаляем, если уже выбран
-                : [...prevToppings, topping] // Добавляем, если не выбран
+        setSelectedToppings((prev) =>
+            prev.includes(topping)
+                ? prev.filter((item) => item !== topping) // Удаление топпинга
+                : [...prev, topping] // Добавление топпинга
         );
     };
 
-    // Загружаем данные из sessionStorage при монтировании
+    // Загрузка данных из sessionStorage при монтировании
     useEffect(() => {
         const savedData = JSON.parse(sessionStorage.getItem('cheeseOrderData'));
         if (savedData) {
             setSelectedCategory(savedData.category === 'Сырники приготовленные' ? 'prepared' : 'frozen');
             setQuantity(savedData.quantity);
-            setSelectedToppings(savedData.toppings);
+            setSelectedToppings(savedData.toppings || []);
         }
     }, []);
 
+    // Управление кнопкой Telegram
     useEffect(() => {
-        // Показываем MainButton, если выбраны все данные
         if (selectedCategory && quantity > 0 && selectedToppings.length > 0) {
             tg.MainButton.setText('Перейти к заказу');
             tg.MainButton.show();
@@ -67,39 +71,25 @@ function CheesePage() {
                     category: selectedCategory === 'prepared' ? 'Сырники приготовленные' : 'Сырники замороженные',
                     quantity,
                     toppings: selectedToppings,
+                    type: 'cheese',
                 };
 
                 sessionStorage.setItem('cheeseOrderData', JSON.stringify(orderData));
-
-                // Переход на OrderPage с передачей данных через state
                 navigate('/order', { state: { orderData } });
             });
         } else {
             tg.MainButton.hide();
         }
 
-        // Удаляем обработчик клика при размонтировании
-        return () => {
-            tg.MainButton.offClick(() => {});
-        };
+        return () => tg.MainButton.offClick(() => {});
     }, [selectedCategory, quantity, selectedToppings, navigate]);
-
-    useEffect(() => {
-        const savedData = JSON.parse(sessionStorage.getItem('cheeseOrderData'));
-        if (savedData) {
-            setSelectedCategory(savedData.category === 'Сырники приготовленные' ? 'prepared' : 'frozen');
-            setQuantity(savedData.quantity);
-            setSelectedToppings(savedData.toppings);
-        }
-    }, []);
-
 
     return (
         <div className="cheese-container">
-            {/* Контейнер с фоновым изображением и описанием */}
+            {/* Заголовок с кнопкой назад */}
             <div className="cheese-header">
                 <button className="cheese-back-button" onClick={() => navigate('/')}>
-                    <IoArrowBack size={24}/> Назад
+                    <IoArrowBack size={24} /> Назад
                 </button>
                 <div className="cheese-image-container"></div>
                 <p className="cheese-description">
@@ -108,7 +98,7 @@ function CheesePage() {
                 </p>
             </div>
 
-            {/* Категории */}
+            {/* Секция выбора категории */}
             <div className="categories">
                 <div
                     className={`category ${selectedCategory === 'prepared' ? 'selected' : ''}`}
@@ -126,7 +116,7 @@ function CheesePage() {
 
             {selectedCategory && <div className="section-divider"></div>}
 
-            {/* Секция "Количество" */}
+            {/* Секция выбора количества */}
             {selectedCategory && (
                 <div className="quantity-selector" ref={quantityRef}>
                     <h3>Количество:</h3>
@@ -140,14 +130,14 @@ function CheesePage() {
                         </button>
                     </div>
                     <p className="quantity-price">
-                        Цена: {(quantity * pricePerCheese).toLocaleString('en-US')} VND
+                        Цена: {(quantity * pricePerCheese).toLocaleString('ru-RU')} VND
                     </p>
                 </div>
             )}
 
             {selectedCategory && quantity > 0 && <div className="section-divider"></div>}
 
-            {/* Подкатегории (Топпинги) */}
+            {/* Секция выбора топпингов */}
             {selectedCategory && quantity > 0 && (
                 <div className="toppings" ref={toppingsRef}>
                     <h3>Выберите топпинги:</h3>
