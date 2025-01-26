@@ -25,6 +25,15 @@ const HomePage = () => {
                         onClick={() => navigate('/items')}
                     ></div>
                 </div>
+
+                {/* Карточка для "Лимонов" */}
+                <div className="home-page__card-container">
+                    <h2 className="home-page__card-title">Лимоны</h2>
+                    <div
+                        className="home-page__card home-page__card--lemons"
+                        onClick={() => navigate('/lemons')}
+                    ></div>
+                </div>
             </div>
         </div>
     );

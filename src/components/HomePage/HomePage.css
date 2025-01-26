@@ -62,3 +62,21 @@
 .home-page__card--fish {
     background-image: url('../../images/fish.jpg');
 }
+
+.home-page__card--lemons {
+    background-color: #fdfd96; /* Светло-желтый цвет */
+    background-image: url('../../images/lemons.jpg'); /* Укажите путь к изображению */
+    background-size: cover;
+    background-position: center;
+    height: 150px;
+    width: 100%;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-page__card--lemons:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
