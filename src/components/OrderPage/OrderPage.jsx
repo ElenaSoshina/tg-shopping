@@ -20,7 +20,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         if (orderData?.quantity && orderData?.category) {
             setOrderItems([
                 {
-                    id: 'cheese-order', // Уникальный идентификатор
+                    id: 'cheese-order',
                     title: orderData.category,
                     quantity: orderData.quantity,
                     price: 40000,
@@ -38,7 +38,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
     const handleOrder = useCallback(() => {
         const orderDetails = {
-            items: orderItems.map(item => ({
+            items: orderItems.map((item) => ({
                 id: item.id,
                 name: item.title,
                 quantity: item.quantity,
@@ -49,11 +49,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        // Сохраняем данные для отправки
-        const simulatedData = JSON.stringify(orderDetails);
-        console.log('[Simulated Data] JSON String:', simulatedData);
-
-        // Показываем модальное окно
+        console.log('[Simulated Data] JSON String:', JSON.stringify(orderDetails));
         setShowPopup(true);
     }, [orderItems, totalPrice]);
 
@@ -75,7 +71,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
 
     const closeWebApp = () => {
         const orderDetails = {
-            items: orderItems.map(item => ({
+            items: orderItems.map((item) => ({
                 id: item.id,
                 name: item.title,
                 quantity: item.quantity,
@@ -86,12 +82,8 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        // Отправка данных перед закрытием
-        const simulatedData = JSON.stringify(orderDetails);
-        console.log('Sending data to Telegram WebApp before closing:', simulatedData);
-        tg.sendData(simulatedData);
-
-        // Закрываем приложение
+        console.log('Sending data to Telegram WebApp before closing:', JSON.stringify(orderDetails));
+        tg.sendData(JSON.stringify(orderDetails));
         tg.close();
     };
 
@@ -99,9 +91,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const increaseQuantity = (id) => {
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
-                item.id === id
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
+                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
             )
         );
     };
@@ -116,7 +106,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         );
     };
 
-    // Определяем стиль фона в зависимости от категории
+    // Определяем стиль фона для изображения
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
@@ -126,11 +116,9 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         borderRadius: '12px',
-        height: '200px',
-        width: '100%',
-        maxWidth: '100px',
-        marginBottom: '20px',
-        textAlign: 'center',
+        height: '150px',
+        width: '150px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
     };
 
     return (
@@ -142,18 +130,15 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 <h2 className="order-title">Ваш заказ</h2>
             </div>
 
-            {/* Проверяем наличие данных заказа */}
-            {Object.keys(orderData).length === 0 ? (
-                <p className="order-empty">Нет данных для отображения заказа</p>
-            ) : (
+            {/* Основное содержимое заказа */}
+            <div className="order-content">
+                <div className="order-image" style={containerStyle}></div>
                 <div className="order-details">
-                    <div style={containerStyle}></div>
-
                     {/* Категория */}
                     <p><strong>Категория:</strong> {orderData.category}</p>
 
                     {/* Количество */}
-                    <div className="quantity__selector">
+                    <div className="quantity-selector">
                         <h3>Количество:</h3>
                         <div className="quantity-controls">
                             <button
@@ -176,28 +161,21 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     <p>
                         <strong>Топпинги:</strong>{' '}
                         {orderData.toppings.length > 0
-                            ? orderData.toppings
-                                .map((topping) => {
-                                    if (topping === 'sourCream') return 'Сметана';
-                                    if (topping === 'condensedMilk') return 'Сгущенка';
-                                    if (topping === 'passionFruitJam') return 'Джем из маракуйи';
-                                    return '';
-                                })
-                                .join(', ')
+                            ? orderData.toppings.join(', ')
                             : 'Нет'}
                     </p>
-                </div>
-            )}
 
-            {orderItems.length > 0 && (
-                <div className="order-summary">
-                    <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
+                    {/* Итоговая сумма */}
+                    <div className="order-summary">
+                        <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
+                    </div>
                 </div>
-            )}
+            </div>
 
+            {/* Попап подтверждения */}
             {showPopup && (
-                <div className={'popup'}>
-                    <div className={'popup-content'}>
+                <div className="popup">
+                    <div className="popup-content">
                         <p>Ваш заказ успешно оформлен!</p>
                         <button className="popup-close-button" onClick={closeWebApp}>
                             Закрыть и вернуться в чат
