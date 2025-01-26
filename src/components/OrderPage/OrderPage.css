@@ -191,3 +191,34 @@
 .popup-close-button:hover {
     background-color: #0056b3;
 }
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.quantity-button {
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.quantity-button:hover {
+    background-color: #555;
+}
+
+.quantity-value {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}

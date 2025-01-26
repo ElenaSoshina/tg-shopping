@@ -95,6 +95,27 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         tg.close();
     };
 
+    // Обработчики изменения количества
+    const increaseQuantity = (id) => {
+        setOrderItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === id
+                    ? { ...item, quantity: item.quantity + 1 }
+                    : item
+            )
+        );
+    };
+
+    const decreaseQuantity = (id) => {
+        setOrderItems((prevItems) =>
+            prevItems.map((item) =>
+                item.id === id && item.quantity > 1
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            )
+        );
+    };
+
     // Определяем стиль фона в зависимости от категории
     const containerStyle = {
         backgroundImage: `url(${
@@ -102,12 +123,12 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 ? frozenCheese
                 : preparedCheese
         })`,
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
         backgroundPosition: 'center',
         borderRadius: '12px',
-        height: '200px',
-        width: '100%',
-        maxWidth: '400px',
+        height: '400px',
+        width: '100%', /* Ширина контейнера — 100% от ширины экрана */
+        maxWidth: '300px', /* Максимальная ширина для планшетов */
         marginBottom: '20px',
     };
 
@@ -131,7 +152,25 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     <p><strong>Категория:</strong> {orderData.category}</p>
 
                     {/* Количество */}
-                    <p><strong>Количество:</strong> {orderData.quantity} шт.</p>
+                    <div className="quantity-selector">
+                        <h3>Количество:</h3>
+                        <div className="quantity-controls">
+                            <button
+                                className="quantity-button"
+                                onClick={() => decreaseQuantity(orderItems[0]?.id)}
+                            >
+                                -
+                            </button>
+                            <span className="quantity-value">{orderItems[0]?.quantity} шт.</span>
+                            <button
+                                className="quantity-button"
+                                onClick={() => increaseQuantity(orderItems[0]?.id)}
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+
 
                     {/* Топпинги */}
                     <p>
