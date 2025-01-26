@@ -23,20 +23,24 @@ function OrderPage() {
                     id: 'order-item',
                     title: orderData.category,
                     quantity: orderData.quantity,
-                    price: orderData.price,
+                    price: orderData.type === 'fish' ? 160000 : 40000, // Используем цену напрямую
                     toppings: orderData.toppings || [],
                 },
             ]);
         }
     }, [orderData]);
 
-    const totalPrice = orderItems.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
+
+    const totalPrice = useMemo(
+        () => orderItems.reduce((total, item) => total + item.price * item.quantity, 0),
+        [orderItems]
     );
 
     const handleOrder = useCallback(() => {
-        if (orderItems.length === 0) return;
+        if (orderItems.length === 0) {
+            console.error('OrderItems is empty');
+            return;
+        }
 
         const orderDetails = {
             items: orderItems.map((item) => ({
@@ -45,32 +49,53 @@ function OrderPage() {
                 quantity: item.quantity,
                 price: item.price,
                 total: (item.price * item.quantity).toFixed(2),
-                toppings: item.toppings,
+                toppings: item.toppings || [],
             })),
             totalPrice: totalPrice.toFixed(2),
         };
 
-        tg.sendData(JSON.stringify(orderDetails));
-        setShowPopup(true);
+        try {
+            tg.sendData(JSON.stringify(orderDetails));
+            setShowPopup(true);
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     }, [orderItems, totalPrice]);
 
     useEffect(() => {
         if (orderItems.length > 0) {
             tg.MainButton.text = 'Оформить заказ';
             tg.MainButton.show();
-
             tg.MainButton.onClick(handleOrder);
 
             return () => {
                 tg.MainButton.offClick(handleOrder);
                 tg.MainButton.hide();
             };
+        } else {
+            tg.MainButton.hide();
         }
     }, [orderItems, handleOrder]);
 
     const closeWebApp = () => {
-        tg.sendData(JSON.stringify(orderItems));
-        tg.close();
+        const orderDetails = {
+            items: orderItems.map((item) => ({
+                id: item.id,
+                name: item.title,
+                quantity: item.quantity,
+                price: item.price,
+                total: (item.price * item.quantity).toFixed(2),
+                toppings: item.toppings || [],
+            })),
+            totalPrice: totalPrice.toFixed(2),
+        };
+
+        try {
+            tg.sendData(JSON.stringify(orderDetails));
+            tg.close();
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
     };
 
     const increaseQuantity = (id) => {
@@ -110,13 +135,11 @@ function OrderPage() {
                 <button
                     className="order-back-button"
                     onClick={() => {
-                        const targetPage = orderData.category.includes('Сырники')
-                            ? '/cheese'
-                            : '/fish';
-                        navigate(targetPage);
+                        const redirectPath = orderData.type === 'fish' ? '/fish' : '/cheese';
+                        navigate(redirectPath);
                     }}
                 >
-                    ← Назад
+                    ←
                 </button>
                 <h2 className="order-title">Ваш заказ</h2>
             </div>
@@ -131,27 +154,37 @@ function OrderPage() {
 
                     <div className="quantity-controls">
                         <strong>Количество:</strong>
-                        <button
-                            className="quantity-button"
-                            onClick={() => decreaseQuantity(orderItems[0]?.id)}
-                        >
+                        <button className="quantity-button" onClick={() => decreaseQuantity(orderItems[0]?.id)}>
                             -
                         </button>
                         <span className="quantity-value">{orderItems[0]?.quantity}</span>
-                        <button
-                            className="quantity-button"
-                            onClick={() => increaseQuantity(orderItems[0]?.id)}
-                        >
+                        <button className="quantity-button" onClick={() => increaseQuantity(orderItems[0]?.id)}>
                             +
                         </button>
                     </div>
 
-                    <p>
-                        <strong>Топпинги:</strong>{' '}
-                        {orderItems[0]?.toppings.length > 0
-                            ? orderItems[0]?.toppings.join(', ')
-                            : 'Нет'}
-                    </p>
+                    {/* Отображаем топпинги только для сырников */}
+                    {orderData.type !== 'fish' && (
+                        <p>
+                            <strong>Топпинги:</strong>{' '}
+                            {orderData.toppings.length > 0
+                                ? orderData.toppings
+                                    .map((topping) => {
+                                        switch (topping) {
+                                            case 'sourCream':
+                                                return 'Сметана';
+                                            case 'condensedMilk':
+                                                return 'Сгущенка';
+                                            case 'passionFruitJam':
+                                                return 'Джем из маракуйи';
+                                            default:
+                                                return 'Неизвестный топпинг';
+                                        }
+                                    })
+                                    .join(', ')
+                                : 'Нет'}
+                        </p>
+                    )}
 
                     <div className="order-summary">
                         <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
