@@ -11,11 +11,9 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Получаем данные заказа из CheesePage
     const orderData = useMemo(() => location.state?.orderData || {}, [location.state]);
     const [orderItems, setOrderItems] = useState([]);
 
-    // Если данные переданы из CheesePage, добавляем их в список заказа
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
             setOrderItems([
@@ -30,7 +28,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         }
     }, [orderData]);
 
-    // Подсчет общей стоимости
     const totalPrice = orderItems.reduce(
         (total, item) => total + item.price * item.quantity,
         0
@@ -87,7 +84,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         tg.close();
     };
 
-    // Обработчики изменения количества
     const increaseQuantity = (id) => {
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
@@ -106,19 +102,12 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
         );
     };
 
-    // Определяем стиль фона для изображения
     const containerStyle = {
         backgroundImage: `url(${
             orderData.category === 'Сырники замороженные'
                 ? frozenCheese
                 : preparedCheese
         })`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        borderRadius: '12px',
-        height: '150px',
-        width: '150px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
     };
 
     return (
@@ -130,14 +119,11 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                 <h2 className="order-title">Ваш заказ</h2>
             </div>
 
-            {/* Основное содержимое заказа */}
             <div className="order-content">
                 <div className="order-image" style={containerStyle}></div>
                 <div className="order-details">
-                    {/* Категория */}
                     <p><strong>Категория:</strong> {orderData.category}</p>
 
-                    {/* Количество */}
                     <div className="quantity-selector">
                         <h3>Количество:</h3>
                         <div className="quantity-controls">
@@ -157,7 +143,6 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                         </div>
                     </div>
 
-                    {/* Топпинги */}
                     <p>
                         <strong>Топпинги:</strong>{' '}
                         {orderData.toppings.length > 0
@@ -165,14 +150,12 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                             : 'Нет'}
                     </p>
 
-                    {/* Итоговая сумма */}
                     <div className="order-summary">
                         <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
                     </div>
                 </div>
             </div>
 
-            {/* Попап подтверждения */}
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
