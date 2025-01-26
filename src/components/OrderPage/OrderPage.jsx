@@ -153,7 +153,7 @@ function OrderPage({ cartItems, onRemove, onAdd }) {
                     <p><strong>Категория:</strong> {orderData.category}</p>
 
                     {/* Количество */}
-                    <div className="quantity-selector">
+                    <div className="quantity__selector">
                         <h3>Количество:</h3>
                         <div className="quantity-controls">
                             <button

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
 
@@ -8,17 +8,29 @@ function CheesePage() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [selectedToppings, setSelectedToppings] = useState([]);
-    const pricePerCheese = 40000
+    const pricePerCheese = 40000;
     const navigate = useNavigate();
+
+    // Рефы для секций
+    const quantityRef = useRef(null);
+    const toppingsRef = useRef(null);
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         setQuantity(0); // Сбрасываем количество при выборе новой категории
         setSelectedToppings([]); // Сбрасываем выбранные топпинги
+
+        // Скроллим к секции количества
+        setTimeout(() => quantityRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
     };
 
     const increaseQuantity = () => {
         setQuantity((prevQuantity) => prevQuantity + 1);
+
+        // Скроллим к секции топпингов
+        if (quantity === 0) {
+            setTimeout(() => toppingsRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
+        }
     };
 
     const decreaseQuantity = () => {
@@ -90,7 +102,7 @@ function CheesePage() {
 
             {/* Секция "Количество" */}
             {selectedCategory && (
-                <div className="quantity-selector">
+                <div className="quantity-selector" ref={quantityRef}>
                     <h3>Количество:</h3>
                     <div className="quantity-controls">
                         <button className="quantity-button" onClick={decreaseQuantity}>
@@ -111,7 +123,7 @@ function CheesePage() {
 
             {/* Подкатегории (Топпинги) */}
             {selectedCategory && quantity > 0 && (
-                <div className="toppings">
+                <div className="toppings" ref={toppingsRef}>
                     <h3>Выберите топпинги:</h3>
                     <div className="topping-options">
                         <div
