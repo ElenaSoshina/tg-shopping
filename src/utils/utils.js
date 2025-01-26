@@ -15,13 +15,20 @@ export const mapToppingNames = (toppings) =>
         }
     });
 
-export const getBackgroundImage = (category, images) => {
-    const { frozenCheese, preparedCheese, salmonSlice, salmonPiece } = images;
-    return category === 'Сырники замороженные'
-        ? frozenCheese
-        : category === 'Сырники приготовленные'
-            ? preparedCheese
-            : category === 'Нарезка'
-                ? salmonSlice
-                : salmonPiece;
-};
+export function getBackgroundImage(category, images) {
+    switch (category) {
+        case 'Сырники замороженные':
+            return images.frozenCheese;
+        case 'Сырники приготовленные':
+            return images.preparedCheese;
+        case 'Нарезка':
+            return images.salmonSlice;
+        case 'Кусок':
+            return images.salmonPiece;
+        case 'Лимон': // Добавлено условие для лимона
+            return images.lemonImage;
+        default:
+            return ''; // Возвращаем пустую строку, если категория не определена
+    }
+}
+
