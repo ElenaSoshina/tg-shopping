@@ -13,14 +13,14 @@ function OrderPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Фallback для получения данных из sessionStorage
+    // Получение данных из location.state или sessionStorage
     const orderData = useMemo(() => {
-        return (
-            location.state?.orderData ||
-            JSON.parse(sessionStorage.getItem('fishOrderData')) ||
-            JSON.parse(sessionStorage.getItem('cheeseOrderData')) ||
-            {}
-        );
+        if (location.state?.orderData) {
+            return location.state.orderData;
+        }
+        const fishOrder = sessionStorage.getItem('fishOrderData');
+        const cheeseOrder = sessionStorage.getItem('cheeseOrderData');
+        return fishOrder ? JSON.parse(fishOrder) : cheeseOrder ? JSON.parse(cheeseOrder) : {};
     }, [location.state]);
 
     const [orderItems, setOrderItems] = useState([]);
@@ -32,10 +32,12 @@ function OrderPage() {
                     id: 'order-item',
                     title: orderData.category,
                     quantity: orderData.quantity,
-                    price: orderData.type === 'fish' ? 160000 : 40000, // Используем цену напрямую
+                    price: orderData.type === 'fish' ? 160000 : 40000,
                     toppings: orderData.toppings || [],
                 },
             ]);
+        } else {
+            console.error('Invalid order data:', orderData);
         }
     }, [orderData]);
 
@@ -86,23 +88,11 @@ function OrderPage() {
     }, [orderItems, handleOrder]);
 
     const closeWebApp = () => {
-        const orderDetails = {
-            items: orderItems.map((item) => ({
-                id: item.id,
-                name: item.title,
-                quantity: item.quantity,
-                price: item.price,
-                total: (item.price * item.quantity).toFixed(2),
-                toppings: item.toppings || [],
-            })),
-            totalPrice: totalPrice.toFixed(2),
-        };
-
         try {
-            tg.sendData(JSON.stringify(orderDetails));
+            tg.sendData(JSON.stringify(orderItems));
             tg.close();
         } catch (error) {
-            console.error('Error sending data:', error);
+            console.error('Error closing WebApp:', error);
         }
     };
 
@@ -179,20 +169,17 @@ function OrderPage() {
                     {orderData.type !== 'fish' && (
                         <p>
                             <strong>Топпинги:</strong>{' '}
-                            {orderData.toppings.length > 0
+                            {orderData.toppings?.length > 0
                                 ? orderData.toppings
-                                    .map((topping) => {
-                                        switch (topping) {
-                                            case 'sourCream':
-                                                return 'Сметана';
-                                            case 'condensedMilk':
-                                                return 'Сгущенка';
-                                            case 'passionFruitJam':
-                                                return 'Джем из маракуйи';
-                                            default:
-                                                return 'Неизвестный топпинг';
-                                        }
-                                    })
+                                    .map((topping) =>
+                                        topping === 'sourCream'
+                                            ? 'Сметана'
+                                            : topping === 'condensedMilk'
+                                                ? 'Сгущенка'
+                                                : topping === 'passionFruitJam'
+                                                    ? 'Джем из маракуйи'
+                                                    : 'Неизвестный топпинг'
+                                    )
                                     .join(', ')
                                 : 'Нет'}
                         </p>
