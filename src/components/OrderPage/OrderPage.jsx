@@ -23,6 +23,7 @@ const tg = window.Telegram.WebApp;
 function OrderPage() {
     const [showPopup, setShowPopup] = useState(false);
     const [orderItems, setOrderItems] = useState([]);
+    const [orderDetails, setOrderDetails] = useState(null); // Добавлено состояние для данных заказа
     const location = useLocation();
 
     // Достаём данные из state или из sessionStorage
@@ -66,7 +67,7 @@ function OrderPage() {
     const handleOrder = useCallback(() => {
         if (orderItems.length === 0) return;
 
-        const orderDetails = {
+        const details = {
             items: orderItems.map((item) => ({
                 ...item,
                 total: (item.price * item.quantity).toFixed(2),
@@ -74,8 +75,13 @@ function OrderPage() {
             totalPrice: totalPrice.toFixed(2),
         };
 
+        console.log('Отправка данных заказа:', details); // Добавлено
+
+        // Сохраняем данные заказа для отображения в Popup
+        setOrderDetails(details);
+
         // Отправляем данные в бота
-        tg.sendData(JSON.stringify(orderDetails));
+        tg.sendData(JSON.stringify(details));
 
         setShowPopup(true);
     }, [orderItems, totalPrice]);
@@ -148,8 +154,7 @@ function OrderPage() {
                 <OrderImage style={containerStyle} />
                 <div className="order-details">
                     <div className="order-category">
-                        <strong>Категория:</strong>{' '}
-                        <span>{orderData.category}</span>
+                        <strong>Категория:</strong> <span>{orderData.category}</span>
                     </div>
 
                     <QuantityControls
@@ -189,8 +194,8 @@ function OrderPage() {
                 </div>
             </div>
 
-            {/* Попап после успешного заказа */}
-            {showPopup && <OrderPopup onClose={closeWebApp} />}
+            {/* Попап после успешного заказа с отображением данных */}
+            {showPopup && <OrderPopup onClose={closeWebApp} orderDetails={orderDetails} />}
         </div>
     );
 }

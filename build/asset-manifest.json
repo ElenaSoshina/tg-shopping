@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b9678009.css",
-    "main.js": "/static/js/main.0f19038a.js",
+    "main.css": "/static/css/main.2595b129.css",
+    "main.js": "/static/js/main.f29250e2.js",
     "static/media/cheesse_tonning.jpeg": "/static/media/cheesse_tonning.08e6efb367e33f645600.jpeg",
     "static/media/preparedCheese.jpeg": "/static/media/preparedCheese.bdb140d7ba7da688ed63.jpeg",
     "static/media/frozenCheese.jpeg": "/static/media/frozenCheese.bd90f6c6323a38b3b2a9.jpeg",
@@ -19,11 +19,11 @@
     "static/media/fish_slices.jpg": "/static/media/fish_slices.fcc7ac1d35c99533e02e.jpg",
     "static/media/lemons.jpg": "/static/media/lemons.d4bde727d653be0b58d2.jpg",
     "index.html": "/index.html",
-    "main.b9678009.css.map": "/static/css/main.b9678009.css.map",
-    "main.0f19038a.js.map": "/static/js/main.0f19038a.js.map"
+    "main.2595b129.css.map": "/static/css/main.2595b129.css.map",
+    "main.f29250e2.js.map": "/static/js/main.f29250e2.js.map"
   },
   "entrypoints": [
-    "static/css/main.b9678009.css",
-    "static/js/main.0f19038a.js"
+    "static/css/main.2595b129.css",
+    "static/js/main.f29250e2.js"
   ]
 }

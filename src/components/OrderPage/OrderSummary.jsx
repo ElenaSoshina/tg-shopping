@@ -1,11 +1,11 @@
 import React from 'react';
 import { mapToppingNames } from '../../utils/utils';
-import './OrderPage.css'
+import './OrderSummary.css'; // Используем отдельный CSS файл
 
 const OrderSummary = ({ orderItems, totalPrice, type }) => (
-    <div>
+    <div className="order-summary-container">
         <div className="order-summary">
-            <span>Итого: {totalPrice.toLocaleString('ru-RU')} VND</span>
+            <span>Итого: {Number(totalPrice).toLocaleString('ru-RU')} VND</span>
         </div>
         {type !== 'fish' && (
             <p>

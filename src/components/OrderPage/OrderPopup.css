@@ -1,0 +1,52 @@
+/* OrderPopup.css */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+}
+
+.order-details ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-details li {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.popup-close-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.popup-close-button:hover {
+    background: #0056b3;
+}
