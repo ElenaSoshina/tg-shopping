@@ -19,7 +19,7 @@ const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
-    const [webAppQueryId, setWebAppQueryId] = useState('');
+    const [webAppQueryId, setWebAppQueryId] = useState(''); // eslint-disable-line no-unused-vars
 
     // Получаем web_app_query_id из URL и сообщаем Telegram, что Web App готово
     useEffect(() => {
@@ -106,6 +106,7 @@ function App() {
                     element={
                         <>
                             <h1 className="heading">Order food</h1>
+                            {webAppQueryId && <p>Query ID: {webAppQueryId}</p>} {/* Добавлено отображение Query ID */}
                             <Cart cartItems={cartItems} />
                             <div className="cards__container">
                                 {foods.map((food) => (
