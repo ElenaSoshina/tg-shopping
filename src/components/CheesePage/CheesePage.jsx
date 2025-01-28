@@ -43,12 +43,24 @@ function CheesePage() {
 
     // Обработчик выбора топпинга
     const handleToppingSelect = (topping) => {
-        setSelectedToppings((prev) =>
-            prev.includes(topping)
+        setSelectedToppings((prev) => {
+            const updatedToppings = prev.includes(topping)
                 ? prev.filter((item) => item !== topping) // Удаление топпинга
-                : [...prev, topping] // Добавление топпинга
-        );
+                : [...prev, topping]; // Добавление топпинга
+
+            // Осуществляем скролл после обновления состояния
+            setTimeout(() => {
+                toppingsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+
+            return updatedToppings;
+        });
     };
+
+    useEffect(() => {
+        // Прокрутка в верх страницы при инициализации компонента
+        window.scrollTo(0, 0);
+    }, []);
 
     // Загрузка данных из sessionStorage при монтировании
     useEffect(() => {

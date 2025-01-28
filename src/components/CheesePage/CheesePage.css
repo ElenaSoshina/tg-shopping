@@ -9,10 +9,12 @@
     background: linear-gradient(to bottom, #f0f4ff, #e6ecf8);
     font-family: 'Poppins', sans-serif;
     color: #333;
+    padding-bottom: 100px;
 }
 
 /* Контейнер с изображением */
 .cheese-header {
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
