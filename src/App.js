@@ -19,14 +19,13 @@ const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
-    const [webAppQueryId, setWebAppQueryId] = useState(''); // eslint-disable-line no-unused-vars
+    const [webAppQueryId, setWebAppQueryId] = useState('');
 
     // Получаем web_app_query_id из URL и сообщаем Telegram, что Web App готово
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const queryId = queryParams.get('query_id');
         setWebAppQueryId(queryId);
-
         tg.ready();
     }, []);
 
@@ -40,16 +39,9 @@ function App() {
     useEffect(() => {
         if (cartItems.length > 0) {
             sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
-        }
-    }, [cartItems]);
-
-    // Показываем / скрываем кнопку «VIEW ORDER» на главной странице
-    useEffect(() => {
-        if (cartItems.length > 0) {
-            tg.MainButton.setText("VIEW ORDER");
-            tg.MainButton.show();
+            updateMainButton("VIEW ORDER", true);
         } else {
-            tg.MainButton.hide();
+            updateMainButton("", false);
         }
     }, [cartItems]);
 
@@ -58,9 +50,7 @@ function App() {
         if (exist) {
             setCartItems(
                 cartItems.map((x) =>
-                    x.id === food.id
-                        ? { ...exist, quantity: exist.quantity + 1 }
-                        : x
+                    x.id === food.id ? { ...exist, quantity: exist.quantity + 1 } : x
                 )
             );
         } else {
@@ -75,17 +65,16 @@ function App() {
         } else {
             setCartItems(
                 cartItems.map((x) =>
-                    x.id === food.id
-                        ? { ...exist, quantity: exist.quantity - 1 }
-                        : x
+                    x.id === food.id ? { ...exist, quantity: exist.quantity - 1 } : x
                 )
             );
         }
     };
 
-    // Управление видимостью кнопки из разных компонентов
-    const handleCartButtonVisibility = (visible) => {
+    // Функция для обновления состояния MainButton
+    const updateMainButton = (text, visible) => {
         if (visible) {
+            tg.MainButton.setText(text);
             tg.MainButton.show();
         } else {
             tg.MainButton.hide();
@@ -94,44 +83,32 @@ function App() {
 
     return (
         <Router>
-            {/* Отслеживание переходов и управление навигацией */}
             <NavigateHandler />
-            <LocationHandler
-                setCartButtonVisibility={handleCartButtonVisibility}
-            />
+            <LocationHandler setCartButtonVisibility={updateMainButton} />
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route
-                    path="/items"
-                    element={
-                        <>
-                            <h1 className="heading">Order food</h1>
-                            {webAppQueryId && <p>Query ID: {webAppQueryId}</p>} {/* Добавлено отображение Query ID */}
-                            <Cart cartItems={cartItems} />
-                            <div className="cards__container">
-                                {foods.map((food) => (
-                                    <Card
-                                        food={food}
-                                        key={food.id}
-                                        onAdd={onAdd}
-                                        onRemove={onRemove}
-                                        cartItems={cartItems}
-                                    />
-                                ))}
-                            </div>
-                        </>
-                    }
-                />
-                {/* Страница выбора сырников */}
+                <Route path="/items" element={
+                    <>
+                        <h1 className="heading">Order food</h1>
+                        {webAppQueryId && <p>Query ID: {webAppQueryId}</p>}
+                        <Cart cartItems={cartItems} />
+                        <div className="cards__container">
+                            {foods.map((food) => (
+                                <Card
+                                    food={food}
+                                    key={food.id}
+                                    onAdd={onAdd}
+                                    onRemove={onRemove}
+                                    cartItems={cartItems}
+                                />
+                            ))}
+                        </div>
+                    </>
+                } />
                 <Route path="/cheese" element={<CheesePage />} />
                 <Route path="/fish" element={<FishPage />} />
                 <Route path="/lemon" element={<LemonPage />} />
-                <Route
-                    path="/order"
-                    element={
-                        <OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} webAppQueryId={webAppQueryId} />
-                    }
-                />
+                <Route path="/order" element={<OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} webAppQueryId={webAppQueryId} />} />
             </Routes>
         </Router>
     );
