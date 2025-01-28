@@ -129,7 +129,7 @@ function App() {
                 <Route
                     path="/order"
                     element={
-                        <OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} />
+                        <OrderPage cartItems={cartItems} onRemove={onRemove} onAdd={onAdd} webAppQueryId={webAppQueryId} />
                     }
                 />
             </Routes>

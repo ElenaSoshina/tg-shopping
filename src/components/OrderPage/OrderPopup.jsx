@@ -1,11 +1,12 @@
 import React from 'react';
 import './OrderPopup.css'; // Изменил на отдельный CSS файл для Popup
 
-const OrderPopup = ({ onClose, orderDetails }) => {
+const OrderPopup = ({ onClose, orderDetails, webAppQueryId }) => {
     return (
         <div className="popup-overlay">
             <div className="popup-content">
                 <h2>Ваш заказ успешно оформлен!</h2>
+                <p>ID вашей сессии: {webAppQueryId}</p>
                 {orderDetails ? (
                     <div className="order-details">
                         <h3>Позиции:</h3>

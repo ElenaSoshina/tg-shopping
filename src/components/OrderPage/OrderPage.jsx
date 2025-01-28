@@ -20,7 +20,7 @@ import OrderPopup from './OrderPopup';
 
 const tg = window.Telegram.WebApp;
 
-function OrderPage() {
+function OrderPage({webAppQueryId}) {
     const [showPopup, setShowPopup] = useState(false);
     const [orderItems, setOrderItems] = useState([]);
     const [orderDetails, setOrderDetails] = useState(null); // Добавлено состояние для данных заказа
@@ -195,7 +195,7 @@ function OrderPage() {
             </div>
 
             {/* Попап после успешного заказа с отображением данных */}
-            {showPopup && <OrderPopup onClose={closeWebApp} orderDetails={orderDetails} />}
+            {showPopup && <OrderPopup onClose={closeWebApp} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />}
         </div>
     );
 }
