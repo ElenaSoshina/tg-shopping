@@ -19,12 +19,15 @@ const tg = window.Telegram.WebApp;
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
+    const [webAppQueryId, setWebAppQueryId] = useState('');
 
-    // ВАЖНО: Сообщаем Telegram, что наше WebApp готово к работе
+    // Получаем web_app_query_id из URL и сообщаем Telegram, что Web App готово
     useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const queryId = queryParams.get('query_id');
+        setWebAppQueryId(queryId);
+
         tg.ready();
-        // Если хотите, чтобы приложение разворачивалось на весь экран
-        // tg.expand();
     }, []);
 
     useEffect(() => {
