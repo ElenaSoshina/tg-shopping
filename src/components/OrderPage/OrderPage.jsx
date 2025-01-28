@@ -6,10 +6,12 @@ import preparedCheese from '../../images/preparedCheese.jpeg';
 import salmonSlice from '../../images/fishPage.jpeg';
 import salmonPiece from '../../images/fish_slices.jpg';
 import lemonImage from '../../images/lemonPage.jpeg';
+
 import {
     calculateTotalPrice,
     getBackgroundImage,
 } from '../../utils/utils';
+
 import QuantityControls from './QuantityControls';
 import OrderSummary from './OrderSummary';
 import OrderHeader from './OrderHeader';
@@ -23,6 +25,7 @@ function OrderPage() {
     const [orderItems, setOrderItems] = useState([]);
     const location = useLocation();
 
+    // Достаём данные из state или из sessionStorage
     const orderData = useMemo(() => {
         return (
             location.state?.orderData ||
@@ -33,6 +36,7 @@ function OrderPage() {
         );
     }, [location.state]);
 
+    // Заполняем данные заказа
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
             setOrderItems([
@@ -52,8 +56,13 @@ function OrderPage() {
         }
     }, [orderData]);
 
-    const totalPrice = useMemo(() => calculateTotalPrice(orderItems), [orderItems]);
+    // Считаем итоговую стоимость
+    const totalPrice = useMemo(
+        () => calculateTotalPrice(orderItems),
+        [orderItems]
+    );
 
+    // Обработка оформления заказа
     const handleOrder = useCallback(() => {
         if (orderItems.length === 0) return;
 
@@ -65,24 +74,33 @@ function OrderPage() {
             totalPrice: totalPrice.toFixed(2),
         };
 
+        // Отправляем данные в бота
         tg.sendData(JSON.stringify(orderDetails));
+
         setShowPopup(true);
     }, [orderItems, totalPrice]);
 
+    // Изменение количества
     const increaseQuantity = () => {
         setOrderItems((prevItems) =>
-            prevItems.map((item) => ({ ...item, quantity: item.quantity + 1 }))
+            prevItems.map((item) => ({
+                ...item,
+                quantity: item.quantity + 1,
+            }))
         );
     };
 
     const decreaseQuantity = () => {
         setOrderItems((prevItems) =>
             prevItems.map((item) =>
-                item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+                item.quantity > 1
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
             )
         );
     };
 
+    // Включаем MainButton и подвешиваем обработчик нажатия
     useEffect(() => {
         if (orderItems.length > 0) {
             tg.MainButton.setText('Оформить заказ');
@@ -90,6 +108,7 @@ function OrderPage() {
             tg.MainButton.onClick(handleOrder);
 
             return () => {
+                // Отключаем обработчик при размонтаже
                 tg.MainButton.offClick(handleOrder);
                 tg.MainButton.hide();
             };
@@ -102,6 +121,7 @@ function OrderPage() {
         tg.close();
     };
 
+    // Подбираем фон
     const containerStyle = {
         backgroundImage: `url(${getBackgroundImage(orderData.category, {
             frozenCheese,
@@ -128,11 +148,12 @@ function OrderPage() {
                 <OrderImage style={containerStyle} />
                 <div className="order-details">
                     <div className="order-category">
-                        <strong>Категория:</strong> <span>{orderData.category}</span>
+                        <strong>Категория:</strong>{' '}
+                        <span>{orderData.category}</span>
                     </div>
 
                     <QuantityControls
-                        quantity={orderItems[0]?.quantity || 0}
+                        quantity={orderItems[0]?.quantity || 1}
                         increase={increaseQuantity}
                         decrease={decreaseQuantity}
                     />
@@ -168,6 +189,7 @@ function OrderPage() {
                 </div>
             </div>
 
+            {/* Попап после успешного заказа */}
             {showPopup && <OrderPopup onClose={closeWebApp} />}
         </div>
     );
