@@ -63,13 +63,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Уменьшен отступ */
+    gap: 15px; /* Уменьшен отступ */
+    margin-top: 10px;
 }
 
 .quantity-button {
-    width: 40px; /* Уменьшен размер */
-    height: 40px; /* Уменьшен размер */
-    font-size: 1.2rem; /* Уменьшен размер шрифта */
+    width: 44px; /* Немного увеличен размер для удобства нажатия */
+    height: 44px; /* Аналогично увеличен размер */
+    font-size: 1.5rem; /* Увеличен размер шрифта для более читаемой иконки */
+    background-color: #007bff; /* Пример добавления цвета кнопкам */
+    color: white; /* Цвет текста/иконки */
+    border-radius: 20%; /* Круглые кнопки */
+    border: none; /* Убрать стандартную рамку */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); /* Добавить тень для лучшей визуальной отделенности */
 }
 
 .quantity-value {
