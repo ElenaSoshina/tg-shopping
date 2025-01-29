@@ -42,6 +42,7 @@ function FishPage() {
                     category: selectedCategory === 'cut' ? 'Нарезка' : 'Кусок',
                     quantity,
                     type: 'fish',
+                    price: calculatePrice(quantity),
                 };
 
                 sessionStorage.setItem('fishOrderData', JSON.stringify(orderData));

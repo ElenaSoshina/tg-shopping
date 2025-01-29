@@ -79,8 +79,7 @@ function OrderPage({webAppQueryId}) {
                 id: 'order-item',
                 title: formattedTitle,
                 quantity: orderData.quantity,
-                price: orderData.type === 'fish' ? 160000 :
-                    orderData.type === 'lemon' ? 80000 : 40000,
+                price: orderData.price,
                 toppings: orderData.toppings || [],
             };
 
