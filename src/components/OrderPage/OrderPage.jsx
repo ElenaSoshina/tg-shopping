@@ -40,15 +40,18 @@ function OrderPage({webAppQueryId}) {
     // Заполняем данные заказа
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
-            const newOrderItems = {
+            const unit = orderData.type === 'fish' ? 'г' :
+                orderData.type === 'lemon' ? 'уп' : 'шт';
+            const title = `${orderData.category} - ${orderData.quantity} ${unit}`;
+
+            setOrderItems([{
                 id: 'order-item',
-                title: orderData.type === 'fish' ? `Рыба ${orderData.category}` : orderData.category,
+                title: title,
                 quantity: orderData.quantity,
                 price: orderData.type === 'fish' ? 160000 :
                     orderData.type === 'lemon' ? 80000 : 40000,
                 toppings: orderData.toppings || [],
-            };
-            setOrderItems([newOrderItems]);
+            }]);
         }
     }, [orderData]);
 
