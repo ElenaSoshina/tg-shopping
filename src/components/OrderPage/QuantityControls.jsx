@@ -1,5 +1,5 @@
 import React from 'react';
-import './OrderPage.css'
+import './QuantityControls.css'
 
 const QuantityControls = ({ quantity, increase, decrease }) => (
     <div className="quantity-controls">

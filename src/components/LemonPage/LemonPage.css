@@ -83,6 +83,9 @@
 }
 
 .quantity-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     background: #e8f7ea;
     color: #28a745;
@@ -93,6 +96,8 @@
     font-size: 1.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 0; /* Убраны внутренние отступы */
+    line-height: 50px; /* Высота строки равна высоте кнопки */
 }
 
 .quantity-value {
