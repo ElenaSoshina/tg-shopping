@@ -1,33 +1,15 @@
-/* QuantityControls.css */
+
 .quantity-controls {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px; /* Расстояние между элементами */
-    font-family: Arial, sans-serif; /* Простой и чистый шрифт */
+    margin-right: 10px;
+
 }
 
-.quantity-button {
-    width: 30px; /* Меньший размер для кнопок */
-    height: 30px;
-    background-color: transparent; /* Прозрачный фон */
-    border: 1px solid #ccc; /* Тонкая граница для определения кнопки */
-    border-radius: 50%; /* Круглая форма кнопки */
-    color: #333; /* Темный цвет для контраста */
-    font-size: 1.2rem; /* Размер символов + и - */
+.quantity-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; /* Плавное изменение фона и цвета при наведении */
-}
-
-.quantity-button:hover {
-    background-color: #e0e0e0; /* Светло-серый фон при наведении */
-    color: #000; /* Черный цвет текста при наведении */
-}
-
-.quantity-value {
-    font-size: 1rem; /* Размер шрифта для количества */
-    min-width: 40px; /* Минимальная ширина, чтобы число не сжималось */
-    text-align: center; /* Центрирование текста */
 }
