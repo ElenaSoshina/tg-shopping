@@ -163,27 +163,23 @@ function OrderPage({webAppQueryId}) {
                         decrease={decreaseQuantity}
                     />
 
-                    {/* Отображаем топпинги только для сырников */}
+                    {/* Отображаем топпинги только для сырников, если они есть */}
                     {orderData.type === 'cheese' && (
-                        <p>
-                            <strong>Топпинги:</strong>{' '}
-                            {orderItems[0]?.toppings?.length
-                                ? orderItems[0].toppings
-                                    .map((topping) => {
-                                        switch (topping) {
-                                            case 'sourCream':
-                                                return 'Сметана';
-                                            case 'condensedMilk':
-                                                return 'Сгущенка';
-                                            case 'passionFruitJam':
-                                                return 'Джем из маракуйи';
-                                            default:
-                                                return 'Неизвестный топпинг';
-                                        }
-                                    })
-                                    .join(', ')
-                                : 'Нет'}
-                        </p>
+                        orderItems[0]?.toppings?.length > 0 ? (
+                            <p>
+                                <strong>Топпинги:</strong>{' '}
+                                {orderItems[0].toppings.map((topping) => {
+                                    switch (topping) {
+                                        case 'sourCream': return 'Сметана';
+                                        case 'condensedMilk': return 'Сгущенка';
+                                        case 'passionFruitJam': return 'Джем из маракуйи';
+                                        default: return 'Неизвестный топпинг';
+                                    }
+                                }).join(', ')}
+                            </p>
+                        ) : (
+                            <p><strong>Топпинги:</strong> Нет</p>
+                        )
                     )}
 
                     <OrderSummary
