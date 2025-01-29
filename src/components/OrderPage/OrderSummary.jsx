@@ -1,5 +1,5 @@
 import React from 'react';
-import { mapToppingNames } from '../../utils/utils';
+// import { mapToppingNames } from '../../utils/utils';
 import './OrderSummary.css'; // Используем отдельный CSS файл
 
 const OrderSummary = ({ orderItems, totalPrice, type }) => (
