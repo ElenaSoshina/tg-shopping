@@ -83,8 +83,9 @@
 }
 
 .quantity-button {
-    background: #ffcc80;
-    color: white;
+    text-align: center;
+    background: #e8f7ea;
+    color: #28a745;
     border: none;
     border-radius: 50%;
     width: 50px;
@@ -104,7 +105,7 @@
     margin-top: 10px;
     font-size: 18px;
     font-weight: 600;
-    color: #ffa000;
+    color: #28a745;
     text-align: center;
 }
 
