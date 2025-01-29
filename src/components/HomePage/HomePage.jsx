@@ -8,8 +8,6 @@ const HomePage = () => {
     return (
         <div className="home-page">
             <div className="home-page__cards-container">
-                {/* Первая строка: Сырники и Лосось */}
-                <div className="home-page__row">
                     <div className="home-page__card-container">
                         <h2 className="home-page__card-title">Сырники</h2>
                         <div
@@ -25,10 +23,7 @@ const HomePage = () => {
                             onClick={() => navigate('/fish')}
                         ></div>
                     </div>
-                </div>
 
-                {/* Вторая строка: Лимоны */}
-                <div className="home-page__row home-page__row--center">
                     <div className="home-page__card-container">
                         <h2 className="home-page__card-title">Лимоны</h2>
                         <div
@@ -36,7 +31,6 @@ const HomePage = () => {
                             onClick={() => navigate('/lemon')}
                         ></div>
                     </div>
-                </div>
             </div>
         </div>
     );

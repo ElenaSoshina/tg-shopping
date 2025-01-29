@@ -12,6 +12,7 @@
 
 /* Контейнер для карточек */
 .home-page__cards-container {
+    width: 270px;
     display: flex;
     flex-direction: column;
     gap: 20px; /* Расстояние между строками */
@@ -20,17 +21,19 @@
 /* Общий стиль для строки карточек */
 .home-page__row {
     display: flex;
-    gap: 20px; /* Расстояние между карточками */
-    justify-content: center; /* Центрирование карточек по горизонтали */
+    flex-direction: column;
+    align-items: center; /* Центрирование карточек по горизонтали */
+    width: 100%; /* Ширина по родителю */
 }
 
-/* Центрирование строки с одной карточкой */
-.home-page__row--center {
-    justify-content: center;
-}
+/*!* Центрирование строки с одной карточкой *!*/
+/*.home-page__row--center {*/
+/*    justify-content: center;*/
+/*}*/
 
 /* Контейнер карточки с текстом */
 .home-page__card-container {
+    width: 100%;
     display: flex;
     flex-direction: column; /* Заголовок сверху, карточка снизу */
     align-items: center;
@@ -46,16 +49,16 @@
 
 /* Карточка */
 .home-page__card {
-    background-color: #fff; /* Фон на случай отсутствия изображения */
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 190px; /* Уменьшенный размер карточки */
-    height: 250px;
+    width: 100%; /* Ширина по родителю */
+    max-width: 300px; /* Максимальная ширина карточки */
+    height: 250px; /* Высота карточки */
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-size: cover; /* Изображение растягивается, сохраняя пропорции */
-    background-position: center; /* Центрирование изображения */
-    background-repeat: no-repeat; /* Изображение не повторяется */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .home-page__card:hover {
