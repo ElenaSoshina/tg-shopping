@@ -1,5 +1,25 @@
 export const calculateTotalPrice = (orderItems) =>
-    orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    orderItems.reduce((total, item) => {
+        // Определение стоимости в зависимости от типа товара
+        let itemTotal = 0;
+        switch (item.type) {
+            case 'fish':
+                // Для рыбы цена указывается за 100 грамм
+                itemTotal = (item.quantity / 100) * item.price;
+                break;
+            case 'cheese':
+            case 'lemon':
+                // Для сырников и лимонов цена указывается за штуку или упаковку
+                itemTotal = item.quantity * item.price;
+                break;
+            default:
+                // Стандартный расчёт стоимости
+                itemTotal = item.quantity * item.price;
+                break;
+        }
+        return total + itemTotal;
+    }, 0);
+
 
 export const mapToppingNames = (toppings) =>
     toppings.map((topping) => {
