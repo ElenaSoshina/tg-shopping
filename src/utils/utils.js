@@ -5,7 +5,7 @@ export const calculateTotalPrice = (orderItems) =>
         switch (item.type) {
             case 'fish':
                 // Для рыбы цена указывается за 100 грамм
-                itemTotal = (item.quantity / 100) * item.price;
+                itemTotal = (item.quantity / 10000) * item.price;
                 break;
             case 'cheese':
             case 'lemon':
