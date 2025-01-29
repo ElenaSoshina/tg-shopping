@@ -38,22 +38,56 @@ function OrderPage({webAppQueryId}) {
     }, [location.state]);
 
     // Заполняем данные заказа
+    // useEffect(() => {
+    //     if (orderData?.quantity && orderData?.category) {
+    //         const newOrderItems = {
+    //             id: 'order-item',
+    //             title: orderData.type === 'fish' ? `Рыба ${orderData.category}` : orderData.category,
+    //             quantity: orderData.quantity,
+    //             price: orderData.type === 'fish' ? 160000 :
+    //                 orderData.type === 'lemon' ? 80000 : 40000,
+    //             toppings: orderData.toppings || [],
+    //         };
+    //         setOrderItems([newOrderItems]);
+    //     }
+    // }, [orderData]);
+
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
-            const unit = orderData.type === 'fish' ? 'г' :
-                orderData.type === 'lemon' ? 'уп' : 'шт';
-            const title = `${orderData.category} - ${orderData.quantity} ${unit}`;
+            // Определяем единицы измерения и название в зависимости от типа товара
+            let unit;
+            let title;
 
-            setOrderItems([{
+            switch (orderData.type) {
+                case 'fish':
+                    unit = 'г';
+                    title = `Рыба ${orderData.category}`; // Добавляем "Рыба" перед категорией
+                    break;
+                case 'lemon':
+                    unit = 'уп';
+                    title = orderData.category;
+                    break;
+                default:
+                    unit = 'шт';
+                    title = orderData.category;
+                    break;
+            }
+
+            const formattedTitle = `${title} - ${orderData.quantity} ${unit}`;
+
+            const newOrderItems = {
                 id: 'order-item',
-                title: title,
+                title: formattedTitle,
                 quantity: orderData.quantity,
                 price: orderData.type === 'fish' ? 160000 :
                     orderData.type === 'lemon' ? 80000 : 40000,
                 toppings: orderData.toppings || [],
-            }]);
+            };
+
+            setOrderItems([newOrderItems]);
         }
     }, [orderData]);
+
 
     // Считаем итоговую стоимость
     const totalPrice = useMemo(
