@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import './OrderPage.css';
 import frozenCheese from '../../images/frozenCheese.jpeg';
 import preparedCheese from '../../images/preparedCheese.jpeg';
-import salmonSlice from '../../images/fishPage.jpeg';
-import salmonPiece from '../../images/fish_slices.jpg';
+import salmonSlice from '../../images/fish_slices.jpg';
+import salmonPiece from '../../images/fishPage.jpeg';
 import lemonImage from '../../images/lemonPage.jpeg';
 
 import {
