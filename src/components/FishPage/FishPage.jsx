@@ -30,7 +30,7 @@ function FishPage() {
     };
 
     // Calculate price based on weight
-    const calculatePrice = (grams) => ((grams / 100) * pricePer100Gram).toLocaleString('ru-RU');
+    const calculatePrice = (grams) => Number((grams / 100) * pricePer100Gram).toFixed(0);
 
     useEffect(() => {
         if (selectedCategory && quantity >= 300) {
