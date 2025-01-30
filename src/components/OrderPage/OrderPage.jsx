@@ -42,7 +42,7 @@ function OrderPage({webAppQueryId}) {
         if (orderData?.quantity && orderData?.category) {
             const newOrderItems = {
                 id: 'order-item',
-                title: orderData.type === 'fish' ? `Рыба ${orderData.category}` : orderData.category,
+                title: orderData.type === 'fish' ? `Лосось ${orderData.category}` : orderData.category,
                 quantity: orderData.quantity,
                 price: orderData.type === 'fish' ? 160000 :
                     orderData.type === 'lemon' ? 80000 : 40000,
@@ -88,18 +88,19 @@ function OrderPage({webAppQueryId}) {
         setOrderItems((prevItems) =>
             prevItems.map((item) => ({
                 ...item,
-                quantity: item.quantity + 1,
+                quantity: item.quantity + (orderData.type === 'fish' ? 100 : 1),
             }))
         );
     };
 
     const decreaseQuantity = () => {
         setOrderItems((prevItems) =>
-            prevItems.map((item) =>
-                item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
+            prevItems.map((item) => {
+                const decrementAmount = item.type === 'fish' ? 100 : 1;  // Define decrement amount based on type
+                return item.quantity > decrementAmount
+                    ? { ...item, quantity: item.quantity - decrementAmount }
+                    : item;  // Prevent decreasing below 100 for fish or below 1 for others
+            })
         );
     };
 
