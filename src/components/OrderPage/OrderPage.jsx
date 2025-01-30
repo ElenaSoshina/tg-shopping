@@ -95,10 +95,20 @@ function OrderPage({webAppQueryId}) {
 
     const decreaseQuantity = () => {
         setOrderItems((prevItems) =>
-            prevItems.map((item) => ({
-                ...item,
-                quantity: item.quantity - (orderData.type === 'fish' ? 100 : 1),
-            }))
+            prevItems.map((item) => {
+                // Определяем, нужно ли уменьшать на 100 или на 1
+                const decrementAmount = orderData.type === 'fish' ? 100 : 1;
+                // Определяем минимальное количество в зависимости от типа товара
+                const minQuantity = orderData.type === 'fish' ? 300 : 1;
+                // Проверяем, чтобы текущее количество было больше минимального перед уменьшением
+                if (item.quantity > minQuantity) {
+                    return {
+                        ...item,
+                        quantity: Math.max(minQuantity, item.quantity - decrementAmount)
+                    };
+                }
+                return item;  // Возвращаем элемент без изменений, если условие не выполнено
+            })
         );
     };
 
