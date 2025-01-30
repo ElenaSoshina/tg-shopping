@@ -12,6 +12,8 @@
     "react-scripts": "^5.0.1",
     "telegraf": "^4.16.3"
   },
+  "homepage": "https://elenasoshina.github.io/tg-shopping/",
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
