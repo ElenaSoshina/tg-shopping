@@ -57,7 +57,7 @@
     width: 100%;
     max-width: 300px;
     height: 400px;
-    background-image: url('../../images/fishPage.jpeg'); /* Add salmon image path */
+    background-image: url('../../images/fishPage.webp'); /* Add salmon image path */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

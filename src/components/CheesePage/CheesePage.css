@@ -26,7 +26,7 @@
     width: 100%; /* Ширина контейнера — 100% от ширины экрана */
     max-width: 300px; /* Максимальная ширина для планшетов */
     height: 400px; /* Прямоугольная высота для вертикального изображения */
-    background-image: url('../../images/cheesse_tonning.jpeg'); /* Укажите путь к изображению */
+    background-image: url('../../images/cheesse_tonning.webp'); /* Укажите путь к изображению */
     background-size: cover; /* Полностью помещаем изображение в контейнер */
     background-repeat: no-repeat; /* Убираем повтор изображения */
     background-position: center; /* Центрируем изображение */

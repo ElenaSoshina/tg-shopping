@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import './OrderPage.css';
-import frozenCheese from '../../images/frozenCheese.jpeg';
-import preparedCheese from '../../images/preparedCheese.jpeg';
-import salmonSlice from '../../images/fish_slices.jpg';
-import salmonPiece from '../../images/fishPage.jpeg';
-import lemonImage from '../../images/lemonPage.jpeg';
+import frozenCheese from '../../images/frozenCheese.webp';
+import preparedCheese from '../../images/preparedCheese.webp';
+import salmonSlice from '../../images/fish_slices.webp';
+import salmonPiece from '../../images/fishPage.webp';
+import lemonImage from '../../images/lemonPage.webp';
 
 import {
     calculateTotalPrice,
