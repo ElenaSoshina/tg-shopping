@@ -96,10 +96,11 @@ function OrderPage({webAppQueryId}) {
     const decreaseQuantity = () => {
         setOrderItems((prevItems) =>
             prevItems.map((item) => {
-                const decrementAmount = item.type === 'fish' ? 100 : 1;  // Define decrement amount based on type
+                // Уменьшаем на 100, если это рыба, иначе на 1
+                const decrementAmount = item.type === 'fish' ? 100 : 1;
                 return item.quantity > decrementAmount
                     ? { ...item, quantity: item.quantity - decrementAmount }
-                    : item;  // Prevent decreasing below 100 for fish or below 1 for others
+                    : item;  // Проверяем, чтобы количество не уменьшилось ниже допустимого минимума
             })
         );
     };
