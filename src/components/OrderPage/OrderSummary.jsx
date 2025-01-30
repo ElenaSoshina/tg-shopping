@@ -7,7 +7,7 @@ const OrderSummary = ({ orderItems, totalPrice, type }) => {
     return (
         <div className="order-summary-container">
             <div className="order-summary">
-                <span>Итого: {Number(totalPrice).toLocaleString('ru-RU')} VND</span>
+                <span>Итого: {Number(finalPrice).toLocaleString('ru-RU')} VND</span>
             </div>
         </div>
     )
