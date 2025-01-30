@@ -82,7 +82,7 @@ function App() {
     };
 
     return (
-        <Router>
+        <Router basename="/tg-shopping">
             <NavigateHandler />
             <LocationHandler setCartButtonVisibility={updateMainButton} />
             <Routes>
