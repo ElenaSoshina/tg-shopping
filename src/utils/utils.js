@@ -1,24 +1,30 @@
-export const calculateTotalPrice = (orderItems) =>
-    orderItems.reduce((total, item) => {
-        // Определение стоимости в зависимости от типа товара
+export const calculateTotalPrice = (orderItems) => {
+    return orderItems.reduce((total, item) => {
+        // Ensure both quantity and price are numbers
+        const quantity = Number(item.quantity);
+        const price = Number(item.price);
+
+        if (isNaN(quantity) || isNaN(price)) {
+            console.error('Invalid number encountered', { quantity, price });
+            return total;
+        }
+
         let itemTotal = 0;
         switch (item.type) {
             case 'fish':
-                // Для рыбы цена указывается за 100 грамм
-                itemTotal = (item.quantity / 100) * item.price;
+                itemTotal = (quantity / 100) * price; // price per 100 grams
                 break;
             case 'cheese':
             case 'lemon':
-                // Для сырников и лимонов цена указывается за штуку или упаковку
-                itemTotal = item.quantity * item.price;
+                itemTotal = quantity * price; // price per unit or package
                 break;
             default:
-                // Стандартный расчёт стоимости
-                itemTotal = item.quantity * item.price;
+                itemTotal = quantity * price; // default case, price per unit
                 break;
         }
         return total + itemTotal;
     }, 0);
+};
 
 
 export const mapToppingNames = (toppings) =>
