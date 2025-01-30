@@ -11,8 +11,7 @@ import CheesePage from "./components/CheesePage/CheesePage";
 import FishPage from "./components/FishPage/FishPage";
 import LemonPage from "./components/LemonPage/LemonPage";
 
-const { getData } = require("./db/db");
-const foods = getData();
+
 
 // Инициируем доступ к Telegram WebApp API
 const tg = window.Telegram.WebApp;
@@ -87,24 +86,6 @@ function App() {
             <LocationHandler setCartButtonVisibility={updateMainButton} />
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/items" element={
-                    <>
-                        <h1 className="heading">Order food</h1>
-                        {webAppQueryId && <p>Query ID: {webAppQueryId}</p>}
-                        <Cart cartItems={cartItems} />
-                        <div className="cards__container">
-                            {foods.map((food) => (
-                                <Card
-                                    food={food}
-                                    key={food.id}
-                                    onAdd={onAdd}
-                                    onRemove={onRemove}
-                                    cartItems={cartItems}
-                                />
-                            ))}
-                        </div>
-                    </>
-                } />
                 <Route path="/cheese" element={<CheesePage />} />
                 <Route path="/fish" element={<FishPage />} />
                 <Route path="/lemon" element={<LemonPage />} />
