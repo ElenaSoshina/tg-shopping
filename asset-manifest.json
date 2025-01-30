@@ -1,29 +1,22 @@
 {
   "files": {
-    "main.css": "/tg-shopping/static/css/main.394e897e.css",
-    "main.js": "/tg-shopping/static/js/main.12cb4547.js",
-    "static/media/cheesse_tonning.jpeg": "/tg-shopping/static/media/cheesse_tonning.08e6efb367e33f645600.jpeg",
-    "static/media/preparedCheese.jpeg": "/tg-shopping/static/media/preparedCheese.bdb140d7ba7da688ed63.jpeg",
-    "static/media/frozenCheese.jpeg": "/tg-shopping/static/media/frozenCheese.bd90f6c6323a38b3b2a9.jpeg",
-    "static/media/fishPage.jpeg": "/tg-shopping/static/media/fishPage.fb1f300375e47e3b20d0.jpeg",
-    "static/media/lemonPage.jpeg": "/tg-shopping/static/media/lemonPage.d3edfcde124cf5318593.jpeg",
-    "static/media/pizza.png": "/tg-shopping/static/media/pizza.c644001e8aa3f3446e15.png",
-    "static/media/kebab.png": "/tg-shopping/static/media/kebab.3c4858e89de56131e20d.png",
-    "static/media/burger.png": "/tg-shopping/static/media/burger.cb91a41266710be009e6.png",
-    "static/media/salad.png": "/tg-shopping/static/media/salad.c5129a877d11ec8a4de5.png",
-    "static/media/coca.png": "/tg-shopping/static/media/coca.57521b94cac077d9dde9.png",
-    "static/media/fish.jpg": "/tg-shopping/static/media/fish.157108c407ddadef8734.jpg",
-    "static/media/syrniki.jpg": "/tg-shopping/static/media/syrniki.66b68a86a5963948c7bf.jpg",
-    "static/media/icecream.png": "/tg-shopping/static/media/icecream.596499d573e6d7c47d6a.png",
-    "static/media/water.png": "/tg-shopping/static/media/water.52ba975d6e1bc5be32d3.png",
-    "static/media/fish_slices.jpg": "/tg-shopping/static/media/fish_slices.fcc7ac1d35c99533e02e.jpg",
-    "static/media/lemons.jpg": "/tg-shopping/static/media/lemons.d4bde727d653be0b58d2.jpg",
+    "main.css": "/tg-shopping/static/css/main.22a3cd38.css",
+    "main.js": "/tg-shopping/static/js/main.498a6fa7.js",
+    "static/media/cheesse_tonning.webp": "/tg-shopping/static/media/cheesse_tonning.3a68b01bf900d3bf613d.webp",
+    "static/media/preparedCheese.webp": "/tg-shopping/static/media/preparedCheese.179aa922f93407b280dc.webp",
+    "static/media/fishPage.webp": "/tg-shopping/static/media/fishPage.23c20de681b74f1c4d3b.webp",
+    "static/media/frozenCheese.webp": "/tg-shopping/static/media/frozenCheese.ef9ff3ca5875ff408baa.webp",
+    "static/media/lemonPage.webp": "/tg-shopping/static/media/lemonPage.ec8bb866036c98fe571f.webp",
+    "static/media/syrniki.webp": "/tg-shopping/static/media/syrniki.96782fa41a288d9927f4.webp",
+    "static/media/fish.webp": "/tg-shopping/static/media/fish.5b1a667f99c660febab7.webp",
+    "static/media/fish_slices.webp": "/tg-shopping/static/media/fish_slices.a09e3347702ca0459982.webp",
+    "static/media/lemons.webp": "/tg-shopping/static/media/lemons.807f7f8be38fc926067d.webp",
     "index.html": "/tg-shopping/index.html",
-    "main.394e897e.css.map": "/tg-shopping/static/css/main.394e897e.css.map",
-    "main.12cb4547.js.map": "/tg-shopping/static/js/main.12cb4547.js.map"
+    "main.22a3cd38.css.map": "/tg-shopping/static/css/main.22a3cd38.css.map",
+    "main.498a6fa7.js.map": "/tg-shopping/static/js/main.498a6fa7.js.map"
   },
   "entrypoints": [
-    "static/css/main.394e897e.css",
-    "static/js/main.12cb4547.js"
+    "static/css/main.22a3cd38.css",
+    "static/js/main.498a6fa7.js"
   ]
 }
