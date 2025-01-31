@@ -27,7 +27,7 @@
     background: none;
     border: none;
     font-size: 1rem;
-    color: #007bff;
+    color: #4caf50;
     cursor: pointer;
     transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -51,21 +51,8 @@
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
+    margin-top: 25px;
 }
-
-.fish-image-container {
-    width: 100%;
-    max-width: 300px;
-    height: 400px;
-    background-image: url('../../images/fishPage.webp'); /* Add salmon image path */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    margin-bottom: 15px;
-}
-
 /* Категории */
 .categories {
     display: flex;
@@ -76,7 +63,7 @@
 
 .category {
     padding: 10px 20px;
-    border: 2px solid #ddd;
+    border: 2px solid #4caf50;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;

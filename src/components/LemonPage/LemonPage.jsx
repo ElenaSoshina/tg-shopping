@@ -2,15 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LemonPage.css';
 import { IoArrowBack } from "react-icons/io5";
+import {useIsMobile} from "../../utils/utils";
+import Carousel from "../ui/Carousel/Carousel";
 
 const tg = window.Telegram.WebApp;
 
 function LemonPage() {
     const [quantity, setQuantity] = useState(1); // Initial quantity in packages
-    const pricePerPackage = 80000; // Price per package in VND
+    const pricePerPackage = 80000;
+    const maxQuantity = 10;// Price per package in VND
     const navigate = useNavigate();
 
     const quantityRef = useRef(null);
+    const isMobile = useIsMobile(); // Определяем, мобильное ли устройство
+    const images = [
+        require('../../images/lemon-3.webp'),
+        require('../../images/lemonPage.webp'),
+        require('../../images/lemon-1.webp'),
+    ];
 
     // Increase quantity
     const increaseQuantity = () => {
@@ -59,18 +68,17 @@ function LemonPage() {
                 </button>
             </div>
 
+            <Carousel images={images} showArrows={!isMobile} autoPlay={true} autoPlayInterval={5000} />
+
             {/* Content section */}
             <div className="lemon-header-content">
-                <div className="lemon-image-container"></div>
                 <h2 className="lemon-title">Свежий лимон с сочной, желтой цедрой.</h2>
                 <p className="lemon-description">
                     Свежий лимон с сочной, желтой цедрой.
                     <br /><br />
                     Лимон обладает антитоксическим действием, уменьшает повреждение и защищает вашу печень.
                     Помогает пищеварительной системе организма работать должным образом.
-                    <br /><br />
                     Ежедневное употребление воды с лимоном помогает бороться с жировыми отложениями, восстанавливать силы во время и после тренировок.
-                    <br /><br />
                     Кроме того, сочная желтая цедра лимона подходит для декорации различных блюд.
                     <br /><br />
                     Упаковка 600-700 гр.
@@ -85,7 +93,7 @@ function LemonPage() {
                         -
                     </button>
                     <span className="quantity-value">{quantity}</span>
-                    <button className="quantity-button" onClick={increaseQuantity}>
+                    <button className="quantity-button" onClick={increaseQuantity} disabled={quantity >= maxQuantity}>
                         +
                     </button>
                 </div>

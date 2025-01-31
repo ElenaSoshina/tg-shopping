@@ -1,3 +1,76 @@
+/* Карусель */
+.cheese-carousel-wrapper {
+    position: relative;
+    width: 100%; /* Ширина обёрточного контейнера — 100% от родителя */
+    max-width: 300px; /* Максимальная ширина для планшетов */
+    height: 400px; /* Высота соответствует контейнеру с изображением */
+    margin-bottom: 15px;
+}
+
+.cheese-image-container {
+    margin: 0 auto;
+    width: 100%; /* Ширина контейнера — 100% от обёрточного контейнера */
+    height: 100%; /* Высота контейнера — 100% от обёрточного контейнера */
+    overflow: hidden;
+    border-radius: 16px; /* Закругленные углы */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Тень для объема */
+    background-size: cover; /* Покрытие всего контейнера */
+    background-repeat: no-repeat; /* Без повторения */
+    background-position: center; /* Центрирование */
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.carousel-button.prev {
+    left: -40px; /* Расположение слева от контейнера */
+}
+
+.carousel-button.next {
+    right: -40px; /* Расположение справа от контейнера */
+}
+
+.carousel-button:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Индикаторы карусели */
+.carousel-indicators {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.indicator.active {
+    background: #4caf50;
+}
+
+/* Остальные стили остаются без изменений */
+
 /* Общий контейнер */
 .cheese-container {
     display: flex;
@@ -40,6 +113,7 @@
     color: #555;
     line-height: 1.5;
     padding: 0 10px; /* Небольшие отступы для текста */
+    margin-top: 30px;
 }
 
 /* Категории */
@@ -52,7 +126,7 @@
 
 .category {
     padding: 10px 10px;
-    border: 2px solid #ddd;
+    border: 2px solid #4caf50;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -62,12 +136,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
-
-/*.category:hover {*/
-/*    background: #f0f9ff;*/
-/*    border-color: #007bff;*/
-/*    color: #007bff;*/
-/*}*/
 
 .category.selected {
     border-color: #4caf50;
@@ -143,7 +211,7 @@
 
 .topping {
     padding: 10px 20px;
-    border: 2px solid #ddd;
+    border: 2px solid #4caf50;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -154,11 +222,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/*.topping:hover {*/
-/*    background: #f0f9ff;*/
-/*    border-color: #007bff;*/
-/*    color: #007bff;*/
-/*}*/
+
 
 .topping.selected {
     border-color: #28a745;
@@ -194,14 +258,30 @@
     background: none;
     border: none;
     font-size: 1rem;
-    color: #007bff;
+    color: #4caf50;
     cursor: pointer;
+    z-index: 10;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .cheese-back-button:hover {
     color: #0056b3;
     transform: translateX(-5px);
+}
+
+/* Медиа-запросы для адаптивности (опционально) */
+@media (max-width: 768px) {
+    .cheese-carousel-wrapper {
+        max-width: 100%;
+    }
+
+    /* Можно изменить позиционирование кнопок на мобильных, если они отображаются */
+    /* Но в нашем случае они скрыты на мобильных, так что дополнительных изменений не требуется */
+
+}
+
+.carousel-indicators {
+    bottom: -25px; /* Корректировка положения индикаторов */
 }
 
 

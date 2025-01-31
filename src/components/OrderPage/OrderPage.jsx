@@ -1,32 +1,34 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import './OrderPage.css';
 import frozenCheese from '../../images/frozenCheese.webp';
 import preparedCheese from '../../images/preparedCheese.webp';
-import salmonSlice from '../../images/fish_slices.webp';
-import salmonPiece from '../../images/fishPage.webp';
+import salmonSlice from '../../images/fish-5.webp';
+import salmonPiece from '../../images/fish-2.webp';
 import lemonImage from '../../images/lemonPage.webp';
 
-import {
-    calculateTotalPrice,
-    getBackgroundImage,
-} from '../../utils/utils';
+import { calculateTotalPrice, getBackgroundImage } from '../../utils/utils';
 
 import QuantityControls from './QuantityControls';
 import OrderSummary from './OrderSummary';
 import OrderHeader from './OrderHeader';
 import OrderImage from './OrderImage';
 import OrderPopup from './OrderPopup';
+import { Form, Input, Select, message } from 'antd';
 
+const { Option } = Select;
 const tg = window.Telegram.WebApp;
 
-function OrderPage({webAppQueryId}) {
+function OrderPage({ webAppQueryId }) {
+    const [form] = Form.useForm();
     const [showPopup, setShowPopup] = useState(false);
     const [orderItems, setOrderItems] = useState([]);
-    const [orderDetails, setOrderDetails] = useState(null); // Добавлено состояние для данных заказа
+    const [orderDetails, setOrderDetails] = useState(null);
     const location = useLocation();
+    const navigate = useNavigate();
 
-    // Достаём данные из state или из sessionStorage
+    const pickupAddress = 'г. Москва, ул. Примерная, 10';
+
     const orderData = useMemo(() => {
         return (
             location.state?.orderData ||
@@ -37,168 +39,109 @@ function OrderPage({webAppQueryId}) {
         );
     }, [location.state]);
 
-
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
-            const newOrderItems = {
+            const newOrderItem = {
                 id: 'order-item',
                 title: orderData.type === 'fish' ? `Лосось ${orderData.category}` : orderData.category,
                 quantity: orderData.quantity,
-                price: orderData.type === 'fish' ? 160000 :
-                    orderData.type === 'lemon' ? 80000 : 40000,
+                price:
+                    orderData.type === 'fish' ? 160000 :
+                        orderData.type === 'lemon' ? 80000 : 40000,
                 toppings: orderData.toppings || [],
             };
-            setOrderItems([newOrderItems]);
+            setOrderItems([newOrderItem]);
         }
     }, [orderData]);
 
+    const totalPrice = useMemo(() => calculateTotalPrice(orderItems), [orderItems]);
 
+    const handleOrderSubmit = useCallback(
+        (values) => {
+            const details = {
+                ...values,
+                address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
+                items: orderItems.map((item) => ({
+                    ...item,
+                    total: (item.price * item.quantity).toFixed(2),
+                })),
+                totalPrice: totalPrice.toFixed(2),
+            };
 
-    // Считаем итоговую стоимость
-    const totalPrice = useMemo(
-        () => calculateTotalPrice(orderItems),
-        [orderItems]
+            console.log('Отправка данных заказа:', details);
+            setOrderDetails(details);
+            tg.sendData(JSON.stringify(details));
+            setShowPopup(true);
+            message.success('Заказ успешно оформлен!');
+        },
+        [pickupAddress, orderItems, totalPrice]
     );
 
-    // Обработка оформления заказа
-    const handleOrder = useCallback(() => {
-        if (orderItems.length === 0) return;
-
-        const details = {
-            items: orderItems.map((item) => ({
-                ...item,
-                total: (item.price * item.quantity).toFixed(2),
-            })),
-            totalPrice: totalPrice.toFixed(2),
-        };
-
-        console.log('Отправка данных заказа:', details); // Добавлено
-
-        // Сохраняем данные заказа для отображения в Popup
-        setOrderDetails(details);
-
-        // Отправляем данные в бота
-        tg.sendData(JSON.stringify(details));
-
-        setShowPopup(true);
-    }, [orderItems, totalPrice]);
-
-    // Изменение количества
-    const increaseQuantity = () => {
-        setOrderItems((prevItems) =>
-            prevItems.map((item) => ({
-                ...item,
-                quantity: item.quantity + (orderData.type === 'fish' ? 100 : 1),
-            }))
-        );
-    };
-
-    const decreaseQuantity = () => {
-        setOrderItems((prevItems) =>
-            prevItems.map((item) => {
-                // Определяем, нужно ли уменьшать на 100 или на 1
-                const decrementAmount = orderData.type === 'fish' ? 100 : 1;
-                // Определяем минимальное количество в зависимости от типа товара
-                const minQuantity = orderData.type === 'fish' ? 300 : 1;
-                // Проверяем, чтобы текущее количество было больше минимального перед уменьшением
-                if (item.quantity > minQuantity) {
-                    return {
-                        ...item,
-                        quantity: Math.max(minQuantity, item.quantity - decrementAmount)
-                    };
-                }
-                return item;  // Возвращаем элемент без изменений, если условие не выполнено
-            })
-        );
-    };
-
-    // Включаем MainButton и подвешиваем обработчик нажатия
-    useEffect(() => {
-        if (orderItems.length > 0) {
-            tg.MainButton.setText('Оформить заказ');
-            tg.MainButton.show();
-            tg.MainButton.onClick(handleOrder);
-
-            return () => {
-                // Отключаем обработчик при размонтаже
-                tg.MainButton.offClick(handleOrder);
-                tg.MainButton.hide();
-            };
-        } else {
-            tg.MainButton.hide();
-        }
-    }, [orderItems, handleOrder]);
-
-    const closeWebApp = () => {
-        tg.close();
-    };
-
-    // Подбираем фон
-    const containerStyle = {
-        backgroundImage: `url(${getBackgroundImage(orderData.category, {
-            frozenCheese,
-            preparedCheese,
-            salmonSlice,
-            salmonPiece,
-            lemonImage,
-        })})`,
-    };
-
     return (
-        <div className="order-container">
-            <OrderHeader
-                redirectPath={
-                    orderData.type === 'fish'
-                        ? '/fish'
-                        : orderData.type === 'lemon'
-                            ? '/lemon'
-                            : '/cheese'
-                }
-            />
-
-            <div className="order-content">
-                <OrderImage style={containerStyle} />
-                <div className="order-details">
-                    <div className="order-category">
-                        <strong>Категория:</strong> <span>{orderData.category}</span>
+        <>
+            <div className="order-container">
+                <OrderHeader redirectPath={`/${orderData.type || 'cheese'}`}/>
+                <div className="order-content">
+                    <OrderImage style={{
+                        backgroundImage: `url(${getBackgroundImage(orderData.category, {
+                            frozenCheese,
+                            preparedCheese,
+                            salmonSlice,
+                            salmonPiece,
+                            lemonImage
+                        })})`
+                    }}/>
+                    <div className="order-details">
+                        <QuantityControls quantity={orderItems[0]?.quantity || 1} increase={() => {
+                        }} decrease={() => {
+                        }}/>
+                        <OrderSummary orderItems={orderItems} totalPrice={totalPrice} type={orderData.type}/>
                     </div>
-
-                    <QuantityControls
-                        quantity={orderItems[0]?.quantity || 1}
-                        increase={increaseQuantity}
-                        decrease={decreaseQuantity}
-                    />
-
-                    {/* Отображаем топпинги только для сырников, если они есть */}
-                    {orderData.type === 'cheese' && (
-                        orderItems[0]?.toppings?.length > 0 ? (
-                            <p>
-                                <strong>Топпинги:</strong>{' '}
-                                {orderItems[0].toppings.map((topping) => {
-                                    switch (topping) {
-                                        case 'sourCream': return 'Сметана';
-                                        case 'condensedMilk': return 'Сгущенка';
-                                        case 'passionFruitJam': return 'Джем из маракуйи';
-                                        default: return 'Неизвестный топпинг';
-                                    }
-                                }).join(', ')}
-                            </p>
-                        ) : (
-                            <p><strong>Топпинги:</strong> Нет</p>
-                        )
-                    )}
-
-                    <OrderSummary
-                        orderItems={orderItems}
-                        totalPrice={totalPrice}
-                        type={orderData.type}
-                    />
                 </div>
+                {showPopup &&
+                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId}/>}
             </div>
 
-            {/* Попап после успешного заказа с отображением данных */}
-            {showPopup && <OrderPopup onClose={closeWebApp} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />}
-        </div>
+            <h3 className={'add-order-header'}>Добавить в заказ</h3>
+            <div className="order-buttons">
+                <button onClick={() => navigate('/cheese')}>Сырники</button>
+                <button onClick={() => navigate('/fish')}>Лосось</button>
+                <button onClick={() => navigate('/lemon')}>Лимоны</button>
+            </div>
+            <div className="order-form">
+                <h3>Данные для заказа</h3>
+                <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
+                    <Form.Item label="Имя" name="name" rules={[{required: true, message: 'Введите имя'}]}>
+                        <Input placeholder="Введите ваше имя"/>
+                    </Form.Item>
+                    <Form.Item label="Телефон" name="phone" rules={[{
+                        required: true,
+                        pattern: /^\+?\d{10,15}$/,
+                        message: 'Введите корректный номер'
+                    }]}>
+                        <Input placeholder="Введите номер телефона"/>
+                    </Form.Item>
+                    <Form.Item label="Способ получения" name="deliveryMethod" initialValue="pickup">
+                        <Select>
+                            <Option value="pickup">Самовывоз</Option>
+                            <Option value="delivery">Доставка</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item shouldUpdate>
+                        {({getFieldValue}) =>
+                            getFieldValue('deliveryMethod') === 'delivery' ? (
+                                <Form.Item label="Адрес доставки" name="address"
+                                           rules={[{required: true, message: 'Введите адрес доставки'}]}>
+                                    <Input placeholder="Введите адрес доставки"/>
+                                </Form.Item>
+                            ) : (
+                                <p className="pickup-address">Самовывоз: {pickupAddress}</p>
+                            )
+                        }
+                    </Form.Item>
+                </Form>
+            </div>
+        </>
     );
 }
 

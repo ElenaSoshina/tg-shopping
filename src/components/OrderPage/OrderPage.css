@@ -79,3 +79,87 @@
     color: #4caf50;
     font-weight: bold;
 }
+
+/* Стили для формы заказа */
+.order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    margin-top: 20px;
+    margin: 0 auto;
+}
+
+.order-form h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+
+.order-form label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.order-input, .order-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.order-input:focus, .order-select:focus {
+    border-color: #007bff;
+}
+
+.order-select {
+    cursor: pointer;
+}
+
+.pickup-address {
+    font-size: 14px;
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.add-order-header {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.order-buttons {
+    margin: 0 auto;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.order-buttons button {
+    width: 30%;
+    height: 40px;
+    border-radius: 12px;
+    border: 2px solid #4caf50;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+
+

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FishPage.css';
 import { IoArrowBack } from "react-icons/io5";
+import Carousel from "../ui/Carousel/Carousel";
+import {useIsMobile} from "../../utils/utils";
 
 const tg = window.Telegram.WebApp;
 
@@ -12,6 +14,16 @@ function FishPage() {
     const navigate = useNavigate();
 
     const quantityRef = useRef(null);
+    const maxQuantity = 4000;
+    const images = [
+        require('../../images/fish-3.webp'),
+        require('../../images/fish-1.webp'),
+        require('../../images/fish-2.webp'),
+        require('../../images/fish-4.webp'),
+        require('../../images/fish-5.webp'),
+    ];
+
+    const isMobile = useIsMobile();
 
     // Handle category selection
     const handleCategorySelect = (category) => {
@@ -66,9 +78,10 @@ function FishPage() {
                 </button>
             </div>
 
+            <Carousel images={images} showArrows={!isMobile}/>
+
             {/* Content section */}
             <div className="fish-header-content">
-                <div className="fish-image-container"></div>
                 <h2 className="fish-title">Норвежский лосось слабосоленый</h2>
                 <p className="fish-description">
                     Приготовлен по домашнему рецепту с использованием только натуральных ингредиентов.
@@ -96,7 +109,7 @@ function FishPage() {
                     className={`category ${selectedCategory === 'piece' ? 'selected' : ''}`}
                     onClick={() => handleCategorySelect('piece')}
                 >
-                    Кусок
+                    Филе
                 </div>
             </div>
 
@@ -111,7 +124,7 @@ function FishPage() {
                             -
                         </button>
                         <span className="quantity-value">{quantity} г</span>
-                        <button className="quantity-button" onClick={increaseQuantity}>
+                        <button className="quantity-button" onClick={increaseQuantity} disabled={quantity >= maxQuantity}>
                             +
                         </button>
                     </div>

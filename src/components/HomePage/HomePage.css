@@ -68,15 +68,15 @@
 
 /* Карточка: фон для "Сырников" */
 .home-page__card--syrniki {
-    background-image: url('../../images/syrniki.webp');
+    background-image: url('../../images/syrniki-5.webp');
 }
 
 /* Карточка: фон для "Лосося" */
 .home-page__card--fish {
-    background-image: url('../../images/fish.webp');
+    background-image: url('../../images/fish-3.webp');
 }
 
 /* Карточка: фон для "Лимонов" */
 .home-page__card--lemons {
-    background-image: url('../../images/lemons.webp');
+    background-image: url('../../images/lemon-3.webp');
 }

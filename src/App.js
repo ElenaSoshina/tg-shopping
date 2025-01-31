@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Card from "./components/Card/Card";
-import Cart from "./components/Cart/Cart";
 import OrderPage from "./components/OrderPage/OrderPage";
 import NavigateHandler from "./services/navigate/navigateHandler";
 import LocationHandler from "./services/navigate/locationHandler";

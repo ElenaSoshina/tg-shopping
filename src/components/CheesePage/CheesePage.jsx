@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
-import { IoArrowBack } from "react-icons/io5";
+import {IoArrowBack} from "react-icons/io5";
+import Carousel from "../ui/Carousel/Carousel";
+import {useIsMobile} from "../../utils/utils";
 
 const tg = window.Telegram.WebApp;
 
@@ -11,18 +13,27 @@ function CheesePage() {
     const [selectedToppings, setSelectedToppings] = useState([]);
     const pricePerCheese = 40000; // Цена за один сырник
     const navigate = useNavigate();
+    const maxQuantity = 40;
 
     // Рефы для секций
     const quantityRef = useRef(null);
     const toppingsRef = useRef(null);
 
+    const images = [
+        require('../../images/syrniki-5.webp'),
+        require('../../images/syrniki-4.webp'),
+        require('../../images/syrinki-1.webp'),
+        require('../../images/syrniki-2.webp'),
+        require('../../images/syrniki-3.webp'),
+    ];
+
+    const isMobile = useIsMobile(); // Определяем тип устройства
+
     // Обработчик выбора категории
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        setQuantity(0); // Сброс количества
-        setSelectedToppings([]); // Сброс топпингов
-
-        // Прокрутка к секции количества
+        setQuantity(0);
+        setSelectedToppings([]);
         setTimeout(() => quantityRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
     };
 
@@ -101,15 +112,14 @@ function CheesePage() {
             {/* Заголовок с кнопкой назад */}
             <div className="cheese-header">
                 <button className="cheese-back-button" onClick={() => navigate('/')}>
-                    <IoArrowBack size={24} /> Назад
+                    <IoArrowBack size={24} />
                 </button>
-                <div className="cheese-image-container"></div>
+            </div>
+            <Carousel images={images} showArrows={!isMobile}/>
                 <p className="cheese-description">
                     Вкусные и свежие сырники с разными начинками и топпингами.
                     Выберите свою категорию и добавьте любимые добавки!
                 </p>
-            </div>
-
             {/* Секция выбора категории */}
             <div className="categories">
                 <div
@@ -137,7 +147,7 @@ function CheesePage() {
                             -
                         </button>
                         <span className="quantity-value">{quantity}</span>
-                        <button className="quantity-button" onClick={increaseQuantity}>
+                        <button className="quantity-button" onClick={increaseQuantity} disabled={quantity >= maxQuantity}>
                             +
                         </button>
                     </div>
@@ -158,7 +168,7 @@ function CheesePage() {
                             className={`topping ${selectedToppings.includes('sourCream') ? 'selected' : ''}`}
                             onClick={() => handleToppingSelect('sourCream')}
                         >
-                            Сметана
+                            Йогурт
                         </div>
                         <div
                             className={`topping ${selectedToppings.includes('condensedMilk') ? 'selected' : ''}`}
