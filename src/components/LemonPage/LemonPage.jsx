@@ -4,6 +4,7 @@ import './LemonPage.css';
 import { IoArrowBack } from "react-icons/io5";
 import {useIsMobile} from "../../utils/utils";
 import Carousel from "../ui/Carousel/Carousel";
+import {applyThemeColors} from "../ui/theme";
 
 const tg = window.Telegram.WebApp;
 
@@ -20,6 +21,16 @@ function LemonPage() {
         require('../../images/lemonPage.webp'),
         require('../../images/lemon-1.webp'),
     ];
+
+    // Устанавливаем тему
+    useEffect(() => {
+        applyThemeColors();
+        tg.onEvent("themeChanged", applyThemeColors);
+
+        return () => {
+            tg.offEvent("themeChanged", applyThemeColors);
+        };
+    }, []);
 
     // Increase quantity
     const increaseQuantity = () => {
