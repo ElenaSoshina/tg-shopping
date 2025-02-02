@@ -1,25 +1,33 @@
 const tg = window.Telegram.WebApp;
 
-// Функция для получения цветов из Telegram API
 export const applyThemeColors = () => {
     const themeColors = tg.themeParams;
 
-    const colors = {
-        bgColor: themeColors.bg_color || "#ffffff",
-        textColor: themeColors.text_color || "#000000",
-        cardBg: themeColors.secondary_bg_color || "#f2f4f8",
-        cardShadow: "rgba(0, 0, 0, 0.1)",
-        buttonColor: themeColors.button_color || "#0088cc",
-        buttonTextColor: themeColors.button_text_color || "#ffffff"
+    // Определение цветов
+    const bgColor = themeColors.bg_color || "#ffffff";
+    const textColor = themeColors.text_color || "#000000";
+    const buttonColor = themeColors.button_color || "#0088cc";
+    const buttonTextColor = themeColors.button_text_color || "#ffffff";
+    const borderColor = themeColors.hint_color || "#4caf50";
+
+    // Логика проверки контрастности
+    const isDarkTheme = bgColor === "#1a1a2e"; // Это пример для определения
+    const adjustedSecondaryTextColor = isDarkTheme ? "#f5f5f5" : "#555";
+
+    // Установка CSS-переменных
+    document.documentElement.style.setProperty("--tg-bg-color", bgColor);
+    document.documentElement.style.setProperty("--tg-text-color", textColor);
+    document.documentElement.style.setProperty("--tg-secondary-text-color", adjustedSecondaryTextColor);
+    document.documentElement.style.setProperty("--tg-button-bg", buttonColor);
+    document.documentElement.style.setProperty("--tg-button-text", buttonTextColor);
+    document.documentElement.style.setProperty("--tg-border-color", borderColor);
+
+    return {
+        bgColor,
+        textColor,
+        adjustedSecondaryTextColor,
+        buttonColor,
+        buttonTextColor,
+        borderColor,
     };
-
-    // Устанавливаем CSS-переменные
-    document.documentElement.style.setProperty("--tg-bg-color", themeColors.bg_color || "#ffffff");
-    document.documentElement.style.setProperty("--tg-text-color", themeColors.text_color || "#000000");
-    document.documentElement.style.setProperty("--tg-secondary-text-color", themeColors.secondary_bg_color || "#cccccc");
-    document.documentElement.style.setProperty("--tg-button-bg", themeColors.button_color || "#0088cc");
-    document.documentElement.style.setProperty("--tg-button-text", themeColors.button_text_color || "#ffffff");
-    document.documentElement.style.setProperty("--tg-border-color", themeColors.hint_color || "#4caf50");
-
-    return colors;
 };

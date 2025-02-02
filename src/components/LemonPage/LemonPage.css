@@ -93,7 +93,7 @@
     border-radius: 12px;
     width: 100%;
     max-width: 400px;
-    background: var(--tg-border-color);
+    background: var(--tg-bg-color);
 }
 
 .quantity-controls {
