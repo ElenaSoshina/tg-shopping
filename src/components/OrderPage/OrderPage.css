@@ -1,12 +1,4 @@
-:root {
-    --tg-bg-color: #ffffff;
-    --tg-text-color: #000000;
-    --tg-secondary-text-color: #666666;
-    --tg-card-bg: #f9f9f9;
-    --tg-button-bg: #0088cc;
-    --tg-button-text: #ffffff;
-    --tg-border-color: #4caf50;
-}
+
 
 .order-container {
     font-family: 'Arial', sans-serif;
