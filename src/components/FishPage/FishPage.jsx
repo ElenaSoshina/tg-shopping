@@ -4,6 +4,7 @@ import './FishPage.css';
 import { IoArrowBack } from "react-icons/io5";
 import Carousel from "../ui/Carousel/Carousel";
 import {useIsMobile} from "../../utils/utils";
+import {applyThemeColors} from "../ui/theme";
 
 const tg = window.Telegram.WebApp;
 
@@ -23,6 +24,15 @@ function FishPage() {
     ];
 
     const isMobile = useIsMobile();
+
+    useEffect(() => {
+        applyThemeColors();
+        tg.onEvent("themeChanged", applyThemeColors);
+
+        return () => {
+            tg.offEvent("themeChanged", applyThemeColors);
+        };
+    }, []);
 
     // Handle category selection
     const handleCategorySelect = (category) => {
