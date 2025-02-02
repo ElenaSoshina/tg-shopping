@@ -14,12 +14,12 @@ export const applyThemeColors = () => {
     };
 
     // Устанавливаем CSS-переменные
-    document.documentElement.style.setProperty("--tg-bg-color", colors.bgColor);
-    document.documentElement.style.setProperty("--tg-text-color", colors.textColor);
-    document.documentElement.style.setProperty("--tg-card-bg", colors.cardBg);
-    document.documentElement.style.setProperty("--tg-card-shadow", colors.cardShadow);
-    document.documentElement.style.setProperty("--tg-button-color", colors.buttonColor);
-    document.documentElement.style.setProperty("--tg-button-text-color", colors.buttonTextColor);
+    document.documentElement.style.setProperty("--tg-bg-color", themeColors.bg_color || "#ffffff");
+    document.documentElement.style.setProperty("--tg-text-color", themeColors.text_color || "#000000");
+    document.documentElement.style.setProperty("--tg-secondary-text-color", themeColors.secondary_bg_color || "#cccccc");
+    document.documentElement.style.setProperty("--tg-button-bg", themeColors.button_color || "#0088cc");
+    document.documentElement.style.setProperty("--tg-button-text", themeColors.button_text_color || "#ffffff");
+    document.documentElement.style.setProperty("--tg-border-color", themeColors.hint_color || "#4caf50");
 
     return colors;
 };
