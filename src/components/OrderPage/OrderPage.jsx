@@ -15,6 +15,7 @@ import OrderHeader from './OrderHeader';
 import OrderImage from './OrderImage';
 import OrderPopup from './OrderPopup';
 import { Form, Input, Select, message } from 'antd';
+import {applyThemeColors} from "../ui/theme";
 
 const { Option } = Select;
 const tg = window.Telegram.WebApp;
@@ -67,6 +68,15 @@ function OrderPage({ webAppQueryId }) {
             setOrderItems([newOrderItem]);
         }
     }, [orderData]);
+
+    useEffect(() => {
+        applyThemeColors(); // Применяем тему при загрузке
+        tg.onEvent('themeChanged', applyThemeColors);
+
+        return () => {
+            tg.offEvent('themeChanged', applyThemeColors);
+        };
+    }, []);
 
     const totalPrice = useMemo(() => calculateTotalPrice(orderItems), [orderItems]);
 

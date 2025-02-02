@@ -12,7 +12,7 @@ export const applyThemeColors = () => {
 
     // Логика проверки контрастности
     const isDarkTheme = bgColor === "#1a1a2e"; // Это пример для определения
-    const adjustedSecondaryTextColor = isDarkTheme ? "#f5f5f5" : "#555";
+    const adjustedSecondaryTextColor = isDarkTheme ? "#f3f3f3" : "#252525";
 
     // Установка CSS-переменных
     document.documentElement.style.setProperty("--tg-bg-color", bgColor);
