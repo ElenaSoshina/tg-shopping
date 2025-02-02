@@ -1,3 +1,10 @@
+:root {
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #000000;
+    --tg-card-bg: #f2f4f8;
+    --tg-card-shadow: rgba(0, 0, 0, 0.1);
+}
+
 /* Общий стиль для страницы */
 .home-page {
     display: flex;
@@ -5,7 +12,8 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f2f4f8; /* Светло-пастельный фон */
+    /*background-color: #f2f4f8; !* Светло-пастельный фон *!*/
+    background-color: var(--tg-bg-color);
     padding: 20px;
     text-align: center;
 }
@@ -43,7 +51,8 @@
 /* Заголовок карточки */
 .home-page__card-title {
     font-size: 1.5rem;
-    color: #333;
+    /*color: #333;*/
+    color: var(--tg-text-color);
     margin: 0;
 }
 
@@ -58,12 +67,15 @@
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    background-color: var(--tg-card-bg);
+    box-shadow: 0 4px 8px var(--tg-card-shadow);
 }
 
 .home-page__card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);*/
+    box-shadow: 0 8px 16px var(--tg-card-shadow);
 }
 
 /* Карточка: фон для "Сырников" */
