@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CheesePage.css';
 import {IoArrowBack} from "react-icons/io5";
 import Carousel from "../ui/Carousel/Carousel";
-import {useIsMobile} from "../../utils/utils";
+import { useIsMobile} from "../../utils/utils";
 
 const tg = window.Telegram.WebApp;
 
@@ -11,9 +11,16 @@ function CheesePage() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [quantity, setQuantity] = useState(0);
     const [selectedToppings, setSelectedToppings] = useState([]);
-    const pricePerCheese = 40000; // Цена за один сырник
     const navigate = useNavigate();
     const maxQuantity = 40;
+
+    // Минимальное количество
+    const minQuantityPrepared = 4;
+    const minQuantityFrozen = 10;
+
+    // Цена за один сырник
+    const pricePerPreparedCheese = 40000;
+    const pricePerFrozenCheese = 30000;
 
     // Рефы для секций
     const quantityRef = useRef(null);
@@ -22,9 +29,9 @@ function CheesePage() {
     const images = [
         require('../../images/syrniki-5.webp'),
         require('../../images/syrniki-4.webp'),
-        require('../../images/syrinki-1.webp'),
-        require('../../images/syrniki-2.webp'),
         require('../../images/syrniki-3.webp'),
+        require('../../images/syrniki-2.webp'),
+        require('../../images/syrinki-1.webp'),
     ];
 
     const isMobile = useIsMobile(); // Определяем тип устройства
@@ -32,7 +39,7 @@ function CheesePage() {
     // Обработчик выбора категории
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        setQuantity(0);
+        setQuantity(category === 'prepared' ? minQuantityPrepared : minQuantityFrozen);
         setSelectedToppings([]);
         setTimeout(() => quantityRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
     };
@@ -47,9 +54,12 @@ function CheesePage() {
         }
     };
 
-    // Уменьшение количества
+    // Уменьшение количества (не ниже минимального)
     const decreaseQuantity = () => {
-        setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
+        setQuantity((prev) => {
+            const minQty = selectedCategory === 'prepared' ? minQuantityPrepared : minQuantityFrozen;
+            return prev > minQty ? prev - 1 : minQty;
+        });
     };
 
     // Обработчик выбора топпинга
@@ -107,6 +117,9 @@ function CheesePage() {
         return () => tg.MainButton.offClick(() => {});
     }, [selectedCategory, quantity, selectedToppings, navigate]);
 
+    const pricePerCheese = selectedCategory === 'prepared' ? pricePerPreparedCheese : pricePerFrozenCheese;
+    const totalPrice = quantity * pricePerCheese;
+
     return (
         <div className="cheese-container">
             {/* Заголовок с кнопкой назад */}
@@ -116,10 +129,24 @@ function CheesePage() {
                 </button>
             </div>
             <Carousel images={images} showArrows={!isMobile}/>
-                <p className="cheese-description">
-                    Вкусные и свежие сырники с разными начинками и топпингами.
-                    Выберите свою категорию и добавьте любимые добавки!
-                </p>
+            <p className="cheese-description">
+                Продукт без искусственных добавок и консервантов с приятным вкусом.<br/><br/>
+
+                Отлично подойдет на завтрак!<br/><br/>
+
+                <ul>
+                    <li>Доля творога в одном сырнике — <strong>90%</strong>.</li>
+                    <li>Низкое содержание соли и сахара.</li>
+                    <li>Без консервантов и химии.</li>
+                    <li>Яйцо и мука используются <em>только</em> для формовки — отличный вкус и текстура.</li>
+                </ul>
+
+                <p>Жирность творога: <strong>14-16%</strong>.<br/>
+                    Вес одного сырника: <strong>47 г</strong>.</p>
+
+                <p>Сырники любим всем сердцем ❤️<br/>
+                    И готовим их для себя.</p>
+            </p>
             {/* Секция выбора категории */}
             <div className="categories">
                 <div
@@ -152,7 +179,7 @@ function CheesePage() {
                         </button>
                     </div>
                     <p className="quantity-price">
-                        Цена: {(quantity * pricePerCheese).toLocaleString('ru-RU')} VND
+                        Цена: {totalPrice.toLocaleString('ru-RU')} VND
                     </p>
                 </div>
             )}

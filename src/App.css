@@ -1,0 +1,26 @@
+:root {
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #000000;
+    --tg-button-color: #0088cc;
+    --tg-button-text-color: #ffffff;
+}
+
+body {
+    background-color: var(--tg-bg-color);
+    color: var(--tg-text-color);
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+    background-color: var(--tg-button-color);
+    color: var(--tg-button-text-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}

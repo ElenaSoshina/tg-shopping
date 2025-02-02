@@ -27,7 +27,7 @@ function OrderPage({ webAppQueryId }) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const pickupAddress = 'г. Москва, ул. Примерная, 10';
+    const pickupAddress = 'Mui ne, Ocean vista, block B';
 
     const orderData = useMemo(() => {
         return (
@@ -41,13 +41,27 @@ function OrderPage({ webAppQueryId }) {
 
     useEffect(() => {
         if (orderData?.quantity && orderData?.category) {
+            let price = 40000; // Базовая цена
+            let minQuantity = 1;
+
+            if (orderData.type === 'cheese') {
+                if (orderData.category === 'Сырники замороженные') {
+                    price = 30000; // Новая цена для замороженных сырников
+                    minQuantity = 10; // Минимальное количество для замороженных сырников
+                } else {
+                    minQuantity = 4; // Минимальное количество для приготовленных сырников
+                }
+            } else if (orderData.type === 'fish') {
+                price = 160000;
+            } else if (orderData.type === 'lemon') {
+                price = 80000;
+            }
+
             const newOrderItem = {
                 id: 'order-item',
                 title: orderData.type === 'fish' ? `Лосось ${orderData.category}` : orderData.category,
-                quantity: orderData.quantity,
-                price:
-                    orderData.type === 'fish' ? 160000 :
-                        orderData.type === 'lemon' ? 80000 : 40000,
+                quantity: Math.max(orderData.quantity, minQuantity), // Учитываем минимальное количество
+                price,
                 toppings: orderData.toppings || [],
             };
             setOrderItems([newOrderItem]);

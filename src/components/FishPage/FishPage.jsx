@@ -17,7 +17,6 @@ function FishPage() {
     const maxQuantity = 4000;
     const images = [
         require('../../images/fish-3.webp'),
-        require('../../images/fish-1.webp'),
         require('../../images/fish-2.webp'),
         require('../../images/fish-4.webp'),
         require('../../images/fish-5.webp'),

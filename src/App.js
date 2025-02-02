@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import OrderPage from "./components/OrderPage/OrderPage";
@@ -18,13 +18,30 @@ function App() {
     const [cartItems, setCartItems] = useState([]);
     const [webAppQueryId, setWebAppQueryId] = useState('');
 
+    // Функция для применения цветов из Telegram API
+    const applyThemeColors = useCallback(() => {
+        const themeColors = tg.themeParams;
+        document.documentElement.style.setProperty("--tg-bg-color", themeColors.bg_color || "#ffffff");
+        document.documentElement.style.setProperty("--tg-text-color", themeColors.text_color || "#000000");
+        document.documentElement.style.setProperty("--tg-button-color", themeColors.button_color || "#0088cc");
+        document.documentElement.style.setProperty("--tg-button-text-color", themeColors.button_text_color || "#ffffff");
+    }, []);
+
     // Получаем web_app_query_id из URL и сообщаем Telegram, что Web App готово
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const queryId = queryParams.get('query_id');
         setWebAppQueryId(queryId);
         tg.ready();
-    }, []);
+
+        applyThemeColors()
+
+        tg.onEvent('themeChanged', applyThemeColors);
+
+        return () => {
+            tg.offEvent('themeChanged', applyThemeColors);
+        }
+    }, [applyThemeColors]);
 
     useEffect(() => {
         const savedCartItems = JSON.parse(sessionStorage.getItem("cartItems"));

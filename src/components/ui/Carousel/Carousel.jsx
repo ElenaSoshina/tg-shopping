@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect, useCallback} from 'react';
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import './Carousel.css';
 
-const Carousel = ({ images, containerStyles, showArrows = true, autoPlay = true, autoPlayInterval = 3000 }) => {
+const Carousel = ({ images, containerStyles, showArrows = true }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const touchStartX = useRef(0);
@@ -36,15 +36,6 @@ const Carousel = ({ images, containerStyles, showArrows = true, autoPlay = true,
         }
     };
 
-    useEffect(() => {
-        if (autoPlay) {
-            const interval = setInterval(() => {
-                nextImage();
-            }, autoPlayInterval);
-
-            return () => clearInterval(interval);
-        }
-    }, [autoPlay, autoPlayInterval, nextImage]);
 
     // Сбрасываем анимацию после завершения
     useEffect(() => {

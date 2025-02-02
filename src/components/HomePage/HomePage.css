@@ -68,7 +68,7 @@
 
 /* Карточка: фон для "Сырников" */
 .home-page__card--syrniki {
-    background-image: url('../../images/syrniki-5.webp');
+    background-image: url('../../images/syrinki-1.webp');
 }
 
 /* Карточка: фон для "Лосося" */
@@ -78,5 +78,5 @@
 
 /* Карточка: фон для "Лимонов" */
 .home-page__card--lemons {
-    background-image: url('../../images/lemon-3.webp');
+    background-image: url('../../images/lemonPage.webp');
 }
