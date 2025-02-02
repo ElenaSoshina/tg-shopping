@@ -4,6 +4,7 @@ import './CheesePage.css';
 import {IoArrowBack} from "react-icons/io5";
 import Carousel from "../ui/Carousel/Carousel";
 import { useIsMobile} from "../../utils/utils";
+import {applyThemeColors} from "../ui/theme";
 
 const tg = window.Telegram.WebApp;
 
@@ -35,6 +36,15 @@ function CheesePage() {
     ];
 
     const isMobile = useIsMobile(); // Определяем тип устройства
+
+    useEffect(() => {
+        applyThemeColors(); // Устанавливаем тему при загрузке
+        tg.onEvent("themeChanged", applyThemeColors);
+
+        return () => {
+            tg.offEvent("themeChanged", applyThemeColors);
+        };
+    }, []);
 
     // Обработчик выбора категории
     const handleCategorySelect = (category) => {

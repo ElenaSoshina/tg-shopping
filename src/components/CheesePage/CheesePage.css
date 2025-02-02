@@ -1,3 +1,10 @@
+:root {
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #000000;
+    --tg-card-bg: #f2f4f8;
+    --tg-card-shadow: rgba(0, 0, 0, 0.1);
+}
+
 /* Карусель */
 .cheese-carousel-wrapper {
     position: relative;
@@ -79,10 +86,12 @@
     align-items: center; /* Центрируем по горизонтали */
     min-height: 100vh; /* Минимальная высота — весь экран */
     padding: 20px;
-    background: linear-gradient(to bottom, #f0f4ff, #e6ecf8);
+    /*background: linear-gradient(to bottom, #f0f4ff, #e6ecf8);*/
     font-family: 'Poppins', sans-serif;
-    color: #333;
+    /*color: #333;*/
     padding-bottom: 100px;
+    background: var(--tg-bg-color);
+    color: var(--tg-text-color)
 }
 
 /* Контейнер с изображением */
@@ -222,8 +231,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
-
 .topping.selected {
     border-color: #28a745;
     background: #e8f8ea;
@@ -258,7 +265,8 @@
     background: none;
     border: none;
     font-size: 1rem;
-    color: #4caf50;
+    /*color: #4caf50;*/
+    color: var(--tg-text-color);
     cursor: pointer;
     z-index: 10;
     transition: color 0.2s ease, transform 0.2s ease;
