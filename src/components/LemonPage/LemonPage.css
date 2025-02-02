@@ -1,7 +1,7 @@
 :root {
     --tg-bg-color: #1a1a2e; /* Тёмно-синий фон */
     --tg-text-color: #f5f5f5; /* Светло-серый текст */
-    --tg-secondary-text-color: #cccccc; /* Второстепенный текст */
+    --tg-secondary-text-color: #f5f5f5; /* Второстепенный текст */
     --tg-card-bg: #232946; /* Фон карточек */
     --tg-button-bg: #0f4c81; /* Тёмно-синий для кнопок */
     --tg-button-text: #ffffff; /* Белый текст для кнопок */
@@ -41,7 +41,7 @@
     border: none;
     font-size: 1rem;
     /*color: #ffb300;*/
-    color: var(--tg-button-bg);
+    color: var(--tg-border-color);
     cursor: pointer;
     transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -93,7 +93,7 @@
     border-radius: 12px;
     width: 100%;
     max-width: 400px;
-    background: var(--tg-bg-color);
+    background: var(--tg-border-color);
 }
 
 .quantity-controls {
@@ -104,7 +104,7 @@
 }
 
 .quantity-button {
-    background: var(--tg-button-bg);
+    background: var(--tg-border-color);
     color: var(--tg-button-text);
     display: flex;
     justify-content: center;
