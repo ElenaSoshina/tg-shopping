@@ -17,6 +17,20 @@ function OrderPage({ webAppQueryId }) {
     const navigate = useNavigate();
     const pickupAddress = 'Mui ne, Ocean vista, block B';
 
+    // Маппинг единиц измерения
+    const unitMapping = {
+        cheese: 'шт',
+        fish: 'г',
+        lemon: 'уп',
+    };
+
+    // Маппинг топпингов
+    const toppingsMapping = {
+        sourCream: 'Йогурт',
+        condensedMilk: 'Сгущенка',
+        passionFruitJam: 'Джем из маракуйи',
+    };
+
     // Восстановление заказа из sessionStorage
     useEffect(() => {
         const savedOrder = JSON.parse(sessionStorage.getItem('currentOrder')) || [];
@@ -46,19 +60,19 @@ function OrderPage({ webAppQueryId }) {
                 id: `${orderData.type}-${orderData.category}`,
                 title: orderData.category,
                 quantity: orderData.quantity,
-                price: orderData.type === 'cheese' ? 30000 : orderData.type === 'fish' ? 160000 : 80000,
+                price: orderData.type === 'cheese' ? 30000 : orderData.type === 'fish' ? 160 : 80000, // Цена за единицу
+                image: orderData.type === 'cheese' ? '/path/to/cheese.jpg' : orderData.type === 'fish' ? '/path/to/fish.jpg' : '/path/to/lemon.jpg',
                 toppings: orderData.toppings || [],
+                type: orderData.type,
             };
 
             setOrderItems((prevItems) => {
                 const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
                 if (existingItemIndex !== -1) {
-                    // Если товар уже существует, обновляем количество
                     const updatedItems = [...prevItems];
                     updatedItems[existingItemIndex].quantity += newOrderItem.quantity;
                     return updatedItems;
                 }
-                // Добавляем новый товар
                 return [...prevItems, newOrderItem];
             });
         }
@@ -95,9 +109,12 @@ function OrderPage({ webAppQueryId }) {
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
+                            <img src={item.image} alt={item.title} className="order-item-image" />
                             <h3>{item.title}</h3>
-                            <p>Количество: {item.quantity}шт</p>
-                            {item.toppings.length > 0 && <p>Топпинги: {item.toppings.join(', ')}</p>}
+                            <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
+                            {item.toppings.length > 0 && (
+                                <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping]).join(', ')}</p>
+                            )}
                             <p>Цена: {(item.price * item.quantity).toLocaleString('ru-RU')} VND</p>
                             {index < orderItems.length - 1 && <hr />}
                         </div>
@@ -138,9 +155,9 @@ function OrderPage({ webAppQueryId }) {
                             <Option value="delivery">Доставка</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.deliveryMethod !== currentValues.deliveryMethod}>
+                    <Form.Item shouldUpdate>
                         {({ getFieldValue }) => {
-                            const deliveryMethod = getFieldValue('deliveryMethod') || 'pickup'; // Устанавливаем значение по умолчанию
+                            const deliveryMethod = getFieldValue('deliveryMethod') || 'pickup';
                             return deliveryMethod === 'delivery' ? (
                                 <Form.Item
                                     label="Адрес доставки"
@@ -154,7 +171,6 @@ function OrderPage({ webAppQueryId }) {
                             );
                         }}
                     </Form.Item>
-
                 </Form>
             </div>
         </>
