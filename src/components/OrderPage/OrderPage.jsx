@@ -30,6 +30,15 @@ function OrderPage({ webAppQueryId }) {
 
     const pickupAddress = 'Mui ne, Ocean vista, block B';
 
+    useEffect(() => {
+        sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
+    }, [orderItems]);
+
+    useEffect(() => {
+        const savedOrder = JSON.parse(sessionStorage.getItem('currentOrder')) || [];
+        setOrderItems(savedOrder);
+    }, []);
+
     const orderData = useMemo(() => {
         return (
             location.state?.orderData ||
@@ -65,7 +74,21 @@ function OrderPage({ webAppQueryId }) {
                 price,
                 toppings: orderData.toppings || [],
             };
-            setOrderItems([newOrderItem]);
+            setOrderItems((prevItems) => {
+                const existingItemIndex = prevItems.findIndex(
+                    (item) => item.id === newOrderItem.id
+                );
+                if (existingItemIndex !== -1) {
+                    // Обновляем количество для существующего товара
+                    const updatedItems = [...prevItems];
+                    updatedItems[existingItemIndex].quantity += newOrderItem.quantity;
+                    return updatedItems;
+                }
+                // Добавляем новый товар
+                return [...prevItems, newOrderItem];
+            });
+
+            sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
         }
     }, [orderData]);
 
@@ -128,9 +151,20 @@ function OrderPage({ webAppQueryId }) {
 
             <h3 className={'add-order-header'}>Добавить в заказ</h3>
             <div className="order-buttons">
-                <button onClick={() => navigate('/cheese')}>Сырники</button>
-                <button onClick={() => navigate('/fish')}>Лосось</button>
-                <button onClick={() => navigate('/lemon')}>Лимоны</button>
+                <button
+                    onClick={() => {
+                        sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
+                        navigate('/cheese')
+                    }}
+                    >Сырники</button>
+                <button onClick={() => {
+                    sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
+                    navigate('/fish')
+                }}>Лосось</button>
+                <button onClick={() => {
+                    sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
+                    navigate('/lemon')
+                }}>Лимоны</button>
             </div>
             <div className="order-form">
                 <h3>Данные для заказа</h3>

@@ -123,6 +123,7 @@
     transition: border-color 0.3s ease;
     outline: none;
     box-sizing: border-box;
+    color: var(--tg-text-color);
 }
 
 .order-input:focus, .order-select:focus {
@@ -144,6 +145,7 @@
 .add-order-header {
     margin-top: 20px;
     text-align: center;
+    color: var(--tg-text-color);
 }
 
 .order-buttons {
