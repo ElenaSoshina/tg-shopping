@@ -1,4 +1,3 @@
-const tg = window.Telegram.WebApp;
 
 export const applyThemeColors = () => {
 
