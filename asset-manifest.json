@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/tg-shopping/static/css/main.a62f915e.css",
-    "main.js": "/tg-shopping/static/js/main.8c534cf3.js",
+    "main.js": "/tg-shopping/static/js/main.0cfb248f.js",
     "static/media/cheesse_tonning.webp": "/tg-shopping/static/media/cheesse_tonning.3a68b01bf900d3bf613d.webp",
     "static/media/preparedCheese.webp": "/tg-shopping/static/media/preparedCheese.179aa922f93407b280dc.webp",
     "static/media/frozenCheese.webp": "/tg-shopping/static/media/frozenCheese.ef9ff3ca5875ff408baa.webp",
@@ -19,10 +19,10 @@
     "static/media/lemon-3.webp": "/tg-shopping/static/media/lemon-3.db264ac6d984a22ab2cb.webp",
     "index.html": "/tg-shopping/index.html",
     "main.a62f915e.css.map": "/tg-shopping/static/css/main.a62f915e.css.map",
-    "main.8c534cf3.js.map": "/tg-shopping/static/js/main.8c534cf3.js.map"
+    "main.0cfb248f.js.map": "/tg-shopping/static/js/main.0cfb248f.js.map"
   },
   "entrypoints": [
     "static/css/main.a62f915e.css",
-    "static/js/main.8c534cf3.js"
+    "static/js/main.0cfb248f.js"
   ]
 }
