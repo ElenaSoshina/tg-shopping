@@ -247,8 +247,8 @@
     transition: all 0.3s ease;
     font-size: 1rem;
     font-weight: 500;
-    color: var(--tg-border-color);
-    /*background: #fff;*/
+    color: #4caf50;
+    background: var(--tg-bg-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -256,7 +256,7 @@
     border-color: #28a745;
     background: var(--tg-border-color);
     font-weight: bold;
-    color: var(--tg-bg-color);
+    color: #f5f5f5;
 }
 
 /* Горизонтальная линия для разделения */
