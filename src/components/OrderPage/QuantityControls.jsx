@@ -3,13 +3,13 @@ import './QuantityControls.css'
 
 const QuantityControls = ({ quantity, increase, decrease }) => (
     <div className='quantity-container'>
-        <strong>Количество:</strong>
-        <div className="quantity-controls">
-            <button onClick={decrease}>
+        <strong className={'quantity-controls__text'}>Количество:</strong>
+        <div className="quantity-controls__gap">
+            <button onClick={decrease} className={'quantity-controls__button'}>
                 -
             </button>
             <span className="quantity-value">{quantity}</span>
-            <button onClick={increase}>
+            <button onClick={increase} className={'quantity-controls__button'}>
                 +
             </button>
         </div>

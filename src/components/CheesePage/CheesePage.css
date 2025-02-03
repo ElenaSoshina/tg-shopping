@@ -247,16 +247,16 @@
     transition: all 0.3s ease;
     font-size: 1rem;
     font-weight: 500;
-    color: #333;
-    background: #fff;
+    color: var(--tg-border-color);
+    /*background: #fff;*/
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .topping.selected {
     border-color: #28a745;
-    background: #e8f8ea;
+    background: var(--tg-border-color);
     font-weight: bold;
-    color: #28a745;
+    color: var(--tg-bg-color);
 }
 
 /* Горизонтальная линия для разделения */

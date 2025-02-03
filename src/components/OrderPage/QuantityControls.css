@@ -13,3 +13,31 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.quantity-controls__button {
+    border: 2px solid var(--tg-border-color);
+    color: var(--tg-border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #e8f7ea;
+
+    /*border: none;*/
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 0; /* Убраны внутренние отступы */
+    line-height: 50px; /* Высота строки равна высоте кнопки */
+}
+
+.quantity-controls__gap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-right: 15px;
+}

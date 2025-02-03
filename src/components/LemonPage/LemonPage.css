@@ -96,15 +96,15 @@
 }
 
 .quantity-button {
-    background: var(--tg-border-color);
-    color: var(--tg-button-text);
+    border: 2px solid var(--tg-border-color);
+    color: var(--tg-border-color);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    /*background: #e8f7ea;*/
-    /*color: #28a745;*/
-    border: none;
+    background: #e8f7ea;
+
+    /*border: none;*/
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -127,7 +127,7 @@
     font-weight: 600;
     /*color: #28a745;*/
     text-align: center;
-    color: var(--tg-border-color);
+    color: var(--tg-text-color);
 }
 
 /* Разделитель */
