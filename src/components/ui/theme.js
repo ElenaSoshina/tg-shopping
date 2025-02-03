@@ -22,8 +22,10 @@ export const applyThemeColors = () => {
     // Логика проверки контрастности
     const isDarkTheme = bgColor === "#1a1a2e"; // Это пример для определения
     const adjustedSecondaryTextColor = isDarkTheme ? "#f3f3f3" : "#252525";
+    const labelColor = isDarkTheme ? "var(--label-color-dark)" : "var(--label-color-light)";
 
     // Установка CSS-переменных
+    document.documentElement.style.setProperty("--label-color", labelColor);
     document.documentElement.style.setProperty("--tg-bg-color", bgColor);
     document.documentElement.style.setProperty("--tg-text-color", textColor);
     document.documentElement.style.setProperty("--tg-secondary-text-color", adjustedSecondaryTextColor);
