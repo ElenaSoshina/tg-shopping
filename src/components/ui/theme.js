@@ -1,7 +1,6 @@
 const tg = window.Telegram.WebApp;
 
 export const applyThemeColors = () => {
-    const themeColors = tg.themeParams;
 
 
     const defaultColors = {
@@ -13,11 +12,11 @@ export const applyThemeColors = () => {
     }
 
     // Определение цветов
-    const bgColor = themeColors.bg_color || defaultColors.bg_color;
-    const textColor = themeColors.text_color || defaultColors.text_color;
-    const buttonColor = themeColors.button_color || defaultColors.button_color;
-    const buttonTextColor = themeColors.button_text_color || defaultColors.button_text_color;
-    const borderColor = themeColors.hint_color || defaultColors.hint_color;
+    const bgColor = defaultColors.bg_color;
+    const textColor = defaultColors.text_color;
+    const buttonColor = defaultColors.button_color;
+    const buttonTextColor = defaultColors.button_text_color;
+    const borderColor = defaultColors.hint_color;
 
     // Логика проверки контрастности
     const isDarkTheme = bgColor === "#1a1a2e"; // Это пример для определения
