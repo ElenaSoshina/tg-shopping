@@ -16,6 +16,11 @@ function FishPage() {
 
     const quantityRef = useRef(null);
     const maxQuantity = 4000;
+
+    const categoryImages = {
+        cut: require('../../images/fish-5.webp'), // Image for cut
+        piece: require('../../images/fish-2.webp'), // Image for piece
+    };
     const images = [
         require('../../images/fish-3.webp'),
         require('../../images/fish-2.webp'),
@@ -64,6 +69,7 @@ function FishPage() {
                     quantity,
                     type: 'fish',
                     price: calculatePrice(quantity),
+                    image: categoryImages[selectedCategory],
                 };
 
                 sessionStorage.setItem('fishOrderData', JSON.stringify(orderData));

@@ -105,7 +105,7 @@ function OrderPage({ webAppQueryId }) {
     return (
         <>
             <div className="order-container">
-                <OrderHeader redirectPath="/menu" />
+                <OrderHeader redirectPath="/" />
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
@@ -113,7 +113,7 @@ function OrderPage({ webAppQueryId }) {
                             <h3>{item.title}</h3>
                             <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
                             {item.toppings.length > 0 && (
-                                <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping]).join(', ')}</p>
+                                <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                             )}
                             <p>Цена: {(item.price * item.quantity).toLocaleString('ru-RU')} VND</p>
                             {index < orderItems.length - 1 && <hr />}

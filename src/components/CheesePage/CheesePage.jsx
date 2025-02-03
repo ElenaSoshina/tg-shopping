@@ -115,6 +115,7 @@ function CheesePage() {
                     quantity,
                     toppings: selectedToppings,
                     type: 'cheese',
+                    image: selectedCategory === 'prepared' ? '../../images/preparedCheese.webp' : '../../images/frozenCheese.webp',
                 };
 
                 sessionStorage.setItem('cheeseOrderData', JSON.stringify(orderData));

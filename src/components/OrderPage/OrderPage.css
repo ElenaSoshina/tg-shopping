@@ -168,5 +168,13 @@
     background: var(--tg-bg-color);
 }
 
+.order-item-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
 
 
