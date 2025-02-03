@@ -31,13 +31,13 @@ function OrderPage({ webAppQueryId }) {
     const pickupAddress = 'Mui ne, Ocean vista, block B';
 
     useEffect(() => {
-        sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
-    }, [orderItems]);
-
-    useEffect(() => {
         const savedOrder = JSON.parse(sessionStorage.getItem('currentOrder')) || [];
         setOrderItems(savedOrder);
     }, []);
+
+    useEffect(() => {
+        sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
+    }, [orderItems]);
 
     const orderData = useMemo(() => {
         return (
@@ -74,6 +74,7 @@ function OrderPage({ webAppQueryId }) {
                 price,
                 toppings: orderData.toppings || [],
             };
+
             setOrderItems((prevItems) => {
                 const existingItemIndex = prevItems.findIndex(
                     (item) => item.id === newOrderItem.id
@@ -88,7 +89,6 @@ function OrderPage({ webAppQueryId }) {
                 return [...prevItems, newOrderItem];
             });
 
-            sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
         }
     }, [orderData]);
 
@@ -139,9 +139,29 @@ function OrderPage({ webAppQueryId }) {
                         })})`
                     }}/>
                     <div className="order-details">
-                        <QuantityControls quantity={orderItems[0]?.quantity || 1} increase={() => {
-                        }} decrease={() => {
-                        }}/>
+                        {orderItems.map((item, index) => (
+                            <div key={item.id} className="order-item">
+                                <p>{item.title}</p>
+                                <QuantityControls
+                                    quantity={item.quantity}
+                                    increase={() => {
+                                        setOrderItems((prevItems) => {
+                                            const newItems = [...prevItems];
+                                            newItems[index].quantity += 1;
+                                            return newItems;
+                                        });
+                                    }}
+                                    decrease={() => {
+                                        setOrderItems((prevItems) => {
+                                            const newItems = [...prevItems];
+                                            newItems[index].quantity = Math.max(1, newItems[index].quantity - 1);
+                                            return newItems;
+                                        });
+                                    }}
+                                />
+                                <p>Цена: {(item.price * item.quantity).toLocaleString()} VND</p>
+                            </div>
+                        ))}
                         <OrderSummary orderItems={orderItems} totalPrice={totalPrice} type={orderData.type}/>
                     </div>
                 </div>
@@ -156,18 +176,21 @@ function OrderPage({ webAppQueryId }) {
                         sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
                         navigate('/cheese')
                     }}
-                    >Сырники</button>
+                >Сырники
+                </button>
                 <button onClick={() => {
                     sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
                     navigate('/fish')
-                }}>Лосось</button>
+                }}>Лосось
+                </button>
                 <button onClick={() => {
                     sessionStorage.setItem('currentOrder', JSON.stringify(orderItems));
                     navigate('/lemon')
-                }}>Лимоны</button>
+                }}>Лимоны
+                </button>
             </div>
             <div className="order-form">
-                <h3>Данные для заказа</h3>
+            <h3>Данные для заказа</h3>
                 <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
                     <Form.Item label="Имя" name="name" rules={[{required: true, message: 'Введите имя'}]}>
                         <Input placeholder="Введите ваше имя"/>
