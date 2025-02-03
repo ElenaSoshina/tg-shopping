@@ -10,7 +10,6 @@ import lemonImage from '../../images/lemonPage.webp';
 import { calculateTotalPrice, getBackgroundImage } from '../../utils/utils';
 
 import QuantityControls from './QuantityControls';
-import OrderSummary from './OrderSummary';
 import OrderHeader from './OrderHeader';
 import OrderImage from './OrderImage';
 import OrderPopup from './OrderPopup';
@@ -141,7 +140,17 @@ function OrderPage({ webAppQueryId }) {
                     <div className="order-details">
                         {orderItems.map((item, index) => (
                             <div key={item.id} className="order-item">
-                                <p>{item.title}</p>
+                                {/* Название товара */}
+                                <h3>{item.title} {item.quantity}шт</h3>
+
+                                {/* Отображение топпингов (если есть) */}
+                                {item.toppings.length > 0 && (
+                                    <p>
+                                        <strong>Топпинги:</strong> {item.toppings.join(", ")}
+                                    </p>
+                                )}
+
+                                {/* Количество с кнопками увеличения/уменьшения */}
                                 <QuantityControls
                                     quantity={item.quantity}
                                     increase={() => {
@@ -159,11 +168,19 @@ function OrderPage({ webAppQueryId }) {
                                         });
                                     }}
                                 />
-                                <p>Цена: {(item.price * item.quantity).toLocaleString()} VND</p>
+
+                                {/* Цена за товар */}
+                                <p><strong>Цена:</strong> {(item.price * item.quantity).toLocaleString()} VND</p>
+
+                                {/* Разделитель между товарами */}
+                                {index < orderItems.length - 1 && <hr/>}
                             </div>
                         ))}
-                        <OrderSummary orderItems={orderItems} totalPrice={totalPrice} type={orderData.type}/>
+
+                        {/* Итоговая стоимость */}
+                        <h2>Итоговая стоимость заказа: {totalPrice.toLocaleString()} VND</h2>
                     </div>
+
                 </div>
                 {showPopup &&
                     <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId}/>}
@@ -190,7 +207,7 @@ function OrderPage({ webAppQueryId }) {
                 </button>
             </div>
             <div className="order-form">
-            <h3>Данные для заказа</h3>
+                <h3>Данные для заказа</h3>
                 <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
                     <Form.Item label="Имя" name="name" rules={[{required: true, message: 'Введите имя'}]}>
                         <Input placeholder="Введите ваше имя"/>
