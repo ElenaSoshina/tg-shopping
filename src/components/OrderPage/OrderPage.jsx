@@ -117,7 +117,7 @@ function OrderPage({ webAppQueryId }) {
                                 {item.toppings.length > 0 && (
                                     <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                                 )}
-                                <p>Цена: {Number(item.price).toLocaleString('ru-RU')} VND</p>
+                                <p>Цена: {item.price ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
                                 {index < orderItems.length - 1 && <hr />}
                             </div>
                         </div>

@@ -189,6 +189,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.order-item-info p {
+    margin: 5px 0; /* Уменьшаем вертикальный отступ */
+    font-size: 14px; /* Уменьшаем размер шрифта, если нужно */
+}
+
+.order-item-info h3 {
+    margin-bottom: 8px; /* Уменьшаем отступ между заголовком и текстом */
+}
+
+
 
 
 
