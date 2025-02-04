@@ -78,7 +78,7 @@ function OrderPage({ webAppQueryId }) {
     }, [orderData]);
 
     const totalPrice = useMemo(() => {
-        return orderItems.reduce((sum, item) => sum + (item.price || 0), 0);
+        return orderItems.reduce((sum, item) => sum + (item.price * item.quantity || 0), 0);
     }, [orderItems]);
 
     const handleOrderSubmit = useCallback(
@@ -107,7 +107,8 @@ function OrderPage({ webAppQueryId }) {
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
-                            <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
+                            <img src={item.image || '../../images/fish.webp'} alt={item.title}
+                                 className="order-item-image"/>
                             <div className="order-item-info">
                                 <h3>
                                     {item.title}
@@ -118,11 +119,12 @@ function OrderPage({ webAppQueryId }) {
                                     <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                                 )}
                                 <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
-                                {index < orderItems.length - 1 && <hr />}
+                                {index < orderItems.length - 1 && <hr/>}
                             </div>
                         </div>
                     ))}
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
+
                 </div>
 
                 {showPopup && (

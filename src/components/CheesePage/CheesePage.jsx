@@ -103,6 +103,8 @@ function CheesePage() {
         }
     }, []);
 
+    const pricePerCheese = selectedCategory === 'prepared' ? pricePerPreparedCheese : pricePerFrozenCheese;
+
     // Управление кнопкой Telegram
     useEffect(() => {
         if (selectedCategory && quantity > 0 && selectedToppings.length > 0) {
@@ -127,9 +129,9 @@ function CheesePage() {
         }
 
         return () => tg.MainButton.offClick(() => {});
-    }, [selectedCategory, quantity, selectedToppings, navigate]);
+    }, [selectedCategory, quantity, selectedToppings, navigate, pricePerCheese]);
 
-    const pricePerCheese = selectedCategory === 'prepared' ? pricePerPreparedCheese : pricePerFrozenCheese;
+
     const totalPrice = quantity * pricePerCheese;
 
     return (
