@@ -44,13 +44,13 @@ function OrderPage({ webAppQueryId }) {
     // Получение данных нового товара из location или sessionStorage
     const orderData = useMemo(() => {
         return (
-            location.state?.orderData ||
-            JSON.parse(sessionStorage.getItem('fishOrderData')) ||
-            JSON.parse(sessionStorage.getItem('cheeseOrderData')) ||
-            JSON.parse(sessionStorage.getItem('lemonOrderData')) ||
+            location.state?.orderData || // Используем данные из state, если есть
+            (location.pathname === '/order' && JSON.parse(sessionStorage.getItem('fishOrderData'))) || // Только для FishPage
+            (location.pathname === '/order' && JSON.parse(sessionStorage.getItem('cheeseOrderData'))) || // Только для CheesePage
+            (location.pathname === '/order' && JSON.parse(sessionStorage.getItem('lemonOrderData'))) || // Только для LemonPage
             {}
         );
-    }, [location.state]);
+    }, [location.state, location.pathname]);
 
     // Обновление заказа при добавлении нового товара
     useEffect(() => {

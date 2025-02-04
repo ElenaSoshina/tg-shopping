@@ -56,6 +56,7 @@ function LemonPage() {
                     quantity,
                     totalPrice: calculatePrice(quantity),
                     type: 'lemon',
+                    image: require('../../images/lemonPage.webp'),
                 };
 
                 sessionStorage.setItem('lemonOrderData', JSON.stringify(orderData));
