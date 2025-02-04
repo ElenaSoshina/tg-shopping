@@ -65,7 +65,7 @@ function FishPage() {
 
             tg.MainButton.onClick(() => {
                 const orderData = {
-                    category: selectedCategory === 'cut' ? 'Нарезка' : 'Кусок',
+                    category: selectedCategory === 'cut' ? 'Нарезка' : 'Филе',
                     quantity,
                     type: 'fish',
                     price: calculatePrice(quantity),

@@ -112,9 +112,10 @@ function OrderPage({ webAppQueryId }) {
                             <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
                             <h3>
                                 {item.type === 'fish'
-                                    ? `Лосось ${item.category === 'Кусок' ? 'филе' : item.category}`
+                                    ? `Лосось ${item.category}` // "Кусок" заменен на "Филе" в FishPage, поэтому отображается корректно
                                     : item.category}
                             </h3>
+
                             <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
                             {item.toppings.length > 0 && (
                                 <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
