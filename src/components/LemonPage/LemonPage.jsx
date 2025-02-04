@@ -54,7 +54,7 @@ function LemonPage() {
                 const orderData = {
                     category: 'Лимон',
                     quantity,
-                    totalPrice: calculatePrice(quantity),
+                    price: quantity * pricePerPackage,
                     type: 'lemon',
                     image: require('../../images/lemonPage.webp'),
                 };

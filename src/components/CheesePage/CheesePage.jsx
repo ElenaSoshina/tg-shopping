@@ -113,6 +113,7 @@ function CheesePage() {
                 const orderData = {
                     category: selectedCategory === 'prepared' ? 'Сырники приготовленные' : 'Сырники замороженные',
                     quantity,
+                    price: pricePerCheese * quantity,
                     toppings: selectedToppings,
                     type: 'cheese',
                     image: selectedCategory === 'prepared' ? require('../../images/preparedCheese.webp') : require('../../images/frozenCheese.webp'),

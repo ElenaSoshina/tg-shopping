@@ -78,7 +78,7 @@ function OrderPage({ webAppQueryId }) {
     }, [orderData]);
 
     const totalPrice = useMemo(() => {
-        return orderItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+        return orderItems.reduce((sum, item) => sum + (item.price || 0), 0);
     }, [orderItems]);
 
     const handleOrderSubmit = useCallback(
@@ -117,12 +117,12 @@ function OrderPage({ webAppQueryId }) {
                                 {item.toppings.length > 0 && (
                                     <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                                 )}
-                                <p>Цена: {item.price ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
+                                <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
                                 {index < orderItems.length - 1 && <hr />}
                             </div>
                         </div>
                     ))}
-                    <h2>Итоговая стоимость: {totalPrice.toLocaleString('ru-RU')} VND</h2>
+                    <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
                 </div>
 
                 {showPopup && (
