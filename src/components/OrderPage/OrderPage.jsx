@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 import { Form, Input, Select, message } from 'antd';
-import OrderHeader from './OrderHeader';
 import OrderPopup from './OrderPopup';
 
 const { Option } = Select;
@@ -58,10 +57,10 @@ function OrderPage({ webAppQueryId }) {
         if (orderData?.quantity && orderData?.category) {
             const newOrderItem = {
                 id: `${orderData.type}-${orderData.category}`,
-                title: orderData.category,
+                title: `Лосось ${orderData.category}`,
                 quantity: orderData.quantity,
-                price: orderData.type === 'cheese' ? 30000 : orderData.type === 'fish' ? 160 : 80000, // Цена за единицу
-                image: orderData.type === 'cheese' ? '/path/to/cheese.jpg' : orderData.type === 'fish' ? '/path/to/fish.jpg' : '/path/to/lemon.jpg',
+                price: orderData.price,
+                image: orderData.image,
                 toppings: orderData.toppings || [],
                 type: orderData.type,
             };
@@ -105,23 +104,22 @@ function OrderPage({ webAppQueryId }) {
     return (
         <>
             <div className="order-container">
-                <OrderHeader redirectPath="/" />
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
                             <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
-                            <h3>
-                                {item.type === 'fish'
-                                    ? `Лосось ${item.category}` // "Кусок" заменен на "Филе" в FishPage, поэтому отображается корректно
-                                    : item.category}
-                            </h3>
+                            <div className="order-item-info">
+                                <h3>
+                                    {item.title}
+                                </h3>
 
-                            <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
-                            {item.toppings.length > 0 && (
-                                <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
-                            )}
-                            <p>Цена: {Number(item.price).toLocaleString('ru-RU')} VND</p>
-                            {index < orderItems.length - 1 && <hr />}
+                                <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
+                                {item.toppings.length > 0 && (
+                                    <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
+                                )}
+                                <p>Цена: {Number(item.price).toLocaleString('ru-RU')} VND</p>
+                                {index < orderItems.length - 1 && <hr />}
+                            </div>
                         </div>
                     ))}
                     <h2>Итоговая стоимость: {totalPrice.toLocaleString('ru-RU')} VND</h2>
