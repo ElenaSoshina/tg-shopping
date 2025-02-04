@@ -110,12 +110,16 @@ function OrderPage({ webAppQueryId }) {
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
                             <img src={item.image} alt={item.title} className="order-item-image" />
-                            <h3>{item.title}</h3>
+                            <h3>
+                                {item.type === 'fish'
+                                    ? `Лосось ${item.category === 'Кусок' ? 'филе' : item.category}`
+                                    : item.category}
+                            </h3>
                             <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
                             {item.toppings.length > 0 && (
                                 <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                             )}
-                            <p>Цена: {(item.price * item.quantity).toLocaleString('ru-RU')} VND</p>
+                            <p>Цена: {Number(item.price).toLocaleString('ru-RU')} VND</p>
                             {index < orderItems.length - 1 && <hr />}
                         </div>
                     ))}
