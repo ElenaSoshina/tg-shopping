@@ -109,7 +109,7 @@ function OrderPage({ webAppQueryId }) {
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
-                            <img src={item.image} alt={item.title} className="order-item-image" />
+                            <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
                             <h3>
                                 {item.type === 'fish'
                                     ? `Лосось ${item.category === 'Кусок' ? 'филе' : item.category}`

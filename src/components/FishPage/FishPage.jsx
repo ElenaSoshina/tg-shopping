@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FishPage.css';
 import { IoArrowBack } from "react-icons/io5";
@@ -16,11 +16,11 @@ function FishPage() {
 
     const quantityRef = useRef(null);
     const maxQuantity = 4000;
-
-    const categoryImages = {
+    const categoryImages = useMemo(() => ({
         cut: require('../../images/fish-5.webp'), // Image for cut
         piece: require('../../images/fish-2.webp'), // Image for piece
-    };
+    }), []);
+
     const images = [
         require('../../images/fish-3.webp'),
         require('../../images/fish-2.webp'),
@@ -82,7 +82,7 @@ function FishPage() {
         return () => {
             tg.MainButton.offClick(() => {});
         };
-    }, [selectedCategory, quantity, navigate]);
+    }, [selectedCategory, quantity, navigate, categoryImages]);
 
     return (
         <div className="fish-container">
