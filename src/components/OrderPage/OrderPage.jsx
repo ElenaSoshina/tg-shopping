@@ -186,6 +186,9 @@ function OrderPage({ webAppQueryId }) {
                 <Form
                     layout="vertical"
                     form={form}
+                    initialValues={{
+                        deliveryMethod: 'pickup', // Значение по умолчанию для способа доставки
+                    }}
                     onFinish={handleOrderSubmit}
                     onValuesChange={() => form.validateFields()
                         .then(() => tg.MainButton.show())
