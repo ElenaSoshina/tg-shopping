@@ -79,8 +79,8 @@ function OrderPage({ webAppQueryId }) {
 
     const totalPrice = useMemo(() => {
         return orderItems.reduce((sum, item) => {
-            const itemTotal = Number(item.price) * Number(item.quantity);
-            return sum + (isNaN(itemTotal) ? 0 : itemTotal);
+            const itemPrice = Number(item.price);
+            return sum + (isNaN(itemPrice) ? 0 : itemPrice);
         }, 0);
     }, [orderItems]);
 
@@ -149,6 +149,7 @@ function OrderPage({ webAppQueryId }) {
                         </div>
                     ))}
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
+
                 </div>
 
                 {showPopup && (
