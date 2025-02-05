@@ -96,7 +96,7 @@ function OrderPage({ webAppQueryId }) {
         };
 
         form.setFieldsValue({
-            deliveryMethod: 'pickup',
+            deliveryMethod: undefined,
         });
 
         checkFormValidity();
