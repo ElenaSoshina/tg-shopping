@@ -85,28 +85,22 @@ function OrderPage({ webAppQueryId }) {
     }, [orderItems]);
 
     useEffect(() => {
-        const checkFormValidity = () => {
-            const isFormValid = form.isFieldsTouched(true) && !form.getFieldsError().some(({ errors }) => errors.length);
-            if (isFormValid) {
+        const checkFormValidity = async () => {
+            try {
+                await form.validateFields();
                 tg.MainButton.setText('Перейти к заказу');
                 tg.MainButton.show();
-            } else {
+            } catch {
                 tg.MainButton.hide();
             }
         };
-
-        const unsubscribe = form.subscribe(({ changedFields }) => {
-            checkFormValidity();
-        });
 
         checkFormValidity();
 
         return () => {
             tg.MainButton.hide();
-            unsubscribe();
         };
     }, [form]);
-
 
     const handleOrderSubmit = useCallback(
         (values) => {
@@ -189,7 +183,12 @@ function OrderPage({ webAppQueryId }) {
 
             <div className="order-form">
                 <h3>Данные для заказа</h3>
-                <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
+                <Form
+                    layout="vertical"
+                    form={form}
+                    onFinish={handleOrderSubmit}
+                    onValuesChange={() => form.validateFields().then(() => tg.MainButton.show()).catch(() => tg.MainButton.hide())}
+                >
                     <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
                         <Input placeholder="Введите ваше имя" />
                     </Form.Item>
