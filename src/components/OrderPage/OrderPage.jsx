@@ -69,7 +69,7 @@ function OrderPage({ webAppQueryId }) {
                 const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
                 if (existingItemIndex !== -1) {
                     const updatedItems = [...prevItems];
-                    updatedItems[existingItemIndex].quantity += newOrderItem.quantity;
+                    updatedItems[existingItemIndex].quantity = newOrderItem.quantity;
                     return updatedItems;
                 }
                 return [...prevItems, newOrderItem];
