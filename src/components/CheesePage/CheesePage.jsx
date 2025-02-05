@@ -93,15 +93,6 @@ function CheesePage() {
         window.scrollTo(0, 0);
     }, []);
 
-    // Загрузка данных из sessionStorage при монтировании
-    useEffect(() => {
-        const savedData = JSON.parse(sessionStorage.getItem('cheeseOrderData'));
-        if (savedData) {
-            setSelectedCategory(savedData.category === 'Сырники приготовленные' ? 'prepared' : 'frozen');
-            setQuantity(savedData.quantity);
-            setSelectedToppings(savedData.toppings || []);
-        }
-    }, []);
 
     const pricePerCheese = selectedCategory === 'prepared' ? pricePerPreparedCheese : pricePerFrozenCheese;
 
