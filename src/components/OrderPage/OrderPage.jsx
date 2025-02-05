@@ -88,12 +88,16 @@ function OrderPage({ webAppQueryId }) {
         const checkFormValidity = async () => {
             try {
                 await form.validateFields();
-                tg.MainButton.setText('Перейти к заказу');
+                tg.MainButton.setText('Оформить заказ');
                 tg.MainButton.show();
             } catch {
                 tg.MainButton.hide();
             }
         };
+
+        form.setFieldsValue({
+            deliveryMethod: 'pickup',
+        });
 
         checkFormValidity();
 
@@ -212,14 +216,14 @@ function OrderPage({ webAppQueryId }) {
                             <Option value="delivery">Доставка</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item shouldUpdate>
+                    <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.deliveryMethod !== currentValues.deliveryMethod}>
                         {({ getFieldValue }) => {
                             const deliveryMethod = getFieldValue('deliveryMethod') || 'pickup';
                             return deliveryMethod === 'delivery' ? (
                                 <Form.Item
                                     label="Адрес доставки"
                                     name="address"
-                                    rules={[{ message: 'Введите адрес доставки' }]}
+                                    rules={[{ required: true, message: 'Введите адрес доставки' }]} // Добавляем required
                                 >
                                     <Input placeholder="Введите адрес доставки" />
                                 </Form.Item>
