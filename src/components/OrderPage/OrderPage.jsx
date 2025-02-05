@@ -190,9 +190,6 @@ function OrderPage({ webAppQueryId }) {
                 <Form
                     layout="vertical"
                     form={form}
-                    initialValues={{
-                        deliveryMethod: 'pickup', // Значение по умолчанию для способа доставки
-                    }}
                     onFinish={handleOrderSubmit}
                     onValuesChange={() => form.validateFields()
                         .then(() => tg.MainButton.show())
@@ -211,25 +208,25 @@ function OrderPage({ webAppQueryId }) {
                         <Input placeholder="Введите номер телефона" />
                     </Form.Item>
                     <Form.Item label="Способ получения" name="deliveryMethod" initialValue="pickup">
-                        <Select>
+                        <Select placeholder="Выберите способ получения">
                             <Option value="pickup">Самовывоз</Option>
                             <Option value="delivery">Доставка</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.deliveryMethod !== currentValues.deliveryMethod}>
                         {({ getFieldValue }) => {
-                            const deliveryMethod = getFieldValue('deliveryMethod') || 'pickup';
+                            const deliveryMethod = getFieldValue('deliveryMethod');
                             return deliveryMethod === 'delivery' ? (
                                 <Form.Item
                                     label="Адрес доставки"
                                     name="address"
-                                    rules={[{ required: true, message: 'Введите адрес доставки' }]} // Добавляем required
+                                    rules={[{ required: true, message: 'Введите адрес доставки' }]} // Добавляем обязательную валидацию
                                 >
                                     <Input placeholder="Введите адрес доставки" />
                                 </Form.Item>
-                            ) : (
+                            ) : deliveryMethod === 'pickup' ? (
                                 <p className="pickup-address">Самовывоз: {pickupAddress}</p>
-                            );
+                            ) : null;
                         }}
                     </Form.Item>
                 </Form>
