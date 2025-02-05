@@ -79,10 +79,11 @@ function OrderPage({ webAppQueryId }) {
 
     const totalPrice = useMemo(() => {
         return orderItems.reduce((sum, item) => {
-            const itemTotal = item.price * item.quantity;
-            return sum + (isNaN(itemTotal) ? 0 : itemTotal); // Добавляем проверку на NaN
+            const itemTotal = Number(item.price) * Number(item.quantity);
+            return sum + (isNaN(itemTotal) ? 0 : itemTotal);
         }, 0);
     }, [orderItems]);
+
 
     const handleOrderSubmit = useCallback(
         (values) => {
