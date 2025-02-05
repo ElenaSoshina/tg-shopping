@@ -187,7 +187,9 @@ function OrderPage({ webAppQueryId }) {
                     layout="vertical"
                     form={form}
                     onFinish={handleOrderSubmit}
-                    onValuesChange={() => form.validateFields().then(() => tg.MainButton.show()).catch(() => tg.MainButton.hide())}
+                    onValuesChange={() => form.validateFields()
+                        .then(() => tg.MainButton.show())
+                        .catch(() => tg.MainButton.hide())}
                 >
                     <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
                         <Input placeholder="Введите ваше имя" />
@@ -214,7 +216,7 @@ function OrderPage({ webAppQueryId }) {
                                 <Form.Item
                                     label="Адрес доставки"
                                     name="address"
-                                    rules={[{ required: true, message: 'Введите адрес доставки' }]}
+                                    rules={[{ message: 'Введите адрес доставки' }]}
                                 >
                                     <Input placeholder="Введите адрес доставки" />
                                 </Form.Item>
