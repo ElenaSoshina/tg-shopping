@@ -207,8 +207,12 @@ function OrderPage({ webAppQueryId }) {
                     >
                         <Input placeholder="Введите номер телефона" />
                     </Form.Item>
-                    <Form.Item label="Способ получения" name="deliveryMethod" initialValue="pickup">
-                        <Select placeholder="Выберите способ получения">
+                    <Form.Item
+                        label="Способ получения"
+                        name="deliveryMethod"
+                        rules={[{ required: true, message: 'Выберите способ получения' }]} // Обязательная валидация
+                    >
+                        <Select placeholder="Выберите способ получения" allowClear>
                             <Option value="pickup">Самовывоз</Option>
                             <Option value="delivery">Доставка</Option>
                         </Select>
