@@ -69,16 +69,19 @@ function OrderPage({ webAppQueryId }) {
                 const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
                 if (existingItemIndex !== -1) {
                     const updatedItems = [...prevItems];
-                    updatedItems[existingItemIndex] = newOrderItem; // Полностью обновляем товар
+                    updatedItems[existingItemIndex] = { ...newOrderItem }; // Полное обновление данных
                     return updatedItems;
                 }
-                return [...prevItems, newOrderItem];
+                return [...prevItems, newOrderItem]; // Добавление нового товара
             });
         }
     }, [orderData]);
 
     const totalPrice = useMemo(() => {
-        return orderItems.reduce((sum, item) => sum + (item.price * item.quantity || 0), 0);
+        return orderItems.reduce((sum, item) => {
+            const itemTotal = item.price * item.quantity;
+            return sum + (isNaN(itemTotal) ? 0 : itemTotal); // Добавляем проверку на NaN
+        }, 0);
     }, [orderItems]);
 
     const handleOrderSubmit = useCallback(
