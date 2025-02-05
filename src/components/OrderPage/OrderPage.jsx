@@ -57,7 +57,7 @@ function OrderPage({ webAppQueryId }) {
         if (orderData?.quantity && orderData?.category) {
             const newOrderItem = {
                 id: `${orderData.type}-${orderData.category}`,
-                title: `Лосось ${orderData.category}`,
+                title: orderData.category, // Убираем "Лосось" перед названием
                 quantity: orderData.quantity,
                 price: orderData.price,
                 image: orderData.image,
@@ -69,7 +69,7 @@ function OrderPage({ webAppQueryId }) {
                 const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
                 if (existingItemIndex !== -1) {
                     const updatedItems = [...prevItems];
-                    updatedItems[existingItemIndex].quantity = newOrderItem.quantity;
+                    updatedItems[existingItemIndex] = newOrderItem; // Полностью обновляем товар
                     return updatedItems;
                 }
                 return [...prevItems, newOrderItem];
@@ -145,7 +145,6 @@ function OrderPage({ webAppQueryId }) {
                         </div>
                     ))}
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
-
                 </div>
 
                 {showPopup && (
@@ -163,7 +162,7 @@ function OrderPage({ webAppQueryId }) {
             <div className="order-form">
                 <h3>Данные для заказа</h3>
                 <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
-                <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
+                    <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
                         <Input placeholder="Введите ваше имя" />
                     </Form.Item>
                     <Form.Item
