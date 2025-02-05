@@ -120,6 +120,27 @@ function OrderPage({ webAppQueryId }) {
                                 )}
                                 <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
                                 {index < orderItems.length - 1 && <hr/>}
+                                <div className="order-item-actions">
+                                    <button
+                                        className="edit-button"
+                                        onClick={() => {
+                                            // Сохраняем выбранный товар и возвращаемся на его страницу
+                                            sessionStorage.setItem(`${item.type}OrderData`, JSON.stringify(item));
+                                            navigate(`/${item.type}`);
+                                        }}
+                                    >
+                                        Изменить
+                                    </button>
+                                    <button
+                                        className="delete-button"
+                                        onClick={() => {
+                                            // Удаляем товар из списка заказов
+                                            setOrderItems((prevItems) => prevItems.filter((_, i) => i !== index));
+                                        }}
+                                    >
+                                        Удалить
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -128,7 +149,7 @@ function OrderPage({ webAppQueryId }) {
                 </div>
 
                 {showPopup && (
-                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />
+                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId}/>
                 )}
             </div>
 
@@ -142,7 +163,7 @@ function OrderPage({ webAppQueryId }) {
             <div className="order-form">
                 <h3>Данные для заказа</h3>
                 <Form layout="vertical" form={form} onFinish={handleOrderSubmit}>
-                    <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
+                <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
                         <Input placeholder="Введите ваше имя" />
                     </Form.Item>
                     <Form.Item

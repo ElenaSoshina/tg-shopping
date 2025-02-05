@@ -198,6 +198,40 @@
     margin-bottom: 8px; /* Уменьшаем отступ между заголовком и текстом */
 }
 
+.order-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-button {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.edit-button:hover {
+    background-color: #45a049;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
 
 
 
