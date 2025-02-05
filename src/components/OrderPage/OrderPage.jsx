@@ -84,6 +84,29 @@ function OrderPage({ webAppQueryId }) {
         }, 0);
     }, [orderItems]);
 
+    useEffect(() => {
+        const checkFormValidity = () => {
+            const isFormValid = form.isFieldsTouched(true) && !form.getFieldsError().some(({ errors }) => errors.length);
+            if (isFormValid) {
+                tg.MainButton.setText('Перейти к заказу');
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+        };
+
+        const unsubscribe = form.subscribe(({ changedFields }) => {
+            checkFormValidity();
+        });
+
+        checkFormValidity();
+
+        return () => {
+            tg.MainButton.hide();
+            unsubscribe();
+        };
+    }, [form]);
+
 
     const handleOrderSubmit = useCallback(
         (values) => {
