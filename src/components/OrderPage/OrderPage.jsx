@@ -95,9 +95,6 @@ function OrderPage({ webAppQueryId }) {
             }
         };
 
-        form.setFieldsValue({
-            deliveryMethod: undefined,
-        });
 
         checkFormValidity();
 
