@@ -18,18 +18,18 @@ function OrderPage({ webAppQueryId }) {
     const pickupAddress = 'Mui ne, Ocean vista, block B';
 
     // Маппинг единиц измерения
-    const unitMapping = {
+    const unitMapping = useMemo(() => ({
         cheese: 'шт',
         fish: 'г',
         lemon: 'уп',
-    };
+    }), []);
 
-    // Маппинг топпингов
-    const toppingsMapping = {
+    // Используем useMemo для маппинга топпингов
+    const toppingsMapping = useMemo(() => ({
         sourCream: 'Йогурт',
         condensedMilk: 'Сгущенка',
         passionFruitJam: 'Джем из маракуйи',
-    };
+    }), []);
 
     // Восстановление заказа из sessionStorage
     useEffect(() => {
@@ -128,6 +128,7 @@ function OrderPage({ webAppQueryId }) {
                 totalPrice: totalPrice.toFixed(2),
             };
 
+            alert("[DEBUG] Отправка данных в Telegram WebApp:\n" + JSON.stringify(details));
             // Отправка данных заказа через Telegram WebApp API
             try {
                 tg.sendData(JSON.stringify(details));
@@ -156,7 +157,7 @@ function OrderPage({ webAppQueryId }) {
                 message.error('Произошла ошибка при отправке заказа пользователю.');
             }
         },
-        [pickupAddress, orderItems, totalPrice]
+        [pickupAddress, orderItems, totalPrice, unitMapping]
     );
 
     // Тестовая кнопка для отладки
