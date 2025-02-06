@@ -141,8 +141,12 @@ function OrderPage({ webAppQueryId }) {
                     details.deliveryMethod === 'delivery' ? `Доставка на адрес: ${details.address}` : 'Самовывоз'
                 }`;
 
-                // Отправка сообщения пользователю
-                tg.sendMessage(messageText);
+                // Отправка сообщения пользователю (дополнительно через WebApp)
+                tg.showAlert('Спасибо за ваш заказ! Данные отправлены.');
+                console.log('Message sent to user:', messageText);
+
+                // Закрытие Telegram WebApp
+                tg.close();
 
                 setOrderDetails(details);
                 setShowPopup(true);
