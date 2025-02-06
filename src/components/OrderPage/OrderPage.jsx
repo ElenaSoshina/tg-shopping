@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 import { Form, Input, Select, message } from 'antd';
 import OrderPopup from './OrderPopup';
+import { debounce } from 'lodash';
 
 const { Option } = Select;
 const tg = window.Telegram.WebApp;
@@ -57,7 +58,7 @@ function OrderPage({ webAppQueryId }) {
         if (orderData?.quantity && orderData?.category) {
             const newOrderItem = {
                 id: `${orderData.type}-${orderData.category}`,
-                title: orderData.category, // Убираем "Лосось" перед названием
+                title: orderData.category,
                 quantity: orderData.quantity,
                 price: orderData.price,
                 image: orderData.image,
@@ -69,10 +70,10 @@ function OrderPage({ webAppQueryId }) {
                 const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
                 if (existingItemIndex !== -1) {
                     const updatedItems = [...prevItems];
-                    updatedItems[existingItemIndex] = { ...newOrderItem }; // Полное обновление данных
+                    updatedItems[existingItemIndex] = { ...newOrderItem };
                     return updatedItems;
                 }
-                return [...prevItems, newOrderItem]; // Добавление нового товара
+                return [...prevItems, newOrderItem];
             });
         }
     }, [orderData]);
@@ -84,30 +85,36 @@ function OrderPage({ webAppQueryId }) {
         }, 0);
     }, [orderItems]);
 
+    // Проверка валидации формы и управление кнопкой MainButton
+    const validateAndShowButton = useCallback(
+        debounce(() => {
+            form.validateFields()
+                .then(() => {
+                    tg.MainButton.setText('Оформить заказ');
+                    tg.MainButton.show();
+                })
+                .catch(() => {
+                    tg.MainButton.hide();
+                });
+        }, 300),
+        [form]
+    );
+
     useEffect(() => {
+        // Инициализация начальных значений формы
         form.setFieldsValue({
-            name: '', // Изначально пустое имя
-            phone: '', // Изначально пустой телефон
-            deliveryMethod: undefined, // Метод доставки не выбран
+            name: '',
+            phone: '',
+            deliveryMethod: undefined,
         });
 
-        const checkFormValidity = async () => {
-            try {
-                await form.validateFields();
-                tg.MainButton.setText('Оформить заказ');
-                tg.MainButton.show();
-            } catch {
-                tg.MainButton.hide();
-            }
-        };
-
-        checkFormValidity();
+        // Первичная проверка валидации
+        validateAndShowButton();
 
         return () => {
             tg.MainButton.hide();
         };
-    }, [form]);
-
+    }, [form, validateAndShowButton]);
 
     const handleOrderSubmit = useCallback(
         (values) => {
@@ -135,24 +142,19 @@ function OrderPage({ webAppQueryId }) {
                 <div className="order-details">
                     {orderItems.map((item, index) => (
                         <div key={item.id} className="order-item">
-                            <img src={item.image || '../../images/fish.webp'} alt={item.title}
-                                 className="order-item-image"/>
+                            <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
                             <div className="order-item-info">
-                                <h3>
-                                    {item.title}
-                                </h3>
-
+                                <h3>{item.title}</h3>
                                 <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
                                 {item.toppings.length > 0 && (
                                     <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
                                 )}
                                 <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
-                                {index < orderItems.length - 1 && <hr/>}
+                                {index < orderItems.length - 1 && <hr />}
                                 <div className="order-item-actions">
                                     <button
                                         className="edit-button"
                                         onClick={() => {
-                                            // Сохраняем выбранный товар и возвращаемся на его страницу
                                             sessionStorage.setItem(`${item.type}OrderData`, JSON.stringify(item));
                                             navigate(`/${item.type}`);
                                         }}
@@ -162,7 +164,6 @@ function OrderPage({ webAppQueryId }) {
                                     <button
                                         className="delete-button"
                                         onClick={() => {
-                                            // Удаляем товар из списка заказов
                                             setOrderItems((prevItems) => prevItems.filter((_, i) => i !== index));
                                         }}
                                     >
@@ -173,11 +174,10 @@ function OrderPage({ webAppQueryId }) {
                         </div>
                     ))}
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
-
                 </div>
 
                 {showPopup && (
-                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId}/>
+                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />
                 )}
             </div>
 
@@ -194,13 +194,11 @@ function OrderPage({ webAppQueryId }) {
                     layout="vertical"
                     form={form}
                     onFinish={handleOrderSubmit}
-                    onValuesChange={() => {
-                        form.validateFields()
-                            .then(() => {
-                                tg.MainButton.setText('Оформить заказ');
-                                tg.MainButton.show();
-                            })
-                            .catch(() => tg.MainButton.hide());
+                    onValuesChange={validateAndShowButton}
+                    initialValues={{
+                        name: '',
+                        phone: '',
+                        deliveryMethod: undefined,
                     }}
                 >
                     <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
@@ -233,7 +231,7 @@ function OrderPage({ webAppQueryId }) {
                                 <Form.Item
                                     label="Адрес доставки"
                                     name="address"
-                                    rules={[{ required: true, message: 'Введите адрес доставки' }]} // Добавляем обязательную валидацию
+                                    rules={[{ required: true, message: 'Введите адрес доставки' }]}
                                 >
                                     <Input placeholder="Введите адрес доставки" />
                                 </Form.Item>
