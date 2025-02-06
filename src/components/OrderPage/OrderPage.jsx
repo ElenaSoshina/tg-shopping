@@ -131,6 +131,7 @@ function OrderPage({ webAppQueryId }) {
             alert("[DEBUG] Отправка данных в Telegram WebApp:\n" + JSON.stringify(details));
             // Отправка данных заказа через Telegram WebApp API
             try {
+                alert("[DEBUG] Данные перед отправкой в Telegram: " + JSON.stringify(details));
                 tg.sendData(JSON.stringify(details));
 
                 // Формирование сообщения для пользователя
