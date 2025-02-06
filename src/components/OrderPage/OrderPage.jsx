@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 import { Form, Input, Select, message } from 'antd';
@@ -86,7 +86,8 @@ function OrderPage({ webAppQueryId }) {
     }, [orderItems]);
 
     // Проверка валидации формы и управление кнопкой MainButton
-    const validateAndShowButton = useCallback(
+    const validateAndShowButton = useMemo(
+        () =>
         debounce(() => {
             form.validateFields()
                 .then(() => {
@@ -116,64 +117,64 @@ function OrderPage({ webAppQueryId }) {
         };
     }, [form, validateAndShowButton]);
 
-    const handleOrderSubmit = useCallback(
-        async (values) => {
-            const details = {
-                ...values,
-                address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
-                items: orderItems.map((item) => ({
-                    ...item,
-                    total: (item.price * item.quantity).toFixed(2),
-                })),
-                totalPrice: totalPrice.toFixed(2),
-            };
-
-            alert("[DEBUG] Отправка данных в Telegram WebApp:\n" + JSON.stringify(details));
-            // Отправка данных заказа через Telegram WebApp API
-            try {
-                alert("[DEBUG] Данные перед отправкой в Telegram: " + JSON.stringify(details));
-                tg.sendData(JSON.stringify(details));
-
-                // Формирование сообщения для пользователя
-                const itemsList = details.items
-                    .map((item) => `${item.title} — ${item.quantity} ${unitMapping[item.type]} — ${item.total} VND`)
-                    .join('\n');
-
-                const messageText = `🛒 *Ваш заказ:*\n\n${itemsList}\n\n💳 *Итого:* ${details.totalPrice} VND\n\n📍 *Способ получения:* ${
-                    details.deliveryMethod === 'delivery' ? `Доставка на адрес: ${details.address}` : 'Самовывоз'
-                }`;
-
-                // Отправка сообщения пользователю (дополнительно через WebApp)
-                tg.showAlert('Спасибо за ваш заказ! Данные отправлены.');
-                console.log('Message sent to user:', messageText);
-
-                // Закрытие Telegram WebApp
-                tg.close();
-
-                setOrderDetails(details);
-                setShowPopup(true);
-                message.success('Заказ успешно оформлен и отправлен пользователю!');
-            } catch (error) {
-                console.error('[ERROR] Sending order details:', error);
-                message.error('Произошла ошибка при отправке заказа пользователю.');
-            }
-        },
-        [pickupAddress, orderItems, totalPrice, unitMapping]
-    );
-
-    // Тестовая кнопка для отладки
-    const handleTestClick = () => {
-        const testDetails = {
-            name: form.getFieldValue('name'),
-            phone: form.getFieldValue('phone'),
-            deliveryMethod: form.getFieldValue('deliveryMethod'),
-            address: form.getFieldValue('deliveryMethod') === 'delivery' ? form.getFieldValue('address') : pickupAddress,
-            items: orderItems,
-            totalPrice: orderItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0).toFixed(2),
+    useEffect(() => {
+        const handleMainButtonClick = () => {
+            console.log('[DEBUG] Нажата кнопка "Оформить заказ"');
+            form.submit(); // Вызовет onFinish формы
         };
-        console.log("[TEST BUTTON CLICK] Order Data:", testDetails);
-    };
 
+        tg.MainButton.onClick(handleMainButtonClick);
+
+        // Отключаем обработчик при размонтировании
+        return () => {
+            tg.MainButton.offClick(handleMainButtonClick);
+        };
+    }, [form]);
+
+    async function handleOrderSubmit(values) {
+        const details = {
+            ...values,
+            address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
+            items: orderItems.map((item) => ({
+                ...item,
+                total: (item.price * item.quantity).toFixed(2),
+            })),
+            totalPrice: totalPrice.toFixed(2),
+        };
+
+        alert('[DEBUG] Отправка данных в Telegram WebApp:\n' + JSON.stringify(details));
+
+        try {
+            // Отправляем данные боту
+            tg.sendData(JSON.stringify(details));
+
+            // Формируем сообщение для пользователя
+            const itemsList = details.items
+                .map((item) => (
+                    `${item.title} — ${item.quantity} ${unitMapping[item.type]} — ${item.total} VND`
+                ))
+                .join('\n');
+
+            const messageText = `🛒 *Ваш заказ:*\n\n${itemsList}\n\n💳 *Итого:* ${details.totalPrice} VND\n\n📍 *Способ получения:* ${
+                details.deliveryMethod === 'delivery'
+                    ? 'Доставка на адрес: ' + details.address
+                    : 'Самовывоз'
+            }`;
+
+            tg.showAlert('Спасибо за ваш заказ! Данные отправлены.');
+            console.log('[DEBUG] Message sent to user:', messageText);
+
+            // Закрытие WebApp
+            tg.close();
+
+            setOrderDetails(details);
+            setShowPopup(true);
+            message.success('Заказ успешно оформлен и отправлен пользователю!');
+        } catch (error) {
+            console.error('[ERROR] Sending order details:', error);
+            message.error('Произошла ошибка при отправке заказа пользователю.');
+        }
+    }
 
     return (
         <>
@@ -286,9 +287,6 @@ function OrderPage({ webAppQueryId }) {
                     </Form.Item>
                 </Form>
             </div>
-
-            {/* Тестовая кнопка */}
-            <button onClick={handleTestClick} className="test-button">Проверить данные</button>
         </>
     );
 }
