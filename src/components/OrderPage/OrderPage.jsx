@@ -85,6 +85,12 @@ function OrderPage({ webAppQueryId }) {
     }, [orderItems]);
 
     useEffect(() => {
+        form.setFieldsValue({
+            name: '', // Изначально пустое имя
+            phone: '', // Изначально пустой телефон
+            deliveryMethod: undefined, // Метод доставки не выбран
+        });
+
         const checkFormValidity = async () => {
             try {
                 await form.validateFields();
@@ -95,13 +101,13 @@ function OrderPage({ webAppQueryId }) {
             }
         };
 
-
         checkFormValidity();
 
         return () => {
             tg.MainButton.hide();
         };
     }, [form]);
+
 
     const handleOrderSubmit = useCallback(
         (values) => {
@@ -188,9 +194,14 @@ function OrderPage({ webAppQueryId }) {
                     layout="vertical"
                     form={form}
                     onFinish={handleOrderSubmit}
-                    onValuesChange={() => form.validateFields()
-                        .then(() => tg.MainButton.show())
-                        .catch(() => tg.MainButton.hide())}
+                    onValuesChange={() => {
+                        form.validateFields()
+                            .then(() => {
+                                tg.MainButton.setText('Оформить заказ');
+                                tg.MainButton.show();
+                            })
+                            .catch(() => tg.MainButton.hide());
+                    }}
                 >
                     <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
                         <Input placeholder="Введите ваше имя" />
@@ -207,13 +218,14 @@ function OrderPage({ webAppQueryId }) {
                     <Form.Item
                         label="Способ получения"
                         name="deliveryMethod"
-                        rules={[{ required: true, message: 'Выберите способ получения' }]} // Обязательная валидация
+                        rules={[{ required: true, message: 'Выберите способ получения' }]}
                     >
                         <Select placeholder="Выберите способ получения" allowClear>
                             <Option value="pickup">Самовывоз</Option>
                             <Option value="delivery">Доставка</Option>
                         </Select>
                     </Form.Item>
+
                     <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.deliveryMethod !== currentValues.deliveryMethod}>
                         {({ getFieldValue }) => {
                             const deliveryMethod = getFieldValue('deliveryMethod');
