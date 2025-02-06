@@ -159,6 +159,19 @@ function OrderPage({ webAppQueryId }) {
         [pickupAddress, orderItems, totalPrice]
     );
 
+    // Тестовая кнопка для отладки
+    const handleTestClick = () => {
+        const testDetails = {
+            name: form.getFieldValue('name'),
+            phone: form.getFieldValue('phone'),
+            deliveryMethod: form.getFieldValue('deliveryMethod'),
+            address: form.getFieldValue('deliveryMethod') === 'delivery' ? form.getFieldValue('address') : pickupAddress,
+            items: orderItems,
+            totalPrice: orderItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0).toFixed(2),
+        };
+        console.log("[TEST BUTTON CLICK] Order Data:", testDetails);
+    };
+
 
     return (
         <>
@@ -200,6 +213,8 @@ function OrderPage({ webAppQueryId }) {
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
                 </div>
 
+
+
                 {showPopup && (
                     <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />
                 )}
@@ -235,7 +250,10 @@ function OrderPage({ webAppQueryId }) {
                             { required: true, pattern: /^\+?\d{10,15}$/, message: 'Введите корректный номер телефона' },
                         ]}
                     >
-                        <Input placeholder="Введите номер телефона" />
+                        <Input placeholder="Введите номер телефона"
+                            inputMode="numeric"
+                               pattern={"[0-9]*"}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="Способ получения"
@@ -266,6 +284,9 @@ function OrderPage({ webAppQueryId }) {
                     </Form.Item>
                 </Form>
             </div>
+
+            {/* Тестовая кнопка */}
+            <button onClick={handleTestClick} className="test-button">Проверить данные</button>
         </>
     );
 }
