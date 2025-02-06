@@ -117,7 +117,7 @@ function OrderPage({ webAppQueryId }) {
     }, [form, validateAndShowButton]);
 
     const handleOrderSubmit = useCallback(
-        (values) => {
+        async (values) => {
             const details = {
                 ...values,
                 address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
@@ -128,13 +128,33 @@ function OrderPage({ webAppQueryId }) {
                 totalPrice: totalPrice.toFixed(2),
             };
 
-            tg.sendData(JSON.stringify(details));
-            setOrderDetails(details);
-            setShowPopup(true);
-            message.success('Заказ успешно оформлен!');
+            // Отправка данных заказа через Telegram WebApp API
+            try {
+                tg.sendData(JSON.stringify(details));
+
+                // Формирование сообщения для пользователя
+                const itemsList = details.items
+                    .map((item) => `${item.title} — ${item.quantity} ${unitMapping[item.type]} — ${item.total} VND`)
+                    .join('\n');
+
+                const messageText = `🛒 *Ваш заказ:*\n\n${itemsList}\n\n💳 *Итого:* ${details.totalPrice} VND\n\n📍 *Способ получения:* ${
+                    details.deliveryMethod === 'delivery' ? `Доставка на адрес: ${details.address}` : 'Самовывоз'
+                }`;
+
+                // Отправка сообщения пользователю
+                tg.sendMessage(messageText);
+
+                setOrderDetails(details);
+                setShowPopup(true);
+                message.success('Заказ успешно оформлен и отправлен пользователю!');
+            } catch (error) {
+                console.error('[ERROR] Sending order details:', error);
+                message.error('Произошла ошибка при отправке заказа пользователю.');
+            }
         },
         [pickupAddress, orderItems, totalPrice]
     );
+
 
     return (
         <>
