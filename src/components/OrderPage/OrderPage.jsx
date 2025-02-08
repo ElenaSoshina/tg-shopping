@@ -142,7 +142,6 @@ function OrderPage({ webAppQueryId }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        alert('[DEBUG] Отправка данных в Telegram WebApp:\n' + JSON.stringify(details));
 
         try {
             // Отправляем данные боту
@@ -161,7 +160,6 @@ function OrderPage({ webAppQueryId }) {
                     : 'Самовывоз'
             }`;
 
-            tg.showAlert('Спасибо за ваш заказ! Данные отправлены.');
             console.log('[DEBUG] Message sent to user:', messageText);
 
             // Закрытие WebApp
@@ -180,46 +178,51 @@ function OrderPage({ webAppQueryId }) {
         <>
             <div className="order-container">
                 <div className="order-details">
-                    {orderItems.map((item, index) => (
-                        <div key={item.id} className="order-item">
-                            <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
-                            <div className="order-item-info">
-                                <h3>{item.title}</h3>
-                                <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
-                                {item.toppings.length > 0 && (
-                                    <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
-                                )}
-                                <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
-                                {index < orderItems.length - 1 && <hr />}
-                                <div className="order-item-actions">
-                                    <button
-                                        className="edit-button"
-                                        onClick={() => {
-                                            sessionStorage.setItem(`${item.type}OrderData`, JSON.stringify(item));
-                                            navigate(`/${item.type}`);
-                                        }}
-                                    >
-                                        Изменить
-                                    </button>
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => {
-                                            setOrderItems((prevItems) => prevItems.filter((_, i) => i !== index));
-                                        }}
-                                    >
-                                        Удалить
-                                    </button>
+                    {orderItems.map((item, index) => {
+                        const displayTitle = item.type === 'fish' ? `Лосось ${item.title}` : item.title;
+
+                        return (
+                            <div key={item.id} className="order-item">
+                                <img src={item.image || '../../images/fish.webp'} alt={item.title}
+                                     className="order-item-image"/>
+                                <div className="order-item-info">
+                                    <h3>{displayTitle}</h3>
+                                    <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
+                                    {item.toppings.length > 0 && (
+                                        <p>Топпинги: {item.toppings.map((topping) => toppingsMapping[topping] || topping).join(', ')}</p>
+                                    )}
+                                    <p>Цена: {item.price && !isNaN(item.price) ? Number(item.price).toLocaleString('ru-RU') : '0'} VND</p>
+                                    {index < orderItems.length - 1 && <hr/>}
+                                    <div className="order-item-actions">
+                                        <button
+                                            className="edit-button"
+                                            onClick={() => {
+                                                sessionStorage.setItem(`${item.type}OrderData`, JSON.stringify(item));
+                                                navigate(`/${item.type}`);
+                                            }}
+                                        >
+                                            Изменить
+                                        </button>
+                                        <button
+                                            className="delete-button"
+                                            onClick={() => {
+                                                setOrderItems((prevItems) => prevItems.filter((_, i) => i !== index));
+                                            }}
+                                        >
+                                            Удалить
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                        }
+                    )}
                     <h2>Итоговая стоимость: {totalPrice > 0 ? totalPrice.toLocaleString('ru-RU') : '0'} VND</h2>
                 </div>
 
 
-
                 {showPopup && (
-                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId} />
+                    <OrderPopup onClose={() => tg.close()} orderDetails={orderDetails} webAppQueryId={webAppQueryId}/>
                 )}
             </div>
 
@@ -243,18 +246,18 @@ function OrderPage({ webAppQueryId }) {
                         deliveryMethod: undefined,
                     }}
                 >
-                    <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
-                        <Input placeholder="Введите ваше имя" />
+                    <Form.Item label="Имя" name="name" rules={[{required: true, message: 'Введите имя'}]}>
+                        <Input placeholder="Введите ваше имя"/>
                     </Form.Item>
                     <Form.Item
                         label="Телефон"
                         name="phone"
                         rules={[
-                            { required: true, pattern: /^\+?\d{10,15}$/, message: 'Введите корректный номер телефона' },
+                            {required: true, pattern: /^\+?\d{10,15}$/, message: 'Введите корректный номер телефона'},
                         ]}
                     >
                         <Input placeholder="Введите номер телефона"
-                            inputMode="numeric"
+                               inputMode="numeric"
                                pattern={"[0-9]*"}
                         />
                     </Form.Item>
