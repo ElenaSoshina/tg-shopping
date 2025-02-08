@@ -419,9 +419,7 @@ function OrderPage() {
 
         alert(`[DEBUG] Отправляемые данные:\n${JSON.stringify(details, null, 2)}`);
 
-        const queryId = tg.initDataUnsafe?.query_id;
-
-        if (queryId) {
+        if (tg.initDataUnsafe?.query_id) {
             try {
                 const payload = {
                     type: 'article',
@@ -435,20 +433,17 @@ function OrderPage() {
                     },
                 };
 
-                // Проверьте доступность метода
-                if (tg.answerWebAppQuery) {
-                    await tg.answerWebAppQuery(queryId, payload);
-                    alert('[DEBUG] Заказ успешно отправлен через answerWebAppQuery');
-                } else {
-                    throw new Error('Метод answerWebAppQuery недоступен');
-                }
+                await tg.answerWebAppQuery(tg.initDataUnsafe.query_id, payload);
+
+                alert('[DEBUG] Заказ успешно отправлен через answerWebAppQuery');
             } catch (error) {
-                alert(`[ERROR] Ошибка при отправке через answerWebAppQuery: ${error.message}`);
+                alert(`[ERROR] Ошибка при вызове answerWebAppQuery: ${error.message}`);
             }
         } else {
             alert('[ERROR] query_id отсутствует!');
         }
     }
+
 
 
     return (
