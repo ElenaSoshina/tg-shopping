@@ -12,6 +12,14 @@ const HomePage = () => {
         applyThemeColors(); // Устанавливаем тему при загрузке
         tg.onEvent("themeChanged", applyThemeColors); // Отслеживаем смену темы
 
+        // Если WebApp запущен внутри Telegram (tg.initDataUnsafe не пуст),
+        // показываем alert
+        // eslint-disable-next-line no-underscore-dangle
+        if (tg.initDataUnsafe?.query_id) {
+            alert("Приложение открыто внутри Telegram!");
+        }
+
+
         return () => {
             tg.offEvent("themeChanged", applyThemeColors);
         };
