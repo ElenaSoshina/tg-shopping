@@ -298,10 +298,11 @@
 //
 // export default OrderPage;
 
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './OrderPage.css';
-import { Form, Input, Select, message } from 'antd';
+import { Form, Input, Select } from 'antd';
 import { debounce } from 'lodash';
 
 const { Option } = Select;
@@ -311,6 +312,7 @@ function OrderPage() {
     const [form] = Form.useForm();
     const [orderItems, setOrderItems] = useState([]);
     const location = useLocation();
+    const navigate = useNavigate();
     const pickupAddress = 'Mui ne, Ocean vista, block B';
 
     const unitMapping = useMemo(() => ({
@@ -318,7 +320,6 @@ function OrderPage() {
         fish: 'г',
         lemon: 'уп',
     }), []);
-
 
     useEffect(() => {
         const savedOrder = JSON.parse(sessionStorage.getItem('currentOrder')) || [];
@@ -331,7 +332,11 @@ function OrderPage() {
 
     const orderData = useMemo(() => {
         return (
-            location.state?.orderData || {}
+            location.state?.orderData ||
+            JSON.parse(sessionStorage.getItem('fishOrderData')) ||
+            JSON.parse(sessionStorage.getItem('cheeseOrderData')) ||
+            JSON.parse(sessionStorage.getItem('lemonOrderData')) ||
+            {}
         );
     }, [location.state]);
 
@@ -343,15 +348,14 @@ function OrderPage() {
                 quantity: orderData.quantity,
                 price: orderData.price,
                 image: orderData.image,
-                toppings: orderData.toppings || [],
                 type: orderData.type,
             };
 
             setOrderItems((prevItems) => {
-                const existingItemIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
-                if (existingItemIndex !== -1) {
+                const existingIndex = prevItems.findIndex((item) => item.id === newOrderItem.id);
+                if (existingIndex !== -1) {
                     const updatedItems = [...prevItems];
-                    updatedItems[existingItemIndex] = { ...newOrderItem };
+                    updatedItems[existingIndex] = { ...newOrderItem };
                     return updatedItems;
                 }
                 return [...prevItems, newOrderItem];
@@ -360,14 +364,10 @@ function OrderPage() {
     }, [orderData]);
 
     const totalPrice = useMemo(() => {
-        return orderItems.reduce((sum, item) => {
-            const itemPrice = Number(item.price);
-            return sum + (isNaN(itemPrice) ? 0 : itemPrice);
-        }, 0);
+        return orderItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
     }, [orderItems]);
 
-    const validateAndShowButton = useMemo(
-        () =>
+    const validateAndShowButton = useMemo(() =>
             debounce(() => {
                 form.validateFields()
                     .then(() => {
@@ -378,8 +378,7 @@ function OrderPage() {
                         tg.MainButton.hide();
                     });
             }, 300),
-        [form]
-    );
+        [form]);
 
     useEffect(() => {
         form.setFieldsValue({
@@ -410,6 +409,7 @@ function OrderPage() {
     async function handleOrderSubmit(values) {
         const details = {
             ...values,
+            address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
             items: orderItems.map((item) => ({
                 ...item,
                 total: (item.price * item.quantity).toFixed(2),
@@ -417,74 +417,81 @@ function OrderPage() {
             totalPrice: totalPrice.toFixed(2),
         };
 
-        const webAppQueryId = tg.initDataUnsafe?.query_id;
+        alert(`[DEBUG] Отправляемые данные:\n${JSON.stringify(details, null, 2)}`);
 
-        if (!webAppQueryId) {
-            alert('[ERROR] web_app_query_id not found!');
-            return;
-        }
-
-        alert('[DEBUG] web_app_query_id найден! Отправляем данные через answerWebAppQuery');
-
-        try {
-            const response = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/answerWebAppQuery`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    web_app_query_id: webAppQueryId,
-                    result: {
-                        type: 'article',
-                        id: 'order_confirmation',
-                        title: 'Заказ подтверждён',
-                        input_message_content: {
-                            message_text: `🛒 *Ваш заказ:*\n\n${details.items.map(item => `${item.title} — ${item.quantity} шт — ${item.total} VND`).join('\n')}\n\n💳 *Итого:* ${details.totalPrice} VND`,
-                            parse_mode: 'Markdown',
-                        },
+        if (tg.initDataUnsafe?.query_id) {
+            try {
+                const payload = {
+                    type: 'article',
+                    id: 'order_summary',
+                    title: 'Ваш заказ успешно оформлен!',
+                    input_message_content: {
+                        message_text: `🛒 Ваш заказ:\n\n${details.items.map((item) =>
+                            `${item.title} — ${item.quantity} ${unitMapping[item.type]} — ${item.total} VND`
+                        ).join('\n')}\n\n💳 Итого: ${details.totalPrice} VND`,
+                        parse_mode: 'HTML',
                     },
-                }),
-            });
+                };
 
-            if (!response.ok) {
-                throw new Error('Failed to send data via answerWebAppQuery');
+                await tg.answerWebAppQuery(tg.initDataUnsafe.query_id, payload);
+
+                alert('[DEBUG] Заказ успешно отправлен через answerWebAppQuery');
+            } catch (error) {
+                alert(`[ERROR] Ошибка при отправке через answerWebAppQuery: ${error.message}`);
             }
-
-            alert('[DEBUG] Данные успешно отправлены через answerWebAppQuery');
-            tg.close();
-        } catch (error) {
-            alert('[ERROR] Ошибка при отправке через answerWebAppQuery: ' + error.message);
+        } else {
+            alert('[ERROR] query_id отсутствует!');
         }
     }
 
-
     return (
-        <div className="order-page">
-            <h3>Данные для заказа</h3>
-            <Form
-                layout="vertical"
-                form={form}
-                onFinish={handleOrderSubmit}
-                onValuesChange={validateAndShowButton}
-                initialValues={{
-                    name: '',
-                    phone: '',
-                    deliveryMethod: undefined,
-                }}
-            >
-                <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
-                    <Input placeholder="Введите ваше имя" />
-                </Form.Item>
-                <Form.Item label="Телефон" name="phone" rules={[{ required: true, pattern: /^\+?\d{10,15}$/, message: 'Введите корректный номер телефона' }]}>
-                    <Input placeholder="Введите номер телефона" />
-                </Form.Item>
-                <Form.Item label="Способ получения" name="deliveryMethod" rules={[{ required: true, message: 'Выберите способ получения' }]}>
-                    <Select placeholder="Выберите способ получения">
-                        <Option value="pickup">Самовывоз</Option>
-                        <Option value="delivery">Доставка</Option>
-                    </Select>
-                </Form.Item>
-            </Form>
-        </div>
+        <>
+            <div className="order-container">
+                <div className="order-details">
+                    {orderItems.map((item, index) => (
+                        <div key={item.id} className="order-item">
+                            <img src={item.image || '../../images/fish.webp'} alt={item.title} className="order-item-image" />
+                            <div className="order-item-info">
+                                <h3>{item.type === 'fish' ? `Лосось ${item.title}` : item.title}</h3>
+                                <p>Количество: {item.quantity}{unitMapping[item.type]}</p>
+                                <p>Цена: {item.price?.toLocaleString('ru-RU')} VND</p>
+                                {index < orderItems.length - 1 && <hr />}
+                            </div>
+                        </div>
+                    ))}
+                    <h2>Итоговая стоимость: {totalPrice.toLocaleString('ru-RU')} VND</h2>
+                </div>
+
+                <h3 className="add-order-header">Добавить в заказ</h3>
+                <div className="order-buttons">
+                    <button onClick={() => navigate('/cheese')}>Сырники</button>
+                    <button onClick={() => navigate('/fish')}>Лосось</button>
+                    <button onClick={() => navigate('/lemon')}>Лимоны</button>
+                </div>
+
+                <Form
+                    layout="vertical"
+                    form={form}
+                    onFinish={handleOrderSubmit}
+                    onValuesChange={validateAndShowButton}
+                >
+                    <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
+                        <Input placeholder="Введите ваше имя" />
+                    </Form.Item>
+                    <Form.Item label="Телефон" name="phone" rules={[{ required: true, message: 'Введите корректный номер телефона' }]}>
+                        <Input placeholder="Введите номер телефона" />
+                    </Form.Item>
+                    <Form.Item label="Способ получения" name="deliveryMethod" rules={[{ required: true, message: 'Выберите способ получения' }]}>
+                        <Select placeholder="Выберите способ получения">
+                            <Option value="pickup">Самовывоз</Option>
+                            <Option value="delivery">Доставка</Option>
+                        </Select>
+                    </Form.Item>
+                </Form>
+            </div>
+        </>
     );
 }
 
 export default OrderPage;
+
