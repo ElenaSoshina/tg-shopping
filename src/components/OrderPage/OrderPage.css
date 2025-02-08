@@ -232,6 +232,10 @@
     background-color: #d32f2f;
 }
 
+.form-label {
+    color: var(--tg-text-color); /* Измени цвет на нужный */
+    font-weight: bold;
+}
 
 
 

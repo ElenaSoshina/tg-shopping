@@ -129,7 +129,6 @@ function OrderPage({ webAppQueryId }) {
     // При нажатии на кнопку "Оформить заказ" в Telegram
     useEffect(() => {
         const handleMainButtonClick = () => {
-            console.log('[DEBUG] Нажата кнопка "Оформить заказ"');
             form.submit(); // вызовет onFinish
         };
 
@@ -152,8 +151,6 @@ function OrderPage({ webAppQueryId }) {
             // Общая сумма
             totalPrice: totalPrice.toFixed(2),
         };
-
-        alert('[DEBUG] Отправка данных в Telegram WebApp:\n' + JSON.stringify(details));
 
         try {
             tg.sendData(JSON.stringify(details));
@@ -202,6 +199,7 @@ function OrderPage({ webAppQueryId }) {
             <div className="order-container">
                 <div className="order-details">
                     {orderItems.map((item, index) => {
+                        const title = item.title.includes('Нарезка') ? `Лосось ${item.title}` : item.title;
                         // Цена (item.price) = уже общая сумма за позицию
                         const priceStr = Number(item.price).toLocaleString('ru-RU');
                         return (
@@ -212,7 +210,7 @@ function OrderPage({ webAppQueryId }) {
                                     className="order-item-image"
                                 />
                                 <div className="order-item-info">
-                                    <h3>{item.title}</h3>
+                                    <h3>{title}</h3>
                                     <p>
                                         Количество: {item.quantity}
                                         {unitMapping[item.type]}
@@ -292,14 +290,14 @@ function OrderPage({ webAppQueryId }) {
                     }}
                 >
                     <Form.Item
-                        label="Имя"
+                        label={<span className="form-label">Имя</span>}
                         name="name"
                         rules={[{ required: true, message: 'Введите имя' }]}
                     >
                         <Input placeholder="Введите ваше имя" />
                     </Form.Item>
                     <Form.Item
-                        label="Телефон"
+                        label={<span className="form-label">Телефон</span>}
                         name="phone"
                         rules={[
                             {
@@ -316,7 +314,7 @@ function OrderPage({ webAppQueryId }) {
                         />
                     </Form.Item>
                     <Form.Item
-                        label="Способ получения"
+                        label={<span className="form-label">Способ получения</span>}
                         name="deliveryMethod"
                         rules={[{ required: true, message: 'Выберите способ получения' }]}
                     >
@@ -325,7 +323,6 @@ function OrderPage({ webAppQueryId }) {
                             <Option value="delivery">Доставка</Option>
                         </Select>
                     </Form.Item>
-
                     <Form.Item
                         shouldUpdate={(prevValues, currentValues) =>
                             prevValues.deliveryMethod !== currentValues.deliveryMethod
@@ -336,7 +333,7 @@ function OrderPage({ webAppQueryId }) {
                             if (deliveryMethod === 'delivery') {
                                 return (
                                     <Form.Item
-                                        label="Адрес доставки"
+                                        label={<span className="form-label">Адрес доставки</span>}
                                         name="address"
                                         rules={[
                                             {
