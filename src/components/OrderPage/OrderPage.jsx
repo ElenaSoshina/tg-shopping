@@ -142,6 +142,8 @@ function OrderPage({ webAppQueryId }) {
             totalPrice: totalPrice.toFixed(2),
         };
 
+        alert("[DEBUG] Отправляемые данные:\n" + JSON.stringify(details, null, 2));
+
 
         try {
             // Отправляем данные боту
