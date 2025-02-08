@@ -410,7 +410,6 @@ function OrderPage() {
     async function handleOrderSubmit(values) {
         const details = {
             ...values,
-            address: values.deliveryMethod === 'delivery' ? values.address : pickupAddress,
             items: orderItems.map((item) => ({
                 ...item,
                 total: (item.price * item.quantity).toFixed(2),
@@ -421,20 +420,16 @@ function OrderPage() {
         const webAppQueryId = tg.initDataUnsafe?.query_id;
 
         if (!webAppQueryId) {
-            alert('[ERROR] web_app_query_id not found');
-            message.error('Ошибка при отправке заказа.');
+            alert('[ERROR] web_app_query_id not found!');
             return;
         }
 
-        try {
-            alert('[DEBUG] Отправляем данные через answerWebAppQuery:');
-            alert(JSON.stringify(details, null, 2));
+        alert('[DEBUG] web_app_query_id найден! Отправляем данные через answerWebAppQuery');
 
+        try {
             const response = await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/answerWebAppQuery`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     web_app_query_id: webAppQueryId,
                     result: {
@@ -442,7 +437,7 @@ function OrderPage() {
                         id: 'order_confirmation',
                         title: 'Заказ подтверждён',
                         input_message_content: {
-                            message_text: `🛒 *Ваш заказ:*\n\n${details.items.map(item => `${item.title} — ${item.quantity} ${unitMapping[item.type]} — ${item.total} VND`).join('\n')}\n\n💳 *Итого:* ${details.totalPrice} VND\n\n📍 *Способ получения:* ${values.deliveryMethod === 'delivery' ? `Доставка на адрес: ${details.address}` : 'Самовывоз'}`,
+                            message_text: `🛒 *Ваш заказ:*\n\n${details.items.map(item => `${item.title} — ${item.quantity} шт — ${item.total} VND`).join('\n')}\n\n💳 *Итого:* ${details.totalPrice} VND`,
                             parse_mode: 'Markdown',
                         },
                     },
@@ -456,11 +451,10 @@ function OrderPage() {
             alert('[DEBUG] Данные успешно отправлены через answerWebAppQuery');
             tg.close();
         } catch (error) {
-            alert('[ERROR] Ошибка при отправке через answerWebAppQuery:');
-            alert(error.message);
-            message.error('Ошибка при отправке заказа.');
+            alert('[ERROR] Ошибка при отправке через answerWebAppQuery: ' + error.message);
         }
     }
+
 
     return (
         <div className="order-page">
